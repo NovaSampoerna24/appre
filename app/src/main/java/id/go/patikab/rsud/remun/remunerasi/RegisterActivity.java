@@ -1,5 +1,6 @@
 package id.go.patikab.rsud.remun.remunerasi;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,12 +22,13 @@ public class RegisterActivity extends AppCompatActivity {
     EditText email, password;
     Button registerButton, loginButton;
     FirebaseAuth firebaseAuth;
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        progressDialog = new ProgressDialog(RegisterActivity.this);
         email = (EditText) findViewById(R.id.uyeEmail);
         password = (EditText) findViewById(R.id.uyeParola);
         registerButton = (Button) findViewById(R.id.yeniUyeButton);
@@ -54,6 +56,9 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("test","tes");
                 } else {
                     Log.d("create",emaile+" "+passworde);
+                    progressDialog.setMessage("Its loading....");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
                     createAccount(emaile, passworde);
                 }
             }
@@ -79,11 +84,14 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
                             Log.d("test", "test");
+                            progressDialog.dismiss();
                         } else {
                             Toast.makeText(getApplicationContext(), "Format email tidak sesuai", Toast.LENGTH_SHORT).show();
                             Log.d("test1", "test1");
+                            progressDialog.dismiss();
                         }
                     }
+
                 });
     }
 }

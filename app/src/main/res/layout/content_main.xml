@@ -38,7 +38,7 @@
                     android:layout_gravity="center"
                     android:text="Rp. 1.000.000"
                     android:textColor="#0e7aff"
-                    android:textSize="25dp" />
+                    android:textSize="45dp" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:background="@drawable/btn_detail"
             android:text="detail"
             android:textStyle="bold"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white" /> 
         <com.victor.loading.newton.NewtonCradleLoading
             android:id="@+id/newton_cradle_loading"
             android:layout_width="wrap_content"

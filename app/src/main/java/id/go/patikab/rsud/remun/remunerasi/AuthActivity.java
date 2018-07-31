@@ -86,6 +86,7 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient.O
                     }
                 }else{
                     progressDialog.setMessage("Its loading....");
+                    progressDialog.setCancelable(false);
                     progressDialog.show();
                     authsign(loginEmail.getText().toString().trim(),loginPassword.getText().toString().trim());
                 }
