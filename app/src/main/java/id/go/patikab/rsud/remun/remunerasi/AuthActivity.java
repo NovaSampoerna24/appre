@@ -1,11 +1,13 @@
 package id.go.patikab.rsud.remun.remunerasi;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,11 +36,14 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient.O
     private SignInButton signInButton;
     FirebaseAuth firebaseAuth;
     GoogleApiClient mGoogleApiClient;
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+
+
+        progressDialog = new ProgressDialog(AuthActivity.this);
 
         loginEmail = (EditText) findViewById(R.id.girisEmail);
         loginPassword = (EditText) findViewById(R.id.girisParola);
@@ -72,7 +77,16 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient.O
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(loginEmail.getText()!=null || loginPassword.getText()!=null){
+                if(TextUtils.isEmpty(loginEmail.getText()) || TextUtils.isEmpty(loginPassword.getText())){
+                    if(TextUtils.isEmpty(loginEmail.getText())){
+                        loginEmail.setError("Email belum diisi !");
+                    }
+                    if(TextUtils.isEmpty(loginPassword.getText())){
+                        loginPassword.setError("Password belum diisi !");
+                    }
+                }else{
+                    progressDialog.setMessage("Its loading....");
+                    progressDialog.show();
                     authsign(loginEmail.getText().toString().trim(),loginPassword.getText().toString().trim());
                 }
             }
@@ -91,12 +105,16 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient.O
                             Log.d("message","Signin Succes !");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }else{
-                            Log.d("message","signin failure");
-                            Toast.makeText(AuthActivity.this, "auth failed", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
+//                        else{
+//                            Log.d("message","signin failure");
+//                            Toast.makeText(AuthActivity.this, "auth failed", Toast.LENGTH_SHORT).show();
+//                            progressDialog.dismiss();
+//                        }
                         if(!task.isSuccessful()){
-                            Toast.makeText(AuthActivity.this, "gagal login", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AuthActivity.this, "Login gagal !", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     }
                 });

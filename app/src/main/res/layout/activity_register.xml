@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="#FFF"
+    android:padding="@dimen/activity_vertical_margin"
     >
 
     <android.support.design.widget.TextInputLayout
@@ -32,28 +32,27 @@
             android:ems="10"
             android:layout_marginTop="10dp"
             android:id="@+id/uyeParola"
-            android:hint="Parola" />
+            android:hint="Password" />
 
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:text="Register"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:textColor="#FFFF"
         android:id="@+id/yeniUyeButton"
-        android:background="@color/colorAccent"/>
-
+        android:background="@drawable/btn_detail"/>
 
     <Button
         android:text="Login"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAllCaps="false"
         android:id="@+id/uyeGirisButton"
-        android:background="@null"
-        android:textColor="@color/colorAccent"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_detail"
+        android:textColor="#fff"
         android:layout_marginBottom="10dp"
         />
 
