@@ -60,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.setCancelable(false);
                     progressDialog.show();
                     createAccount(emaile, passworde);
+                    saveToServer();
                 }
             }
         });
@@ -73,6 +74,10 @@ public class RegisterActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
+    }
+
+    private void saveToServer() {
+        Log.d("message:","Save to server");
     }
 
     private void createAccount(String emaile, String passworde) {

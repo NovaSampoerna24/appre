@@ -1,60 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:padding="@dimen/activity_vertical_margin"
-    >
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/activity_vertical_margin">
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
 
-    <android.support.design.widget.TextInputLayout
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@mipmap/logo" />
+
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_marginTop="10dp"
+        android:text="Remunerasi RSUD RAA Soewondo Pati"
+        android:textAlignment="center"
+        android:textColor="@color/primary_text" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/nama"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
+            android:layout_marginTop="10dp"
+            android:hint="Nama"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/kdDokter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Kode Dokter"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/uyeEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="E-mail"
-            android:id="@+id/uyeEmail" />
+            android:inputType="textEmailAddress" />
 
     </android.support.design.widget.TextInputLayout>
-
 
 
     <android.support.design.widget.TextInputLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <EditText
+            android:id="@+id/uyeParola"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
             android:layout_marginTop="10dp"
-            android:id="@+id/uyeParola"
-            android:hint="Password" />
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/passwordulangi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Ulangi Password"
+            android:inputType="textPassword" />
+
 
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:text="Register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:textColor="#FFFF"
         android:id="@+id/yeniUyeButton"
-        android:background="@drawable/btn_detail"/>
-
-    <Button
-        android:text="Login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/uyeGirisButton"
         android:layout_marginTop="10dp"
         android:background="@drawable/btn_detail"
-        android:textColor="#fff"
+        android:text="Register"
+        android:textColor="#FFFF" />
+
+    <Button
+        android:id="@+id/uyeGirisButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        />
-
-
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_white"
+        android:text="Login"
+        android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -50,7 +50,7 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient.O
 
         loginButton = (Button) findViewById(R.id.girisButton);
         registerButton = (Button) findViewById(R.id.registerButton);
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+//        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -62,12 +62,12 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient.O
                 .enableAutoManage(AuthActivity.this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
+//        signInButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                signIn();
+//            }
+//        });
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
