@@ -114,7 +114,7 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient.O
 //                            progressDialog.dismiss();
 //                        }
                         if(!task.isSuccessful()){
-                            Toast.makeText(AuthActivity.this, "Login gagal !", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AuthActivity.this, "Login gagal periksa kembali email dan password anda !", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
                     }
@@ -125,9 +125,7 @@ public class AuthActivity extends AppCompatActivity implements GoogleApiClient.O
     void signIn() {
         Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signIntent, RC_SIGN_IN);
-
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
