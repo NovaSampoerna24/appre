@@ -1,163 +1,189 @@
 package id.go.patikab.rsud.remun.remunerasi;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 
-public class AuthActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    EditText loginEmail, loginPassword;
-    Button loginButton, registerButton, newPassButton;
-    private static final int RC_SIGN_IN = 9001;
-    private SignInButton signInButton;
-    FirebaseAuth firebaseAuth;
-    GoogleApiClient mGoogleApiClient;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import id.go.patikab.rsud.remun.remunerasi.api.ApiClient;
+import id.go.patikab.rsud.remun.remunerasi.api.ApiInterface;
+import id.go.patikab.rsud.remun.remunerasi.entity.DataDokter;
+import id.go.patikab.rsud.remun.remunerasi.entity.LoginResponse;
+import id.go.patikab.rsud.remun.remunerasi.entity.ValDokter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.login_session;
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.pref;
+
+public class AuthActivity extends AppCompatActivity {
+    EditText username, password;
+    Button loginButton, registerButton;
+
     ProgressDialog progressDialog;
+    SharedPreferences preferences;
+    ApiInterface apiInterface;
+    @BindView(R.id.spin_dokter)
+    Spinner spinnerDokter;
+    Context context;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
+        ButterKnife.bind(this);
 
         progressDialog = new ProgressDialog(AuthActivity.this);
 
-        loginEmail = (EditText) findViewById(R.id.girisEmail);
-        loginPassword = (EditText) findViewById(R.id.girisParola);
-
+        password = (EditText) findViewById(R.id.passwordLogin);
         loginButton = (Button) findViewById(R.id.girisButton);
         registerButton = (Button) findViewById(R.id.registerButton);
-//        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
 
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(AuthActivity.this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-//        signInButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                signIn();
-//            }
-//        });
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AuthActivity.this,RegisterActivity.class));
+                startActivity(new Intent(AuthActivity.this, RegisterActivity.class));
             }
         });
+        initSpinnerDokter();
+//        spinnerDokter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                String selectName = adapterView.getItemAtPosition(i).toString();
+//                Toast.makeText(AuthActivity.this, "Kamu memilih dokter " + selectName, Toast.LENGTH_SHORT).show();
+//            }
+//        });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(TextUtils.isEmpty(loginEmail.getText()) || TextUtils.isEmpty(loginPassword.getText())){
-                    if(TextUtils.isEmpty(loginEmail.getText())){
-                        loginEmail.setError("Email belum diisi !");
+
+
+                if (TextUtils.isEmpty(password.getText())) {
+
+                    if (TextUtils.isEmpty(password.getText())) {
+                        password.setError("Password belum diisi !");
                     }
-                    if(TextUtils.isEmpty(loginPassword.getText())){
-                        loginPassword.setError("Password belum diisi !");
-                    }
-                }else{
-                    progressDialog.setMessage("Its loading....");
+                } else {
+
+                    progressDialog.setMessage("Login....");
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-                    authsign(loginEmail.getText().toString().trim(),loginPassword.getText().toString().trim());
+
+                    preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+                    String token = "";
+                    token = preferences.getString(my_token, null);
+//                    signinsavetoken(username,password,token);
                 }
             }
         });
-        if (firebaseAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }
     }
 
-    private void authsign(String email,String password) {
-        firebaseAuth.signInWithEmailAndPassword(email,password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.d("message","Signin Succes !");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            progressDialog.dismiss();
-                        }
-//                        else{
-//                            Log.d("message","signin failure");
-//                            Toast.makeText(AuthActivity.this, "auth failed", Toast.LENGTH_SHORT).show();
-//                            progressDialog.dismiss();
-//                        }
-                        if(!task.isSuccessful()){
-                            Toast.makeText(AuthActivity.this, "Login gagal periksa kembali email dan password anda !", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
+    private void initSpinnerDokter() {
+        progressDialog.show();
+
+        Call<ValDokter> call = apiInterface.getDokter();
+        call.enqueue(new Callback<ValDokter>() {
+            @Override
+            public void onResponse(Call<ValDokter> call, Response<ValDokter> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    List<String> nama = new ArrayList<String>();
+                    List<DataDokter> list = new ArrayList<DataDokter>();
+
+
+                    for (int i = 0; i < response.body().getDokterList().size(); i++) {
+                        String namas = response.body().getDokterList().get(i).getNama_dokter();
+                        String kds = response.body().getDokterList().get(i).getKddokter();
+//                       list.add(new DataDokter("",""));
+                        nama.add(namas + "-" + kds);
+
+
+//                    ArrayMap<String,String> adapter = new ArrayMap<String, String>(AuthActivity.this,android.R.layout.simple_dropdown_item_1line,list)
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(AuthActivity.this, android.R.layout.simple_spinner_dropdown_item, nama);
+//                        ArrayAdapter<DataDokter> adapter = new ArrayAdapter<DataDokter>(AuthActivity.this, android.R.layout.simple_list_item_1, list);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerDokter.setAdapter(adapter);
+
+                        Log.d("test", "tes");
+                    }
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(AuthActivity.this, "Gagal mengambil data dokter !", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ValDokter> call, Throwable t) {
+                progressDialog.dismiss();
+                Log.d("messge", t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+        if (preferences.contains(login_session)) {
+            startActivity(new Intent(AuthActivity.this, MainActivity.class));
+        }
+
+    }
+
+    private void signinsavetoken(String username, String password, String token) {
+        try {
+            Call<LoginResponse> call = apiInterface.getloginresponse(username, password, token);
+            call.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().getStatus().equals("ok")) {
+                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(login_session, response.body().getDataUser().get(0).getId());
+                            editor.apply();
+                            startActivity(new Intent(AuthActivity.this, MainActivity.class));
                         }
                     }
-                });
-
-    }
-
-    void signIn() {
-        Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signIntent, RC_SIGN_IN);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                GoogleSignInAccount account = result.getSignInAccount();
-                authWithGoogle(account);
-            }
-        }
-    }
-
-    private void authWithGoogle(GoogleSignInAccount account) {
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Auth Error", Toast.LENGTH_SHORT).show();
-
                 }
-            }
-        });
-    }
 
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    Log.d("failur", t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            Log.d("Exception ", e.getMessage());
+        }
     }
 }

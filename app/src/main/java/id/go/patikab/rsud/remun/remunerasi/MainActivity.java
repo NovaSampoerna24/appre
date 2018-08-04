@@ -1,10 +1,10 @@
 package id.go.patikab.rsud.remun.remunerasi;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,20 +18,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
 import com.victor.loading.newton.NewtonCradleLoading;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import id.go.patikab.rsud.remun.remunerasi.adapter.DetailAdapter;
 import id.go.patikab.rsud.remun.remunerasi.api.ApiClient;
@@ -42,11 +41,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.date_up;
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.pref;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TextView txt_pendatapan;
+    TextView total_pendapatan, emaile, date_update, pendapatan_bpjs, pendapatan_umum;
     Button btndetail;
-    FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
+//    FirebaseAuth firebaseAuth;
+//    private FirebaseAuth.AuthStateListener authStateListener;
     LinearLayoutManager layoutManager;
 
     RecyclerView mrecRecyclerView;
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     List<DetailList> detailListList;
     ApiInterface apiInterface;
     DetailAdapter detailAdapter;
-
+    SharedPreferences sharedPreferences;
 
     NewtonCradleLoading newtonCradleLoading;
 
@@ -69,27 +72,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
-        newtonCradleLoading = (NewtonCradleLoading)findViewById(R.id.newton_cradle_loading);
+        newtonCradleLoading = (NewtonCradleLoading) findViewById(R.id.newton_cradle_loading);
         newtonCradleLoading.setLoadingColor(R.color.colorAccent);
 //        newtonCradleLoading.setLoadingColor("");
 
-        btndetail = (Button)findViewById(R.id.btn_detail);
+        btndetail = (Button) findViewById(R.id.btn_detail);
         btndetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              String textn = btndetail.getText().toString();
+                String textn = btndetail.getText().toString();
                 if (textn == "detail") {
                     newtonCradleLoading.setVisibility(View.VISIBLE);
                     newtonCradleLoading.start();
                     getlistDetail();
-                }else{
+                } else {
                     hiddenlist();
-                    Log.d("test",textn);
+                    Log.d("test", textn);
                 }
             }
         });
 
-        mrecRecyclerView = (RecyclerView)findViewById(R.id.list_detail);
+        mrecRecyclerView = (RecyclerView) findViewById(R.id.list_detail);
         mlayoutManager = new LinearLayoutManager(this);
         mrecRecyclerView.setLayoutManager(mlayoutManager);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -103,30 +106,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+//        firebaseAuth = FirebaseAuth.getInstance();
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-                    finish();
-                }
-            }
-        };
+//        authStateListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user == null) {
+//                    startActivity(new Intent(getApplicationContext(), AuthActivity.class));
+//                    finish();
+//                }
+//            }
+//        };
 
-        final FirebaseUser user = firebaseAuth.getCurrentUser();
-        Log.d("email : ", user.getEmail());
-        String email = user.getEmail().toString();
-        Toast.makeText(this, "Selamat datang " + user.getEmail(), Toast.LENGTH_SHORT).show();
-        TextView t = (TextView)findViewById(R.id.email_d);
+//        final FirebaseUser user = firebaseAuth.getCurrentUser();
+//        Log.d("email : ", user.getEmail());
+//        String email = user.getEmail().toString();
+//        Toast.makeText(this, "Selamat datang " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
+        sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(my_token)) {
+            String token = sharedPreferences.getString(my_token, null);
+            Log.d("tokenmu", token);
+        }
+
+        emaile = (TextView) findViewById(R.id.email_d);
+//        emaile.setText(email);
 //        t.setText(email);
     }
+
     private void hiddenlist() {
         mrecRecyclerView.setVisibility(View.GONE);
         btndetail.setText("detail");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void getlistDetail() {
@@ -137,14 +153,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onResponse(Call<ValDetail> call, Response<ValDetail> response) {
 //                    Toast.makeText(MainActivity.this, response.body().getDetailListList().size(), Toast.LENGTH_SHORT).show();
                     mrecRecyclerView.setVisibility(View.VISIBLE);
-                    Log.d("test 1",response.body().getResponses().toString());
-                    List<DetailList>detailLists = response.body().getDetailListList();
-                    madapter= new DetailAdapter(detailLists);
+                    Log.d("test 1", response.body().getResponses().toString());
+                    List<DetailList> detailLists = response.body().getDetailListList();
+                    madapter = new DetailAdapter(detailLists);
                     mrecRecyclerView.setAdapter(madapter);
+
                     btndetail.setText("sembunyikan");
                     newtonCradleLoading.stop();
                     newtonCradleLoading.setVisibility(View.GONE);
                 }
+
                 @Override
                 public void onFailure(Call<ValDetail> call, Throwable t) {
                     Log.d("trowable : ", t.getMessage());
@@ -155,26 +173,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseAuth.addAuthStateListener(authStateListener);
+        Date date = Calendar.getInstance().getTime();
+        DateFormat formater = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss");
+        String date_o = formater.format(date);
+        String d = date_o.toString();
+
+        sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("date_up");
+        editor.putString("date_up",d);
+        editor.apply();
+
+        if (btndetail.getText() != "detail") {
+            btndetail.setText("detail");
+        }
+//        firebaseAuth.addAuthStateListener(authStateListener);
+        sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("date_up")) {
+            String date_u = sharedPreferences.getString("date_up", null);
+            date_update = (TextView) findViewById(R.id.date_update);
+            date_update.setText(date_u);
+        }
+        Intent i = getIntent();
+        if (i != null) {
+            Bundle b = i.getExtras();
+            if (b != null) {
+                Set<String> keys = b.keySet();
+                for (String key : keys) {
+                    Log.d("getintent", "Bundle contains : key = " + key);
+                }
+            } else {
+                Log.w("getintent", "oncreate bundle null");
+            }
+
+        } else {
+            Log.w("getintent", "intent is null");
+
+        }
         try {
             Call<ValDetail> call = apiInterface.getDetail();
             call.enqueue(new Callback<ValDetail>() {
                 @Override
                 public void onResponse(Call<ValDetail> call, Response<ValDetail> response) {
-                    txt_pendatapan = (TextView)findViewById(R.id.pendapatan);
-                    txt_pendatapan.setText(response.body().getTotalDapat().toString());
+                    total_pendapatan = (TextView) findViewById(R.id.pendapatan_total);
+                    pendapatan_bpjs = (TextView)findViewById(R.id.pendapatan_bpjs);
+                    pendapatan_umum = (TextView)findViewById(R.id.pendapatan_umum);
+                    pendapatan_umum.setText(response.body().getPendapatan_umum().toString());
+                    pendapatan_bpjs.setText(response.body().getPendapatan_bpjs().toString());
+                    total_pendapatan.setText(response.body().getTotalDapat().toString());
                 }
 
                 @Override
                 public void onFailure(Call<ValDetail> call, Throwable t) {
-                    Log.d("error",t.getMessage());
+                    Log.d("error", t.getMessage());
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d("err : ", e.getMessage());
         }
     }
@@ -182,9 +239,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStop() {
         super.onStop();
-        if (authStateListener != null) {
-            firebaseAuth.removeAuthStateListener(authStateListener);
-        }
+//        if (authStateListener != null) {
+//            firebaseAuth.removeAuthStateListener(authStateListener);
+//        }
     }
 
     @Override
@@ -218,16 +275,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return super.onOptionsItemSelected(item);
     }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if(id== R.id.nav_logout){
+        if (id == R.id.nav_logout) {
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
-            firebaseAuth.signOut();
-                startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-                finish();
+//            firebaseAuth.signOut();
+            startActivity(new Intent(getApplicationContext(), AuthActivity.class));
+            finish();
         }
 //
 //        if (id == R.id.nav_camera) {
