@@ -25,11 +25,11 @@ public class SpinAdapter extends ArrayAdapter<DataDokter> {
         this.dokters = dokters1;
     }
 
-    public SpinAdapter(AuthActivity context, int simple_dropdown_item_1line, List<DataDokter> list) {
-        super(context,simple_dropdown_item_1line,list);
-        this.context = context;
-        this.dokterList = list;
-    }
+//    public SpinAdapter(AuthActivity context, int simple_dropdown_item_1line, List<DataDokter> list) {
+//        super(context,simple_dropdown_item_1line,list);
+//        this.context = context;
+//        this.dokterList = list;
+//    }
 
 
     @Override

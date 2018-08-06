@@ -58,6 +58,7 @@ public class AuthActivity extends AppCompatActivity {
     Spinner spinnerDokter;
     SpinnerAdapter adapterspin;
     Context context;
+    String id_d = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,12 +81,12 @@ public class AuthActivity extends AppCompatActivity {
                 startActivity(new Intent(AuthActivity.this, RegisterActivity.class));
             }
         });
-//        spinner();
         spinnerDokter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 DataDokter dataDokter = (DataDokter) adapterspin.getItem(i);
-                Toast.makeText(AuthActivity.this, dataDokter.getKddokter(), Toast.LENGTH_SHORT).show();
+                id_d = dataDokter.getKddokter().toString();
+//                Toast.makeText(AuthActivity.this, dataDokter.getKddokter(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -94,23 +95,19 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
         initSpinnerDokter();
-//        spinnerDokter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                String selectName = adapterView.getItemAtPosition(i).toString();
-//                Toast.makeText(AuthActivity.this, "Kamu memilih dokter " + selectName, Toast.LENGTH_SHORT).show();
-//            }
-//        });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                if (TextUtils.isEmpty(password.getText())) {
-
+                String ps = password.getText().toString().trim();
+                if (TextUtils.isEmpty(password.getText()) || id_d == null) {
                     if (TextUtils.isEmpty(password.getText())) {
                         password.setError("Password belum diisi !");
                     }
+                    if (id_d == null) {
+                        Toast.makeText(context, "Pilih dokter terlebih dahulu !", Toast.LENGTH_SHORT).show();
+                    }
+                    Log.d("test", "" + password.getText().toString().trim() + " " + spinnerDokter.getSelectedItem().toString().trim() + " " + id_d);
+
                 } else {
 
                     progressDialog.setMessage("Login....");
@@ -120,33 +117,16 @@ public class AuthActivity extends AppCompatActivity {
                     preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                     String token = "";
                     token = preferences.getString(my_token, null);
-//                    signinsavetoken(username,password,token);
+                    signinsavetoken(id_d, ps, token);
                 }
             }
         });
     }
 
-    private void spinner() {
-        DataDokter[] dataDokters = new DataDokter[2];
-
-        dataDokters[0] = new DataDokter();
-        dataDokters[0].setKddokter("1");
-        dataDokters[0].setNama_dokter("Joaquin");
-
-        dataDokters[1] = new DataDokter();
-        dataDokters[1].setKddokter("2");
-        dataDokters[1].setNama_dokter("Alberto");
-
-        adapterspin = new SpinAdapter(AuthActivity.this, android.R.layout.simple_dropdown_item_1line, dataDokters);
-        spinnerDokter = (Spinner) findViewById(R.id.spin_dokter);
-        spinnerDokter.setAdapter(adapterspin);
-
-    }
-
-    private void initSpinnerDokter() {
+    public void initSpinnerDokter() {
         progressDialog.show();
 
-        Call<ValDokter> call = apiInterface.getDokter();
+        Call<ValDokter> call = apiInterface.getlistDokterlogin();
         call.enqueue(new Callback<ValDokter>() {
             @Override
             public void onResponse(Call<ValDokter> call, Response<ValDokter> response) {
@@ -157,14 +137,14 @@ public class AuthActivity extends AppCompatActivity {
                     int total = response.body().getDokterList().size();
                     DataDokter[] dataDokters = new DataDokter[total];
 
-                    for (int i = 0; i < total ; i++) {
+                    for (int i = 0; i < total; i++) {
                         String namas = response.body().getDokterList().get(i).getNama_dokter();
                         String kds = response.body().getDokterList().get(i).getKddokter();
                         dataDokters[i] = new DataDokter();
                         dataDokters[i].setKddokter(kds);
                         dataDokters[i].setNama_dokter(namas);
 
-                }
+                    }
 
                     spinnerDokter = (Spinner) findViewById(R.id.spin_dokter);
                     adapterspin = new SpinAdapter(AuthActivity.this, android.R.layout.simple_dropdown_item_1line, dataDokters);
@@ -175,6 +155,7 @@ public class AuthActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     Toast.makeText(AuthActivity.this, "Gagal mengambil data dokter !", Toast.LENGTH_SHORT).show();
                 }
+                Log.d("response",response.toString());
             }
 
             @Override
@@ -195,19 +176,20 @@ public class AuthActivity extends AppCompatActivity {
 
     }
 
-    private void signinsavetoken(String username, String password, String token) {
+    private void signinsavetoken(String id, String password, String token) {
         try {
-            Call<LoginResponse> call = apiInterface.getloginresponse(username, password, token);
+            Call<LoginResponse> call = apiInterface.getloginresponse(id, password, token);
             call.enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful()) {
                         if (response.body().getStatus().equals("ok")) {
-                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString(login_session, response.body().getDataUser().get(0).getId());
-                            editor.apply();
+//                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+//                            SharedPreferences.Editor editor = preferences.edit();
+//                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
+//                            editor.apply();
                             startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                            finish();
                         }
                     }
                 }

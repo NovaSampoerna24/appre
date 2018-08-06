@@ -11,8 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Api;
@@ -21,39 +24,74 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import id.go.patikab.rsud.remun.remunerasi.adapter.SpinAdapter;
 import id.go.patikab.rsud.remun.remunerasi.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.api.ApiInterface;
+import id.go.patikab.rsud.remun.remunerasi.entity.DataDokter;
 import id.go.patikab.rsud.remun.remunerasi.entity.RegisterResponse;
+import id.go.patikab.rsud.remun.remunerasi.entity.ValDokter;
+
+
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.login_session;
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.pref;
+
+import id.go.patikab.rsud.remun.remunerasi.AuthActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.my_token;
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.pref;
-
 public class RegisterActivity extends AppCompatActivity {
-    EditText  password, device_token, repassword;
+    EditText password, device_token, repassword;
     Button registerButton, loginButton;
-    FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
     SharedPreferences preferences;
     ApiInterface apiInterface;
+    @BindView(R.id.spin_dokter)
+    Spinner spinnerDokter;
+    SpinnerAdapter adapterspin;
+    Context context;
+    String id_d;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+        if (preferences.contains(login_session)) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
         progressDialog = new ProgressDialog(RegisterActivity.this);
 
         password = (EditText) findViewById(R.id.uyeParola);
         registerButton = (Button) findViewById(R.id.yeniUyeButton);
         loginButton = (Button) findViewById(R.id.uyeGirisButton);
         repassword = (EditText) findViewById(R.id.passwordulangi);
+        spinnerDokter = findViewById(R.id.spin_dokter);
+
+        spinnerDokter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                DataDokter dataDokter = (DataDokter) adapterspin.getItem(i);
+                id_d = dataDokter.getKddokter().toString();
+//                Toast.makeText(AuthActivity.this, dataDokter.getKddokter(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        firebaseAuth = FirebaseAuth.getInstance();
+        initSpinnerDokterregister();
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String passworde = password.getText().toString();
                 String passwordulang = repassword.getText().toString();
 
-                if ( passworde == null || passworde.length() < 6 || passwordulang == null || !TextUtils.equals(passworde, passwordulang)) {
+                if (passworde == null || passworde.length() < 6 || passwordulang == null || !TextUtils.equals(passworde, passwordulang)) {
 
                     if (TextUtils.isEmpty(passworde)) {
                         password.setError("Password belum diisi !");
@@ -79,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.setMessage("Register....");
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-//                    saveToServer(username, passworde, passwordulang);
+//                    saveToServer(id_dokters, passworde, passwordulang);
                 }
             }
         });
@@ -90,20 +128,75 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), AuthActivity.class));
             }
         });
-        if (firebaseAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }
     }
 
-//    private void saveToServer(String nama_d, String emaile, String passworde, String passwordulang) {
+    public void initSpinnerDokterregister() {
+        progressDialog.show();
+        Call<ValDokter>call = apiInterface.getDokter();
+        call.enqueue(new Callback<ValDokter>() {
+            @Override
+            public void onResponse(Call<ValDokter> call, Response<ValDokter> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    List<String> nama = new ArrayList<String>();
+                    List<DataDokter> list = new ArrayList<DataDokter>();
+                    int total = response.body().getDokterList().size();
+                    DataDokter[] dataDokters = new DataDokter[total];
+
+                    for (int i = 0; i < total; i++) {
+                        String namas = response.body().getDokterList().get(i).getNama_dokter();
+                        String kds = response.body().getDokterList().get(i).getKddokter();
+                        dataDokters[i] = new DataDokter();
+                        dataDokters[i].setKddokter(kds);
+                        dataDokters[i].setNama_dokter(namas);
+
+                    }
+
+                    spinnerDokter = (Spinner) findViewById(R.id.spin_dokter);
+                    adapterspin = new SpinAdapter(RegisterActivity.this, android.R.layout.simple_dropdown_item_1line, dataDokters);
+                    spinnerDokter.setAdapter(adapterspin);
+
+                    Log.d("test", "tes");
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(RegisterActivity.this, "Gagal mengambil data dokter !", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ValDokter> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+//    private void saveToServer(String id_dokter, String passworde, String passwordulang) {
+//        progressDialog.dismiss();
 //        preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-//        String token = preferences.getString(my_token, null);
+//        String token_d = preferences.getString(my_token, null);
 //        try {
-//            Call<RegisterResponse> call = apiInterface.getresponse(nama_d, emaile, passworde, passwordulang, token);
+//            Call<RegisterResponse> call = apiInterface.getresponse(id_dokter, passworde, passwordulang, token_d);
 //            call.enqueue(new Callback<RegisterResponse>() {
 //                @Override
 //                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-//                    String message = response.body().getStatus();
+//                    String status = response.body().getStatus();
+//                    String message = response.body().getMessage();
+//                    if (response.isSuccessful()) {
+//                        if (status == "failed") {
+//                            Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+//                        } else if (status == "ok") {
+//                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+//                            SharedPreferences.Editor editor = preferences.edit();
+//                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
+//                            editor.apply();
+//
+//                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+//                            finish();
+//                        } else {
+//                            Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
 //                    Log.d("message :", message);
 //                }
 //
