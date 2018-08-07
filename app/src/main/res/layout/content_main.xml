@@ -28,50 +28,109 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="40dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft= "5dp"
+                    android:paddingRight="5dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Filter :"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="3"
+                        android:gravity="center">
+
+                        <EditText
+                            android:id="@+id/date_awal"
+                            android:layout_weight="1.4"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:hint="Tanggal Awal"
+                            app:layout_constraintBottom_toTopOf="@+id/set_date_button"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"/>
+                        <Button
+                            android:id="@+id/start_d"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/ic_datepicker"/>
+                        <EditText
+                            android:id="@+id/date_akhir"
+                            android:layout_weight="1.4"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:hint="Tanggal Akhir"
+                            app:layout_constraintBottom_toTopOf="@+id/set_date_button"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"/>
+                        <Button
+                            android:id="@+id/end_d"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/ic_datepicker"/>
+
+                    </LinearLayout>
 
                     <TextView
+                        android:id="@+id/judul"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/roboto_reguler"
-                        android:text="Pendapatan BPJS:" />
-
-                    <TextView
-                        android:id="@+id/pendapatan_bpjs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
+                        android:textAlignment="center"
                         android:fontFamily="@font/roboto_reguler"
-                        android:text="Rp. 0"
-                        android:textColor="@color/primary"
-                        android:textSize="30dp" />
+                        android:text="Data Pendapatan :" />
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginTop="10dp"-->
+                        <!--android:textAlignment="center"-->
+                        <!--android:fontFamily="@font/roboto_reguler"-->
+                        <!--android:text="Total pendapatan Umum:" />-->
 
+                    <!--<TextView-->
+                        <!--android:id="@+id/pendapatan_total"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginBottom="10dp"-->
+                        <!--android:layout_marginTop="10dp"-->
+                        <!--android:fontFamily="@font/roboto_reguler"-->
+                        <!--android:text="Rp. 0"-->
+                        <!--android:textColor="@color/primary"-->
+                        <!--android:textSize="30dp" />-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginTop="10dp"-->
+                        <!--android:textAlignment="center"-->
+                        <!--android:fontFamily="@font/roboto_reguler"-->
+                        <!--android:text="Total pendapatan BPJS :" />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/pendapatan_total"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginBottom="10dp"-->
+                        <!--android:layout_marginTop="10dp"-->
+                        <!--android:fontFamily="@font/roboto_reguler"-->
+                        <!--android:text="Rp. 0"-->
+                        <!--android:textColor="@color/primary"-->
+                        <!--android:textSize="30dp" />-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/roboto_reguler"
-                        android:text="Pendapatan Umum:" />
-
-                    <TextView
-                        android:id="@+id/pendapatan_umum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
-                        android:fontFamily="@font/roboto_reguler"
-                        android:text="Rp. 0"
-                        android:textColor="@color/primary"
-                        android:textSize="30dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:textAlignment="center"
                         android:fontFamily="@font/roboto_reguler"
                         android:text="Total pendapatan :" />
 
@@ -80,22 +139,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
                         android:fontFamily="@font/roboto_reguler"
                         android:text="Rp. 0"
                         android:textColor="@color/primary"
                         android:textSize="30dp" />
-
-                    <TextView
-                        android:id="@+id/date_update"
+                    <ProgressBar
+                        android:id="@+id/progress_bar1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="0dp"
-                        android:fontFamily="@font/roboto_reguler"
-                        android:text="Tanggal update : 20 Juli 2018"
-                        android:textSize="10dp" />
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/email_d"
@@ -105,9 +160,11 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/roboto_reguler"
                         android:gravity="center"
+                        android:padding="5dp"
                         android:text="Dokter : Dr. Abet"
                         android:textColor="@color/secondary_text"
-                        android:textSize="10dp" />
+                        android:textSize="12sp" />
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -134,4 +191,6 @@
 
         </LinearLayout>
     </ScrollView>
+
+
 </android.support.constraint.ConstraintLayout>

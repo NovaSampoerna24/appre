@@ -1,7 +1,11 @@
 package id.go.patikab.rsud.remun.remunerasi.api;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
 import java.util.List;
 
+import id.go.patikab.rsud.remun.remunerasi.entity.DataTindakan;
 import id.go.patikab.rsud.remun.remunerasi.entity.DetailList;
 import id.go.patikab.rsud.remun.remunerasi.entity.LoginResponse;
 import id.go.patikab.rsud.remun.remunerasi.entity.RegisterResponse;
@@ -12,6 +16,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiInterface {
     @GET("android/data.php")
@@ -39,4 +44,9 @@ public interface ApiInterface {
             @Field("password") String password,
             @Field("device_token") String device_token
     );
+
+    @GET("android/service/dokter_detail.php")
+    Call<DataTindakan> getDataTindakan(@Query("id_dokter") String id,
+                                       @Query("start") String start,
+                                       @Query("end") String end);
 }

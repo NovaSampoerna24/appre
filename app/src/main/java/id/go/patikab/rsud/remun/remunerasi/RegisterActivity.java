@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.setMessage("Register....");
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-//                    saveToServer(id_dokters, passworde, passwordulang);
+                    saveToServer(id_d, passworde, passwordulang);
                 }
             }
         });
@@ -132,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void initSpinnerDokterregister() {
         progressDialog.show();
-        Call<ValDokter>call = apiInterface.getDokter();
+        Call<ValDokter> call = apiInterface.getDokter();
         call.enqueue(new Callback<ValDokter>() {
             @Override
             public void onResponse(Call<ValDokter> call, Response<ValDokter> response) {
@@ -171,43 +171,43 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-//    private void saveToServer(String id_dokter, String passworde, String passwordulang) {
-//        progressDialog.dismiss();
-//        preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-//        String token_d = preferences.getString(my_token, null);
-//        try {
-//            Call<RegisterResponse> call = apiInterface.getresponse(id_dokter, passworde, passwordulang, token_d);
-//            call.enqueue(new Callback<RegisterResponse>() {
-//                @Override
-//                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-//                    String status = response.body().getStatus();
-//                    String message = response.body().getMessage();
-//                    if (response.isSuccessful()) {
-//                        if (status == "failed") {
-//                            Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
-//                        } else if (status == "ok") {
-//                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-//                            SharedPreferences.Editor editor = preferences.edit();
-//                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
-//                            editor.apply();
-//
-//                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-//                            finish();
-//                        } else {
-//                            Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                    Log.d("message :", message);
-//                }
-//
-//                @Override
-//                public void onFailure(Call<RegisterResponse> call, Throwable t) {
-//                    Log.d("trowable : ", t.getMessage());
-//                    progressDialog.dismiss();
-//                }
-//            });
-//        } catch (Exception e) {
-//            Log.d("message err : ", e.getMessage());
-//        }
-//    }
+    private void saveToServer(String id_dokter, String passworde, String passwordulang) {
+        progressDialog.dismiss();
+        preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+        String token_d = preferences.getString(my_token, null);
+        try {
+            Call<RegisterResponse> call = apiInterface.getresponse(id_dokter, passworde, token_d, passwordulang);
+            call.enqueue(new Callback<RegisterResponse>() {
+                @Override
+                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                    String status = response.body().getStatus();
+                    String message = response.body().getMessage();
+                    if (response.isSuccessful()) {
+                        if (status.equals("ok")) {
+                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
+                            editor.apply();
+
+                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                            finish();
+                        } else if (status.equals("failed")) {
+                            Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    Log.d("message :", message);
+                }
+
+                @Override
+                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                    Log.d("trowable : ", t.getMessage());
+                    progressDialog.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            Log.d("message err : ", e.getMessage());
+        }
+    }
 }

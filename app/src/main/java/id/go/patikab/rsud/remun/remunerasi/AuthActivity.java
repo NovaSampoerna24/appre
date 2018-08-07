@@ -124,6 +124,7 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void initSpinnerDokter() {
+        progressDialog.setMessage("Mengambil data dokter");
         progressDialog.show();
 
         Call<ValDokter> call = apiInterface.getlistDokterlogin();
@@ -172,6 +173,7 @@ public class AuthActivity extends AppCompatActivity {
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
         if (preferences.contains(login_session)) {
             startActivity(new Intent(AuthActivity.this, MainActivity.class));
+            finish();
         }
 
     }
@@ -182,21 +184,27 @@ public class AuthActivity extends AppCompatActivity {
             call.enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    String status = response.body().getStatus().toString();
+                    String message = response.body().getMessage().toString();
                     if (response.isSuccessful()) {
-                        if (response.body().getStatus().equals("ok")) {
-//                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-//                            SharedPreferences.Editor editor = preferences.edit();
-//                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
-//                            editor.apply();
+                        if (status.equals("ok")) {
+                            progressDialog.dismiss();
+                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
+                            editor.apply();
                             startActivity(new Intent(AuthActivity.this, MainActivity.class));
                             finish();
+                        }else if(status.equals("failed")){
+                            progressDialog.dismiss();
+                            Toast.makeText(AuthActivity.this, message, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    Log.d("failur", t.getMessage());
+                    Log.d("failure", t.getMessage());
                 }
             });
         } catch (Exception e) {

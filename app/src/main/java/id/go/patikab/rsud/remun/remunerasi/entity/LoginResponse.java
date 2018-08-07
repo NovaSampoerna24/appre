@@ -9,8 +9,8 @@ public class LoginResponse {
     String status;
     @SerializedName("message")
     String message;
-//    @SerializedName("data")
-//    List<DataUser> dataUser;
+    @SerializedName("data")
+    List<DataUser> dataUser;
 
     public String getStatus() {
         return status;
@@ -20,7 +20,7 @@ public class LoginResponse {
         return message;
     }
 
-//    public List<DataUser> getDataUser() {
-//        return dataUser;
-//    }
+    public List<DataUser> getDataUser() {
+        return dataUser;
+    }
 }
