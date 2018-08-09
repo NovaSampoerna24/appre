@@ -10,9 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import id.go.patikab.rsud.remun.remunerasi.R;
-import id.go.patikab.rsud.remun.remunerasi.entity.DetailList;
 import id.go.patikab.rsud.remun.remunerasi.entity.DetailTindakan;
-import id.go.patikab.rsud.remun.remunerasi.entity.ValDetail;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
     List<DetailTindakan>detailTindakanList;

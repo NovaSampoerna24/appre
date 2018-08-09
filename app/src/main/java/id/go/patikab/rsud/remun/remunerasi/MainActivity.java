@@ -1,15 +1,16 @@
 package id.go.patikab.rsud.remun.remunerasi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,9 +22,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,27 +36,30 @@ import android.widget.Toast;
 import com.victor.loading.newton.NewtonCradleLoading;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import id.go.patikab.rsud.remun.remunerasi.adapter.DetailAdapter;
 import id.go.patikab.rsud.remun.remunerasi.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.api.ApiInterface;
 import id.go.patikab.rsud.remun.remunerasi.entity.DataTindakan;
-import id.go.patikab.rsud.remun.remunerasi.entity.DetailList;
 import id.go.patikab.rsud.remun.remunerasi.entity.DetailTindakan;
-import id.go.patikab.rsud.remun.remunerasi.entity.ValDetail;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.date_up;
 import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.my_token;
 import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.pref;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,16 +68,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     EditText date_Awal, date_Akhir;
     DatePickerDialog awaldatepicker, akhirdatepicker;
     SimpleDateFormat dateFormater;
-
     String kd_user;
-
     LinearLayoutManager layoutManager;
 
     RecyclerView mrecRecyclerView;
     RecyclerView.Adapter madapter;
     RecyclerView.LayoutManager mlayoutManager;
 
-    List<DetailList> detailListList;
     ApiInterface apiInterface;
     DetailAdapter detailAdapter;
     SharedPreferences sharedPreferences;
@@ -78,17 +82,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NewtonCradleLoading newtonCradleLoading;
     ProgressBar progressBar;
 
+    Animation uptodown;
+    LinearLayout ln_f, ln_2;
+    @BindView(R.id.btnfilter)
+    Button btnfilters;
+
+    @OnClick(R.id.hariIni)
+    public void hariIni() {
+        getiListHariIni();
+    }
+
+    @OnClick(R.id.mingguIni)
+    public void mingguini() {
+        getiListMingguan();
+    }
+
+    @OnClick(R.id.bulanIni)
+    public void bulan() {
+        getiListBulanan();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         dateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
         date_Awal = (EditText) findViewById(R.id.date_awal);
 
         date_Akhir = (EditText) findViewById(R.id.date_akhir);
@@ -110,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         newtonCradleLoading = (NewtonCradleLoading) findViewById(R.id.newton_cradle_loading);
         newtonCradleLoading.setLoadingColor(R.color.colorAccent);
-//        newtonCradleLoading.setLoadingColor("");
 
         getdatadetail();
         btndetail = (Button) findViewById(R.id.btn_detail);
@@ -122,8 +144,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     newtonCradleLoading.setVisibility(View.VISIBLE);
                     newtonCradleLoading.start();
                     getListDataDetail();
+                    mrecRecyclerView.setMinimumHeight(1500);
                 } else {
                     hiddenlist();
+                    mrecRecyclerView.setMinimumHeight(0);
                     Log.d("test", textn);
                 }
             }
@@ -146,12 +170,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
         kd_user = sharedPreferences.getString(login_session, null);
-//        Toast.makeText(this, kd_user, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, kd_user, Toast.LENGTH_SHORT).show();
 
         emaile = (TextView) findViewById(R.id.email_d);
         judule = (TextView) findViewById(R.id.judul);
         total_pendapatan = (TextView) findViewById(R.id.pendapatan_total);
+        btnfilters.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String btn = btnfilters.getText().toString();
+                if (btn == "hide") {
+                    String bt = btnfilters.getText().toString();
+//                    Toast.makeText(MainActivity.this,bt, Toast.LENGTH_SHORT).show();
+                    ln_f = (LinearLayout) findViewById(R.id.ln_filter);
+//                    ln_f.setVisibility(View.GONE);
+                    ln_2 = (LinearLayout) findViewById(R.id.ln_2);
+
+                    Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.downtoup);
+                    ln_2.startAnimation(slide_up);
+
+                    ln_f.animate()
+                            .translationY(0.0f)
+                            .alpha(ln_f.getHeight())
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    ln_f.setVisibility(View.GONE);
+                                }
+                            });
+                    btnfilters.setText("show");
+                } else {
+//                    Toast.makeText(MainActivity.this,btn, Toast.LENGTH_SHORT).show();
+                    ln_f = (LinearLayout) findViewById(R.id.ln_filter);
+                    ln_f.setVisibility(View.VISIBLE);
+//
+                    btnfilters.setText("hide");
+                }
+            }
+        });
     }
+
 
     private void showDialogDateAkhir() {
         Calendar akhircalendar = Calendar.getInstance();
@@ -169,7 +229,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         akhirdatepicker.show();
     }
 
-
     private void showDialogDateAwal() {
         Calendar awalcalendar = Calendar.getInstance();
         awaldatepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -186,49 +245,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         awaldatepicker.show();
     }
 
-
     private void getdatadetail() {
         String date_aw = date_Awal.getText().toString().trim();
         String date_ak = date_Akhir.getText().toString().trim();
-        try {
-            Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
-            call.enqueue(new Callback<DataTindakan>() {
-                @Override
-                public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
-                    String status, total, nama_dokter, judul;
-                    status = response.body().getStatus().toString();
-                    nama_dokter = response.body().getNama_dokter().toString();
-                    judul = response.body().getJudul().toString();
-                    if (response.isSuccessful()) {
-                        if (status.equals("ok")) {
-                            emaile.setText(nama_dokter);
-                            if (response.body().getTotal().equals("0")) {
-                                total_pendapatan.setText("Rp. 0");
-                            } else {
-                                total_pendapatan.setText(response.body().getTotal().toString());
-                            }
-                            judule.setText(judul);
+        if (isOnline() == true) {
+            try {
+                Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
+                call.enqueue(new Callback<DataTindakan>() {
+                    @Override
+                    public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
+                        String status, total, nama_dokter, judul;
+                        status = response.body().getStatus().toString();
+                        nama_dokter = response.body().getNama_dokter().toString();
+                        judul = response.body().getJudul().toString();
+                        if (response.isSuccessful()) {
+                            if (status.equals("ok")) {
+                                emaile.setText(nama_dokter);
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                judule.setText(judul);
 
-                        } else {
-                            if (response.body().getTotal().equals("0")) {
-                                total_pendapatan.setText("Rp. 0");
                             } else {
-                                total_pendapatan.setText(response.body().getTotal().toString());
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                Toast.makeText(MainActivity.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(MainActivity.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            total_pendapatan.setVisibility(View.VISIBLE);
                         }
-                        progressBar.setVisibility(View.GONE);
-                        total_pendapatan.setVisibility(View.VISIBLE);
                     }
-                }
 
-                @Override
-                public void onFailure(Call<DataTindakan> call, Throwable t) {
-                    Log.d("Failure", t.getMessage());
-                }
-            });
-        } catch (Exception e) {
-            Log.d("Exception", e.getMessage());
+                    @Override
+                    public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        Log.d("Failure", t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Log.d("Exception", e.getMessage());
+            }
+        } else {
+            Toast.makeText(this, "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -246,90 +308,261 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String date_aw = date_Awal.getText().toString();
         String date_ak = date_Akhir.getText().toString();
         Log.d("filter", kd_user + " " + date_aw + " " + date_ak);
-        try {
-            Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
-            call.enqueue(new Callback<DataTindakan>() {
-                @Override
-                public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
-                    String status, total, nama_dokter, judul;
-                    status = response.body().getStatus().toString();
-                    total = response.body().getTotal().toString();
-                    nama_dokter = response.body().getNama_dokter().toString();
-                    judul = response.body().getJudul().toString();
-                    if (response.isSuccessful()) {
-                        if (status.equals("ok")) {
-                            emaile.setText(nama_dokter);
-                            if (response.body().getTotal().equals("0")) {
-                                total_pendapatan.setText("Rp. 0");
+        if (isOnline() == true) {
+            try {
+                Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
+                call.enqueue(new Callback<DataTindakan>() {
+                    @Override
+                    public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
+                        String status, total, nama_dokter, judul;
+                        status = response.body().getStatus().toString();
+                        total = response.body().getTotal().toString();
+                        nama_dokter = response.body().getNama_dokter().toString();
+                        judul = response.body().getJudul().toString();
+                        if (response.isSuccessful()) {
+                            if (status.equals("ok")) {
+                                emaile.setText(nama_dokter);
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                judule.setText(judul);
+                                if (response.body().getDetailTindakanList().size() > 0) {
+                                    mrecRecyclerView.setVisibility(View.VISIBLE);
+                                    Log.d("total :", response.body().getTotal().toString());
+                                    List<DetailTindakan> detailTindakanList = response.body().getDetailTindakanList();
+                                    madapter = new DetailAdapter(detailTindakanList);
+                                    mrecRecyclerView.setAdapter(madapter);
+                                    btndetail.setText("sembunyikan");
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Detail Tindakan kosong ! perbarui tindakan anda", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                total_pendapatan.setText(response.body().getTotal().toString());
+                                Toast.makeText(MainActivity.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
                             }
-                            judule.setText(judul);
-                            if (response.body().getDetailTindakanList().size() > 0) {
-                                mrecRecyclerView.setVisibility(View.VISIBLE);
-                                Log.d("total :", response.body().getTotal().toString());
-                                List<DetailTindakan> detailTindakanList = response.body().getDetailTindakanList();
-                                madapter = new DetailAdapter(detailTindakanList);
-                                mrecRecyclerView.setAdapter(madapter);
-                                btndetail.setText("sembunyikan");
-                            } else {
-                                Toast.makeText(MainActivity.this, "Detail Tindakan kosong ! perbarui tindakan anda", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(MainActivity.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+
                         }
+                        newtonCradleLoading.stop();
+                        newtonCradleLoading.setVisibility(View.GONE);
                     }
-                    newtonCradleLoading.stop();
-                    newtonCradleLoading.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onFailure(Call<DataTindakan> call, Throwable t) {
-                    Log.d("Failure", t.getMessage());
-                }
-            });
+                    @Override
+                    public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        Log.d("Failure", t.getMessage());
+                    }
+                });
 
-        } catch (Exception e) {
-            Log.w("Exception", e.getMessage());
+            } catch (Exception e) {
+                Log.w("Exception", e.getMessage());
+            }
+        } else {
+            Toast.makeText(this, "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
         }
     }
-//    private void getlistDetail() {
-//        try {
-//            Call<ValDetail> call = apiInterface.getDetail();
-//            call.enqueue(new Callback<ValDetail>() {
-//                @Override
-//                public void onResponse(Call<ValDetail> call, Response<ValDetail> response) {
-////                    Toast.makeText(MainActivity.this, response.body().getDetailListList().size(), Toast.LENGTH_SHORT).show();
-//
-//                    mrecRecyclerView.setVisibility(View.VISIBLE);
-//                    Log.d("test 1", response.body().getResponses().toString());
-//                    List<DetailList> detailLists = response.body().getDetailListList();
-//                    madapter = new DetailAdapter(detailLists);
-//                    mrecRecyclerView.setAdapter(madapter);
-//
-//                    btndetail.setText("sembunyikan");
-//                    newtonCradleLoading.stop();
-//                    newtonCradleLoading.setVisibility(View.GONE);
-//                }
-//
-//                @Override
-//                public void onFailure(Call<ValDetail> call, Throwable t) {
-//                    Log.d("trowable : ", t.getMessage());
-//                }
-//            });
-//        } catch (Exception e) {
-//            Log.d("err : ", e.getMessage());
-//        }
-//    }
+
+    private void getiListBulanan() {
+        Date date = Calendar.getInstance().getTime();
+        DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+        String date_o = formater.format(date);
+        String d = date_o.toString();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat ds = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            cal.setTime(ds.parse(d));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        cal.add(Calendar.MONTH, -1);
+        Log.d("test2", "" + ds.format(cal.getTime()));
+        String tanggal_a = ds.format(cal.getTime());
+        date_Awal.setText(tanggal_a);
+        date_Akhir.setText(d);
+        if(isOnline()==true){
+            try {
+                Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, ds.format(cal.getTime()), d);
+                call.enqueue(new Callback<DataTindakan>() {
+                    @Override
+                    public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
+                        String status, total, nama_dokter, judul;
+                        status = response.body().getStatus().toString();
+                        nama_dokter = response.body().getNama_dokter().toString();
+                        judul = response.body().getJudul().toString();
+                        if (response.isSuccessful()) {
+                            if (status.equals("ok")) {
+                                emaile.setText(nama_dokter);
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                judule.setText(judul);
+
+                            } else {
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                Toast.makeText(MainActivity.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            total_pendapatan.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        Log.d("Failure", t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Log.d("Exception", e.getMessage());
+            }
+        }else{
+            Toast.makeText(this, "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void getiListMingguan() {
+        Date date = Calendar.getInstance().getTime();
+        DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+        String date_o = formater.format(date);
+        String d = date_o.toString();
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat ds = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            cal.setTime(ds.parse(d));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        cal.add(Calendar.DAY_OF_MONTH, -7);
+        String tanggal_a = ds.format(cal.getTime());
+        date_Awal.setText(tanggal_a);
+        date_Akhir.setText(d);
+        if(isOnline()==true){
+            try {
+                Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, tanggal_a, d);
+                call.enqueue(new Callback<DataTindakan>() {
+                    @Override
+                    public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
+                        String status, total, nama_dokter, judul;
+                        status = response.body().getStatus().toString();
+                        nama_dokter = response.body().getNama_dokter().toString();
+                        judul = response.body().getJudul().toString();
+                        if (response.isSuccessful()) {
+                            if (status.equals("ok")) {
+                                emaile.setText(nama_dokter);
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                judule.setText(judul);
+
+                            } else {
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                Toast.makeText(MainActivity.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            total_pendapatan.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        Log.d("Failure", t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Log.d("Exception", e.getMessage());
+            }
+
+        }else{
+            Toast.makeText(this, "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void getiListHariIni() {
+        Date date = Calendar.getInstance().getTime();
+        DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+        String date_o = formater.format(date);
+        String d = date_o.toString();
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat ds = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            cal.setTime(ds.parse(d));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        String tanggal_a = ds.format(cal.getTime());
+        date_Awal.setText(tanggal_a);
+        date_Akhir.setText(d);
+        if(isOnline()==true){
+            try {
+                Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, tanggal_a, d);
+                call.enqueue(new Callback<DataTindakan>() {
+                    @Override
+                    public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
+                        String status, total, nama_dokter, judul;
+                        status = response.body().getStatus().toString();
+                        nama_dokter = response.body().getNama_dokter().toString();
+                        judul = response.body().getJudul().toString();
+                        if (response.isSuccessful()) {
+                            if (status.equals("ok")) {
+                                emaile.setText(nama_dokter);
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                judule.setText(judul);
+
+                            } else {
+                                if (response.body().getTotal().equals("0")) {
+                                    total_pendapatan.setText("Rp. 0");
+                                } else {
+                                    total_pendapatan.setText(response.body().getTotal().toString());
+                                }
+                                Toast.makeText(MainActivity.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            total_pendapatan.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        Log.d("Failure", t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Log.d("Exception", e.getMessage());
+            }
+        }else{
+            Toast.makeText(this, "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
 
         Date date = Calendar.getInstance().getTime();
-        DateFormat formater = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss");
+        DateFormat formater = new SimpleDateFormat("dd/MMMM/yyyy");
         String date_o = formater.format(date);
         String d = date_o.toString();
+
 
         sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -340,12 +573,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (btndetail.getText() != "detail") {
             btndetail.setText("detail");
         }
-//        sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-//        if (sharedPreferences.contains("date_up")) {
-//            String date_u = sharedPreferences.getString("date_up", null);
-//            date_update = (TextView) findViewById(R.id.date_update);
-//            date_update.setText(date_u);
-//        }
 
         Intent i = getIntent();
         if (i != null) {
@@ -420,5 +647,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    //method untuk cek koneksi
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        //jika ada koneksi return true
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        //jika tidak ada koneksi return false
+        return false;
     }
 }

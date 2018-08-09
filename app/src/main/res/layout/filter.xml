@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ln_filter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:visibility="gone"
+    android:padding="@dimen/nav_header_vertical_spacing">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:id="@+id/hariIni"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:width="100dp"
+            android:background="@drawable/btn_custom"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="0dp"
+            android:text="Hari Ini"
+            android:textColor="@color/icons"
+            android:layout_margin="3dp"/>
+        <Button
+            android:id="@+id/mingguIni"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:width="100dp"
+            android:background="@drawable/btn_custom"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="0dp"
+            android:text="Minggu Ini"
+            android:textColor="@color/icons"
+            android:layout_margin="3dp"/>
+        <Button
+            android:id="@+id/bulanIni"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:width="100dp"
+            android:background="@drawable/btn_custom"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="0dp"
+            android:text="Bulan Ini"
+            android:textColor="@color/icons"
+            android:layout_margin="3dp"/>
+    </LinearLayout>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter Custom Tanggal :"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="16sp"/>
+<LinearLayout
+    android:weightSum="3"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+    <EditText
+        android:id="@+id/date_awal"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/set_date_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_weight="4"/>
+    <Button
+        android:id="@+id/start_d"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_datepicker" />
+    </LinearLayout>
+    <LinearLayout
+        android:weightSum="5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <EditText
+            android:id="@+id/date_akhir"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/set_date_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/end_d"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_datepicker" />
+    </LinearLayout>
+</LinearLayout>
+
+</LinearLayout>
