@@ -20,7 +20,7 @@ public class SpinAdapter extends ArrayAdapter<DataDokter> {
     private List<DataDokter> dokterList;
 
     public SpinAdapter(Context context, int textViewResid, DataDokter[] dokters1) {
-        super(context,textViewResid,dokters1);
+        super(context, textViewResid, dokters1);
         this.context = context;
         this.dokters = dokters1;
     }
@@ -30,7 +30,6 @@ public class SpinAdapter extends ArrayAdapter<DataDokter> {
 //        this.context = context;
 //        this.dokterList = list;
 //    }
-
 
     @Override
     public int getCount() {
@@ -47,12 +46,12 @@ public class SpinAdapter extends ArrayAdapter<DataDokter> {
     @Override
     public long getItemId(int position) {
         return super.getItemId(position);
-}
+    }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        TextView label = (TextView)super.getView(position,convertView,parent);
+        TextView label = (TextView) super.getView(position, convertView, parent);
         label.setTextColor(Color.BLACK);
         label.setText(dokters[position].getNama_dokter());
         return label;
@@ -61,7 +60,7 @@ public class SpinAdapter extends ArrayAdapter<DataDokter> {
 
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-          TextView label = (TextView) super.getDropDownView(position, convertView, parent);
+        TextView label = (TextView) super.getDropDownView(position, convertView, parent);
         label.setTextColor(Color.BLACK);
         label.setText(dokters[position].getNama_dokter());
 

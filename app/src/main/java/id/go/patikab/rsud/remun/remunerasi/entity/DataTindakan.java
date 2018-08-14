@@ -9,6 +9,10 @@ public class DataTindakan {
     String status;
     @SerializedName("total")
         String total;
+    @SerializedName("pendapatan_bpjs")
+    String pendapatan_bpjs;
+    @SerializedName("pendapatan_umum")
+    String pendapatan_umum;
     @SerializedName("nama_dokter")
     String nama_dokter;
     @SerializedName("judul")
@@ -22,6 +26,14 @@ public class DataTindakan {
 
     public String getTotal() {
         return total;
+    }
+
+    public String getPendapatan_bpjs() {
+        return pendapatan_bpjs;
+    }
+
+    public String getPendapatan_umum() {
+        return pendapatan_umum;
     }
 
     public String getNama_dokter() {

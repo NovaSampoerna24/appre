@@ -83,6 +83,15 @@ public class AuthActivity extends AppCompatActivity {
                 startActivity(new Intent(AuthActivity.this, RegisterActivity.class));
             }
         });
+//        spinnerDokter.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(adapterspin.getCount()<1){
+//                    initSpinnerDokter();
+//                }
+//            }
+//        });
+//
         spinnerDokter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -90,13 +99,11 @@ public class AuthActivity extends AppCompatActivity {
                 id_d = dataDokter.getKddokter().toString();
 //                Toast.makeText(AuthActivity.this, dataDokter.getKddokter(), Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
-
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,9 +114,9 @@ public class AuthActivity extends AppCompatActivity {
                         password.setError("Password belum diisi !");
                     }
                     if ( TextUtils.isEmpty(id_d)) {
-                        Toast.makeText(context, "Pilih dokter terlebih dahulu !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AuthActivity.this, "Pilih dokter terlebih dahulu !", Toast.LENGTH_SHORT).show();
                     }
-                    Log.d("test", "" + password.getText().toString().trim() + " " + spinnerDokter.getSelectedItem().toString().trim() + " " + id_d);
+//                    Log.d("test", "" + password.getText().toString().trim() + " " + spinnerDokter.getSelectedItem().toString().trim() + " " + id_d);
 
                 } else {
 
@@ -173,7 +180,7 @@ public class AuthActivity extends AppCompatActivity {
             }
 
         } else {
-            Toast.makeText(context, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AuthActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -181,13 +188,14 @@ public class AuthActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-        if (preferences.contains(login_session)) {
+        if (!preferences.getString(login_session,"").equals("")) {
             startActivity(new Intent(AuthActivity.this, MainActivity.class));
             finish();
+        }else{
+            initSpinnerDokter();
+            String token = preferences.getString(my_token, null);
+            Log.d("tokenmu", token + " ");
         }
-        String token = preferences.getString(my_token, null);
-        Log.d("tokenmu", token + " ");
-        initSpinnerDokter();
     }
 
     private void signinsavetoken(String id, String password, String token) {

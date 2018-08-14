@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="140dp"
+        android:gravity="center">
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/logo"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@android:color/white"
+        android:text="Remunerasi"
+        android:fontFamily="@font/roboto_medium"
+        android:layout_marginTop="@dimen/margin_text"/>
+
+        <!--<ImageView-->
+            <!--android:layout_width="70dp"-->
+            <!--android:layout_height="70dp"-->
+            <!--android:textSize="20sp"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:src="@drawable/ic_pl"-->
+            <!--android:fontFamily="@font/roboto_medium"-->
+            <!--android:layout_marginTop="80dp"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="@dimen/margin_text"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:text="RSUD RAA SOEWONDO PATI"
+            android:fontFamily="@font/roboto_reguler"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="60dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <Button
+            android:id="@+id/bt_masuk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_text"
+            android:layout_weight="2"
+            android:background="@drawable/btn_start_default"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="0dp"
+            android:text="Masuk"
+            android:textAllCaps="false"
+            android:textColor="@color/icons"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/bt_daftar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_text"
+            android:layout_weight="2"
+            android:background="@drawable/btn_start_default"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="0dp"
+            android:text="Daftar"
+            android:textAllCaps="false"
+            android:textColor="@color/icons"
+            android:textSize="15sp" />
+    </LinearLayout>
+</RelativeLayout>

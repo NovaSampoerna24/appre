@@ -3,10 +3,10 @@
     android:shape="rectangle">
     <!--  Gradient Bg for listrow -->
     <gradient
-        android:startColor="@color/accent"
-        android:centerColor="@color/primary"
-        android:endColor="@color/colorPrimaryDark"
+        android:startColor="@color/book_loading_book"
+        android:centerColor="@color/accent"
+        android:endColor="@color/primary"
         android:angle="180" />
-    <corners android:radius="10dp" />
+    <corners android:radius="5dp" />
 
 </shape>

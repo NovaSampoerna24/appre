@@ -19,11 +19,11 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String recent_token = FirebaseInstanceId.getInstance().getToken();
         Log.d(REG_Token,recent_token);
-
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(my_token,recent_token);
-        editor.apply();
-
+        if(!preferences.contains(my_token)){
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(my_token,recent_token);
+            editor.apply();
+        }
     }
 }

@@ -65,16 +65,20 @@
         android:background="@drawable/btn_detail"
         android:text="Login"
         android:layout_marginTop="20dp"
-        android:textAllCaps="true"
-        android:textColor="#FFFF" />
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textColor="#FFFF"
+        android:fontFamily="@font/roboto_medium"/>
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_white"
-        android:text="Register!"
+        android:background="@drawable/btn_start2"
+        android:text="Belum punya akun ?"
+        android:fontFamily="@font/roboto_medium"
         android:layout_marginTop="10dp"
+        android:textAllCaps="false"
         android:textColor="@color/primary" />
 
 

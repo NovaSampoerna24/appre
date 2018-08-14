@@ -64,11 +64,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-        if (preferences.contains(login_session)) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }
         progressDialog = new ProgressDialog(RegisterActivity.this);
 
         password = (EditText) findViewById(R.id.uyeParola);
@@ -76,6 +71,8 @@ public class RegisterActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.uyeGirisButton);
         repassword = (EditText) findViewById(R.id.passwordulangi);
         spinnerDokter = findViewById(R.id.spin_dokter);
+
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         spinnerDokter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -92,8 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        initSpinnerDokterregister();
+
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void initSpinnerDokterregister(){
         progressDialog.show();
+        progressDialog.setMessage("Mengambil data dokter ...");
         if (isOnline() == true) {
             Call<ValDokter> call = apiInterface.getDokter();
             call.enqueue(new Callback<ValDokter>() {
@@ -173,7 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
             });
 
         }else{
-            Toast.makeText(context, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -221,6 +218,18 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(context, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+        if (!preferences.getString(login_session,"").equals("")) {
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+            finish();
+        }else{
+            initSpinnerDokterregister();
+        }
     }
 
     public boolean isOnline() {
