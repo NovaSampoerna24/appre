@@ -11,18 +11,20 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import id.go.patikab.rsud.remun.remunerasi.AuthActivity;
+import id.go.patikab.rsud.remun.remunerasi.database.model.DokterData;
 import id.go.patikab.rsud.remun.remunerasi.entity.DataDokter;
 
-public class SpinAdapter extends ArrayAdapter<DataDokter> {
+public class SpinAdapter extends ArrayAdapter<DokterData> {
     private Context context;
-    private DataDokter[] dokters;
+//    private DataDokter[] dokters;
+    private DokterData[] dokterData;
     private List<DataDokter> dokterList;
 
-    public SpinAdapter(Context context, int textViewResid, DataDokter[] dokters1) {
-        super(context, textViewResid, dokters1);
+    public SpinAdapter(Context context, int textViewResid,DokterData[] dokterDatumLogins) {
+        super(context, textViewResid, dokterDatumLogins);
         this.context = context;
-        this.dokters = dokters1;
+//        this.dokters = dokters1;
+        this.dokterData = dokterDatumLogins;
     }
 
 //    public SpinAdapter(AuthActivity context, int simple_dropdown_item_1line, List<DataDokter> list) {
@@ -33,13 +35,14 @@ public class SpinAdapter extends ArrayAdapter<DataDokter> {
 
     @Override
     public int getCount() {
-        return dokters.length;
+//        return dokters.length;
 //        return dokterList.size();
+        return dokterData.length;
     }
 
     @Nullable
     @Override
-    public DataDokter getItem(int position) {
+    public DokterData getItem(int position) {
         return super.getItem(position);
     }
 
@@ -53,7 +56,7 @@ public class SpinAdapter extends ArrayAdapter<DataDokter> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         TextView label = (TextView) super.getView(position, convertView, parent);
         label.setTextColor(Color.BLACK);
-        label.setText(dokters[position].getNama_dokter());
+        label.setText(dokterData[position].getNama());
         return label;
 
     }
@@ -62,7 +65,7 @@ public class SpinAdapter extends ArrayAdapter<DataDokter> {
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         TextView label = (TextView) super.getDropDownView(position, convertView, parent);
         label.setTextColor(Color.BLACK);
-        label.setText(dokters[position].getNama_dokter());
+        label.setText(dokterData[position].getNama().toString());
 
         return label;
     }

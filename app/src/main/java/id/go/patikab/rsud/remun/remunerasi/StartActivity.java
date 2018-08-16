@@ -19,12 +19,12 @@ public class StartActivity extends AppCompatActivity {
     @OnClick(R.id.bt_masuk)
     public void btmasuk(){
         startActivity(new Intent(StartActivity.this,AuthActivity.class));
-        finish();
+
     }
     @OnClick(R.id.bt_daftar)
     public void btdaftar(){
         startActivity(new Intent(StartActivity.this,RegisterActivity.class));
-        finish();
+
     }
 
     @Override

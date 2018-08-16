@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,8 +69,18 @@ import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdS
 import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TextView total_pendapatan, emaile, judule, pendapatan_bpjs, pendapatan_umum, txtumum, txtbpjs, txtloadmore;
-    Button btndetail, btn_date_awal, btn_date_akhir;
+    TextView    total_pendapatan,
+                emaile, judule,
+                pendapatan_bpjs,
+                pendapatan_umum,
+                txtumum,
+                txtbpjs,
+                txtloadmore;
+
+    Button      btndetail,
+                btn_date_awal,
+                btn_date_akhir;
+
     EditText date_Awal, date_Akhir;
     DatePickerDialog awaldatepicker, akhirdatepicker;
     SimpleDateFormat dateFormater;
@@ -91,12 +102,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int currentItems, totalItems, scrollItems;
 
     ApiInterface apiInterface;
-    DetailAdapter detailAdapter;
     SharedPreferences sharedPreferences;
 
     NewtonCradleLoading newtonCradleLoading;
-    ProgressBar progressBar1, progressBar2, progressBar3, loadMoreProgreses;
-
+    ProgressBar progressBar1,
+                progressBar2,
+                progressBar3,
+                loadMoreProgreses;
     Animation uptodown;
     LinearLayout ln_f, ln_2, liner,loaded;
 
@@ -107,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void hariIni() {
         showLoad();
         getiListHariIni();
+        Log.d("hari","hari");
     }
 
     @OnClick(R.id.mingguIni)
@@ -119,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void bulan() {
         showLoad();
         getiListBulanan();
+
     }
 
 
@@ -358,20 +372,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
         if (sharedPreferences.getString(login_session,"").equals("")) {
             startActivity(new Intent(MainActivity.this, AuthActivity.class));
+            Log.d("tokene",sharedPreferences.getString(my_token,null)+" ");
             finish();
         } else {
             String textn = btndetail.getText().toString();
-            if (textn == "detail") {
+            if(textn == "Detail") {
                 mrecRecyclerView.setVisibility(View.GONE);
-                btndetail.setText("detail");
                 detailisthide();
+                hariIni();
             }
-
             Date date = Calendar.getInstance().getTime();
             DateFormat formater = new SimpleDateFormat("dd/MMMM/yyyy");
             String date_o = formater.format(date);
             String d = date_o.toString();
-
 
             sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -381,7 +394,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             date_Awal.setFocusable(false);
             date_Akhir.setFocusable(false);
-
 
             Intent i = getIntent();
             if (i != null) {
@@ -473,7 +485,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (response.isSuccessful()) {
 
                             if (status.equals("ok")) {
-                                emaile.setText("Nama : "+nama_dokters);
+                                emaile.setText(nama_dokters);
                                 judule.setText(judul);
                                 pendapatan_bpjs.setText(pendapatan_bpjsr);
                                 pendapatan_umum.setText(pendapatan_umumr);
@@ -533,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             pendapatan_bpjs.setText(pendapatan_bpjsr);
                             pendapatan_umum.setText(pendapatan_umumr);
                             if (status.equals("ok")) {
-                                emaile.setText("Nama : "+nama_dokter);
+                                emaile.setText(nama_dokter);
                                 if (response.body().getTotal().equals("0")) {
                                     total_pendapatan.setText("Rp. 0");
                                 } else {
@@ -547,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     detailTindakanList = response.body().getDetailTindakanList();
                                     madapter = new DetailAdapter(detailTindakanList, listcount, MainActivity.this);
                                     mrecRecyclerView.setAdapter(madapter);
-                                    btndetail.setText("sembunyikan");
+                                    btndetail.setText("Sembunyikan");
 
                                     detailisttampil();
 

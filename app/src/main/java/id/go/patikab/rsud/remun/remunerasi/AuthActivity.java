@@ -6,17 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -24,21 +20,16 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 
-import com.google.gson.JsonObject;
-import com.google.gson.internal.bind.DateTypeAdapter;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.go.patikab.rsud.remun.remunerasi.adapter.SpinAdapter;
 import id.go.patikab.rsud.remun.remunerasi.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.api.ApiInterface;
-import id.go.patikab.rsud.remun.remunerasi.entity.DataDokter;
+import id.go.patikab.rsud.remun.remunerasi.database.DatabaseHandler;
+import id.go.patikab.rsud.remun.remunerasi.database.model.DokterData;
 import id.go.patikab.rsud.remun.remunerasi.entity.LoginResponse;
 import id.go.patikab.rsud.remun.remunerasi.entity.ValDokter;
 import retrofit2.Call;
@@ -61,6 +52,8 @@ public class AuthActivity extends AppCompatActivity {
     SpinnerAdapter adapterspin;
     Context context;
     String id_d = null;
+    DokterData[] dokterdatalogin;
+    List<DokterData> dokterDataList = new ArrayList<DokterData>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +61,6 @@ public class AuthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth);
 
         ButterKnife.bind(this);
-
         progressDialog = new ProgressDialog(AuthActivity.this);
 
         password = (EditText) findViewById(R.id.passwordLogin);
@@ -83,22 +75,14 @@ public class AuthActivity extends AppCompatActivity {
                 startActivity(new Intent(AuthActivity.this, RegisterActivity.class));
             }
         });
-//        spinnerDokter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(adapterspin.getCount()<1){
-//                    initSpinnerDokter();
-//                }
-//            }
-//        });
-//
         spinnerDokter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                DataDokter dataDokter = (DataDokter) adapterspin.getItem(i);
-                id_d = dataDokter.getKddokter().toString();
-//                Toast.makeText(AuthActivity.this, dataDokter.getKddokter(), Toast.LENGTH_SHORT).show();
+                DokterData dokterDataeLogin = (DokterData) adapterspin.getItem(i);
+                id_d = dokterDataeLogin.getKode().toString();
+//                Toast.makeText(AuthActivity.this, id_d + " ", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -113,7 +97,7 @@ public class AuthActivity extends AppCompatActivity {
                     if (TextUtils.isEmpty(password.getText())) {
                         password.setError("Password belum diisi !");
                     }
-                    if ( TextUtils.isEmpty(id_d)) {
+                    if (TextUtils.isEmpty(id_d)) {
                         Toast.makeText(AuthActivity.this, "Pilih dokter terlebih dahulu !", Toast.LENGTH_SHORT).show();
                     }
 //                    Log.d("test", "" + password.getText().toString().trim() + " " + spinnerDokter.getSelectedItem().toString().trim() + " " + id_d);
@@ -127,79 +111,112 @@ public class AuthActivity extends AppCompatActivity {
                     preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                     String token = preferences.getString(my_token, null);
                     Log.d("token", token + " ");
-                    signinsavetoken(id_d, ps, token);
+                    if (isOnline() == true) {
+                        signinsavetoken(id_d, ps, token);
+                    }else{
+                        progressDialog.dismiss();
+                        Toast.makeText(AuthActivity.this, "Periksa Koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
     }
 
     public void initSpinnerDokter() {
-        progressDialog.setMessage("Mengambil data dokter");
-        progressDialog.show();
-        if (isOnline() == true) {
-            try {
-                Call<ValDokter> call = apiInterface.getlistDokterlogin();
-                call.enqueue(new Callback<ValDokter>() {
-                    @Override
-                    public void onResponse(Call<ValDokter> call, Response<ValDokter> response) {
-                        if (response.isSuccessful()) {
-                            progressDialog.dismiss();
-                            List<String> nama = new ArrayList<String>();
-                            List<DataDokter> list = new ArrayList<DataDokter>();
-                            int total = response.body().getDokterList().size();
-                            DataDokter[] dataDokters = new DataDokter[total];
-
-                            for (int i = 0; i < total; i++) {
-                                String namas = response.body().getDokterList().get(i).getNama_dokter();
-                                String kds = response.body().getDokterList().get(i).getKddokter();
-                                dataDokters[i] = new DataDokter();
-                                dataDokters[i].setKddokter(kds);
-                                dataDokters[i].setNama_dokter(namas);
-
-                            }
-
-                            spinnerDokter = (Spinner) findViewById(R.id.spin_dokter);
-                            adapterspin = new SpinAdapter(AuthActivity.this, android.R.layout.simple_dropdown_item_1line, dataDokters);
-                            spinnerDokter.setAdapter(adapterspin);
-
-                            Log.d("test", "tes");
-                        } else {
-                            progressDialog.dismiss();
-                            Toast.makeText(AuthActivity.this, "Gagal mengambil data dokter !", Toast.LENGTH_SHORT).show();
-                        }
-                        Log.d("response", response.toString());
-                    }
-
-                    @Override
-                    public void onFailure(Call<ValDokter> call, Throwable t) {
-                        Log.d("messge", t.getMessage());
-                    }
-                });
-            } catch (Exception e) {
-                Log.d("Exception", e.getMessage());
-            }
-
+        final DatabaseHandler db = DatabaseHandler.getInstance(AuthActivity.this);
+        dokterDataList = db.getAllrecord();
+        if (dokterDataList.size() > 0) {
+            spinneradapterfromlokal();
+            Log.d("sqlite","lokal");
         } else {
-            Toast.makeText(AuthActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+            progressDialog.setMessage("Mengambil data dokter");
+            progressDialog.show();
+            db.deleteAllrc();
+            if (isOnline() == true) {
+                try {
+                    Call<ValDokter> call = apiInterface.getlistDokterlogin();
+                    call.enqueue(new Callback<ValDokter>() {
+                        @Override
+                        public void onResponse(Call<ValDokter> call, Response<ValDokter> response) {
+                            if (response.isSuccessful()) {
+                                progressDialog.dismiss();
+                                int total = response.body().getDokterList().size();
+                                dokterdatalogin = new DokterData[total];
+
+                                for (int i = 0; i < total; i++) {
+                                    String namas = response.body().getDokterList().get(i).getNama_dokter();
+                                    String kds = response.body().getDokterList().get(i).getKddokter();
+
+                                    DokterData dokterData = new DokterData();
+                                    dokterData.setKode(kds);
+                                    dokterData.setNama(namas);
+                                    db.addRecord(dokterData);
+//                                    Log.d("nama", namas + " ");
+                                }
+                                spinneradapterfromlokal();
+//                                Log.d("test", "tes");
+                            } else {
+                                progressDialog.dismiss();
+                                Toast.makeText(AuthActivity.this, "Gagal mengambil data dokter !", Toast.LENGTH_SHORT).show();
+                            }
+                            Log.d("response", response.toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<ValDokter> call, Throwable t) {
+                            Log.d("messge", t.getMessage());
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.d("Exception", e.getMessage());
+                }
+            } else {
+                Toast.makeText(AuthActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    public void spinneradapterfromlokal() {
+        DatabaseHandler db = DatabaseHandler.getInstance(AuthActivity.this);
+        dokterDataList = db.getAllrecord();
+        DokterData[] dokterdata = new DokterData[dokterDataList.size()];
+        for (int i = 0; i < dokterDataList.size(); i++) {
+
+            String kd = dokterDataList.get(i).getKode().toString();
+            String namah = dokterDataList.get(i).getNama().toString();
+            int id = dokterDataList.get(i).getId();
+
+            dokterdata[i] = new DokterData();
+            dokterdata[i].setKode(kd);
+            dokterdata[i].setNama(namah);
+
+            Log.d("sqlite", kd + " " + namah + " " + id + " ");
+        }
+        spinnerDokter = (Spinner) findViewById(R.id.spin_dokter);
+        adapterspin = new SpinAdapter(AuthActivity.this, android.R.layout.simple_dropdown_item_1line, dokterdata);
+        spinnerDokter.setAdapter(adapterspin);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-        if (!preferences.getString(login_session,"").equals("")) {
+        if (!preferences.getString(login_session, "").equals("")) {
             startActivity(new Intent(AuthActivity.this, MainActivity.class));
             finish();
-        }else{
+        } else {
+//            if (String.valueOf(dataDokters).toString().trim() == "null") {
             initSpinnerDokter();
-            String token = preferences.getString(my_token, null);
-            Log.d("tokenmu", token + " ");
+//                Log.d("sd", "sd");
         }
+//            Log.d("obj", String.valueOf(dataDokters).toString().trim() + " ");
+        String token = preferences.getString(my_token, null);
+        Log.d("tokenmu", token + " ");
+//        }
     }
 
     private void signinsavetoken(String id, String password, String token) {
-        if (isOnline() == true) {
+
             try {
                 Call<LoginResponse> call = apiInterface.getloginresponse(id, password, token);
                 call.enqueue(new Callback<LoginResponse>() {
@@ -234,9 +251,10 @@ public class AuthActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.d("Exception ", e.getMessage());
             }
-        } else {
-            Toast.makeText(this, "Periksa Koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
-        }
+//        }
+//        else {
+//
+//        }
     }
 
     //method untuk cek koneksi
