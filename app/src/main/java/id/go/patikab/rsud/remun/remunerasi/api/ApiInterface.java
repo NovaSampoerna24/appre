@@ -4,6 +4,7 @@ import id.go.patikab.rsud.remun.remunerasi.entity.DataTindakan;
 import id.go.patikab.rsud.remun.remunerasi.entity.LoginResponse;
 import id.go.patikab.rsud.remun.remunerasi.entity.RegisterResponse;
 import id.go.patikab.rsud.remun.remunerasi.entity.ValDokter;
+import id.go.patikab.rsud.remun.remunerasi.entity.valueDetailTindakan;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -18,6 +19,9 @@ public interface ApiInterface {
 
     @GET("android/dokter.php")
     Call<ValDokter> getDokter();
+
+    @GET("android/service/detail_tindakan.php")
+    Call<valueDetailTindakan> getValueDetailTindakanCall(@Query("id") String id);
 
     @FormUrlEncoded
     @POST("android/service/register.php")

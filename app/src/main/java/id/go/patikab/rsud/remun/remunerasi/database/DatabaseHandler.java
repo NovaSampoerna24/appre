@@ -114,7 +114,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public DataDokter getDokter(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(nm_tb1, new String[]{field2_tb, field2_tb}, field1_tb + "=?",
+        Cursor cursor = db.query(nm_tb1, new String[]{field2_tb, field2_tb}, field1_tb + " = ?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();

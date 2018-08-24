@@ -7,12 +7,12 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.REG_Token;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.pref;
+
 public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
-    private static final String REG_Token = "REG_TOKEN";
-    public static final String pref  = "tokene";
-    public static final String my_token = "token";
-    public static final String date_up = "00-00-0000 00:00:00";
-    public static final String login_session = null;
+
 
     SharedPreferences preferences;
     @Override

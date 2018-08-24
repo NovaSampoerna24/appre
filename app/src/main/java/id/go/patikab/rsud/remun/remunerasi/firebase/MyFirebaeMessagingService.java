@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -17,12 +18,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import id.go.patikab.rsud.remun.remunerasi.MainActivity;
-import id.go.patikab.rsud.remun.remunerasi.R;
-
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.pref;
-
 public class MyFirebaeMessagingService extends FirebaseMessagingService {
     SharedPreferences sharedPreferences;
+    Context context;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
@@ -33,7 +32,7 @@ public class MyFirebaeMessagingService extends FirebaseMessagingService {
         notificationBuilder.setContentTitle("Remunerasi Notification");
         notificationBuilder.setContentText(remoteMessage.getNotification().getBody());
         notificationBuilder.setAutoCancel(true);
-        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+
         notificationBuilder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0,notificationBuilder.build());

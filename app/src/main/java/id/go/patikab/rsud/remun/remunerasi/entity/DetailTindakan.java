@@ -3,6 +3,8 @@ package id.go.patikab.rsud.remun.remunerasi.entity;
 import com.google.gson.annotations.SerializedName;
 
 public class DetailTindakan {
+    @SerializedName("id")
+    String id;
     @SerializedName("tindakan")
     String tindakan;
     @SerializedName("tanggal")
@@ -19,7 +21,73 @@ public class DetailTindakan {
     String tarif_jtl2;
 
 
-    public DetailTindakan(String tindakan, String tanggal, String tarif, String tarif_jl1, String tarif_jl2, String tarif_jtl1, String tarif_jtl2) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTindakan() {
+        return tindakan;
+    }
+
+    public void setTindakan(String tindakan) {
+        this.tindakan = tindakan;
+    }
+
+    public String getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(String tanggal) {
+        this.tanggal = tanggal;
+    }
+
+    public String getTarif() {
+        return tarif;
+    }
+
+    public void setTarif(String tarif) {
+        this.tarif = tarif;
+    }
+
+    public String getTarif_jl1() {
+        return tarif_jl1;
+    }
+
+    public void setTarif_jl1(String tarif_jl1) {
+        this.tarif_jl1 = tarif_jl1;
+    }
+
+    public String getTarif_jl2() {
+        return tarif_jl2;
+    }
+
+    public void setTarif_jl2(String tarif_jl2) {
+        this.tarif_jl2 = tarif_jl2;
+    }
+
+    public String getTarif_jtl1() {
+        return tarif_jtl1;
+    }
+
+    public void setTarif_jtl1(String tarif_jtl1) {
+        this.tarif_jtl1 = tarif_jtl1;
+    }
+
+    public String getTarif_jtl2() {
+        return tarif_jtl2;
+    }
+
+    public void setTarif_jtl2(String tarif_jtl2) {
+        this.tarif_jtl2 = tarif_jtl2;
+    }
+
+    public DetailTindakan(String id, String tindakan, String tanggal, String tarif, String tarif_jl1, String tarif_jl2, String tarif_jtl1, String tarif_jtl2) {
+
+        this.id = id;
         this.tindakan = tindakan;
         this.tanggal = tanggal;
         this.tarif = tarif;
@@ -27,33 +95,5 @@ public class DetailTindakan {
         this.tarif_jl2 = tarif_jl2;
         this.tarif_jtl1 = tarif_jtl1;
         this.tarif_jtl2 = tarif_jtl2;
-    }
-
-    public String getTarif_jl1() {
-        return tarif_jl1;
-    }
-
-    public String getTarif_jl2() {
-        return tarif_jl2;
-    }
-
-    public String getTarif_jtl1() {
-        return tarif_jtl1;
-    }
-
-    public String getTarif_jtl2() {
-        return tarif_jtl2;
-    }
-
-    public String getTindakan() {
-        return tindakan;
-    }
-
-    public String getTanggal() {
-        return tanggal;
-    }
-
-    public String getTarif() {
-        return tarif;
     }
 }

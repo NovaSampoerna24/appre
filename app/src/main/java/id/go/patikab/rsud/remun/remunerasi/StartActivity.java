@@ -11,8 +11,8 @@ import android.widget.Button;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.pref;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.login_session;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.pref;
 
 public class StartActivity extends AppCompatActivity {
     SharedPreferences preferences;
@@ -24,7 +24,6 @@ public class StartActivity extends AppCompatActivity {
     @OnClick(R.id.bt_daftar)
     public void btdaftar(){
         startActivity(new Intent(StartActivity.this,RegisterActivity.class));
-
     }
 
     @Override

@@ -36,9 +36,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.my_token;
-import static id.go.patikab.rsud.remun.remunerasi.firebase.MyFirebaseInstanceIdService.pref;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.login_session;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.nm_dokter;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.pref;
 
 public class AuthActivity extends AppCompatActivity {
     EditText username, password;
@@ -51,7 +52,7 @@ public class AuthActivity extends AppCompatActivity {
     Spinner spinnerDokter;
     SpinnerAdapter adapterspin;
     Context context;
-    String id_d = null;
+    String id_d = null,nama_dokter;
     DokterData[] dokterdatalogin;
     List<DokterData> dokterDataList = new ArrayList<DokterData>();
 
@@ -73,6 +74,7 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(AuthActivity.this, RegisterActivity.class));
+                finish();
             }
         });
         spinnerDokter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -80,6 +82,7 @@ public class AuthActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 DokterData dokterDataeLogin = (DokterData) adapterspin.getItem(i);
                 id_d = dokterDataeLogin.getKode().toString();
+                nama_dokter = dokterDataeLogin.getNama().toString();
 //                Toast.makeText(AuthActivity.this, id_d + " ", Toast.LENGTH_SHORT).show();
             }
 
@@ -112,7 +115,7 @@ public class AuthActivity extends AppCompatActivity {
                     String token = preferences.getString(my_token, null);
                     Log.d("token", token + " ");
                     if (isOnline() == true) {
-                        signinsavetoken(id_d, ps, token);
+                        signinsavetoken(id_d, ps, token,nama_dokter);
                     }else{
                         progressDialog.dismiss();
                         Toast.makeText(AuthActivity.this, "Periksa Koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
@@ -164,18 +167,23 @@ public class AuthActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ValDokter> call, Throwable t) {
+                            progressDialog.dismiss();
+                            Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                             Log.d("messge", t.getMessage());
                         }
                     });
                 } catch (Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(AuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d("Exception", e.getMessage());
                 }
             } else {
+                progressDialog.dismiss();
+
                 Toast.makeText(AuthActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
     public void spinneradapterfromlokal() {
         DatabaseHandler db = DatabaseHandler.getInstance(AuthActivity.this);
         dokterDataList = db.getAllrecord();
@@ -215,7 +223,7 @@ public class AuthActivity extends AppCompatActivity {
 //        }
     }
 
-    private void signinsavetoken(String id, String password, String token) {
+    private void signinsavetoken(String id, String password, String token, final String nama_dokter) {
 
             try {
                 Call<LoginResponse> call = apiInterface.getloginresponse(id, password, token);
@@ -230,6 +238,7 @@ public class AuthActivity extends AppCompatActivity {
                                 preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
+                                editor.putString(nm_dokter,nama_dokter);
                                 editor.apply();
                                 startActivity(new Intent(AuthActivity.this, MainActivity.class));
                                 finish();
@@ -239,16 +248,21 @@ public class AuthActivity extends AppCompatActivity {
                             }
                         }
                         if (!response.isSuccessful()) {
+                            progressDialog.dismiss();
                             Toast.makeText(AuthActivity.this, "Periksa kembali jaringan anda !", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                         Log.d("failure", t.getMessage());
                     }
                 });
             } catch (Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("Exception ", e.getMessage());
             }
 //        }

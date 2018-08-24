@@ -1,6 +1,7 @@
 package id.go.patikab.rsud.remun.remunerasi.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,8 +13,11 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import id.go.patikab.rsud.remun.remunerasi.DetailTindakanActivity;
+import id.go.patikab.rsud.remun.remunerasi.MainActivity;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.entity.DetailTindakan;
+import id.go.patikab.rsud.remun.remunerasi.page_dialog.CustomDialogDetail;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
     List<DetailTindakan> detailTindakanList;
@@ -41,11 +45,21 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.txt_nm_tindakan.setText("Tindakan : " + detailTindakanList.get(position).getTindakan());
         holder.tanggal.setText("Tanggal : " + detailTindakanList.get(position).getTanggal());
         holder.tarif.setText("Tarif : " + detailTindakanList.get(position).getTarif());
         holder.tr_jl1.setText(" " + detailTindakanList.get(position).getTarif_jl1());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                CustomDialogDetail cdd = new CustomDialogDetail(context,detailTindakanList.get(position));
+//                cdd.show();
+                Intent i = new Intent(context, DetailTindakanActivity.class);
+                i.putExtra("id",detailTindakanList.get(position).getId());
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override

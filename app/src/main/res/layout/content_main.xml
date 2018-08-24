@@ -8,9 +8,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+    <android.support.v4.widget.NestedScrollView android:id="@+id/nestedScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/rl"
@@ -44,7 +48,6 @@
 
             </LinearLayout>
 
-
             <include layout="@layout/filter" />
 
             <LinearLayout
@@ -55,7 +58,10 @@
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_text"
+                    app:cardCornerRadius="3dp"
+                    app:cardElevation="4dp">
 
                     <LinearLayout
                         android:id="@+id/liner"
@@ -64,15 +70,16 @@
                         android:orientation="vertical"
                         android:padding="@dimen/margin_text">
 
-
                         <TextView
                             android:id="@+id/judul"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:fontFamily="@font/roboto_reguler"
+                            android:fontFamily="@font/roboto_medium"
                             android:text="Data Pendapatan :"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="18sp" />
 
                         <TextView
                             android:id="@+id/txtumum"
@@ -82,7 +89,8 @@
                             android:layout_marginTop="@dimen/margin_text"
                             android:fontFamily="@font/roboto_reguler"
                             android:text="Jumlah pendapatan Umum:"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"
+                            android:textColor="@color/secondary_text" />
 
                         <TextView
                             android:id="@+id/pendapatan_umum"
@@ -92,13 +100,13 @@
                             android:layout_marginTop="@dimen/margin_text"
                             android:fontFamily="@font/roboto_reguler"
                             android:text="Rp. 0"
-                            android:textColor="#00bcd4"
+                            android:textColor="@color/green_liht"
                             android:textSize="20dp" />
 
                         <ProgressBar
                             android:id="@+id/progress_bar3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:visibility="gone" />
 
@@ -110,7 +118,8 @@
                             android:layout_marginTop="5dp"
                             android:fontFamily="@font/roboto_reguler"
                             android:text="Jumlah pendapatan BPJS :"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"
+                            android:textColor="@color/secondary_text" />
 
                         <TextView
                             android:id="@+id/pendapatan_bpjs"
@@ -120,13 +129,13 @@
                             android:layout_marginTop="@dimen/margin_text"
                             android:fontFamily="@font/roboto_reguler"
                             android:text="Rp. 0"
-                            android:textColor="#00bcd4"
+                            android:textColor="@color/green_liht"
                             android:textSize="20dp" />
 
                         <ProgressBar
                             android:id="@+id/progress_bar2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:visibility="gone" />
 
@@ -137,16 +146,17 @@
                             android:layout_marginTop="@dimen/margin_text"
                             android:fontFamily="@font/roboto_reguler"
                             android:text="Total pendapatan :"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"
+                            android:textColor="@color/secondary_text" />
 
                         <TextView
                             android:id="@+id/pendapatan_total"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:padding="0dp"
                             android:layout_marginTop="@dimen/margin_text"
                             android:fontFamily="@font/roboto_reguler"
+                            android:padding="0dp"
                             android:text="Rp. 0"
                             android:textColor="@color/primary"
                             android:textSize="30dp" />
@@ -179,12 +189,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_text"
                     android:layout_marginTop="@dimen/margin_text"
                     android:background="@drawable/btn_detail"
                     android:fontFamily="@font/roboto_medium"
+                    android:maxHeight="30dp"
+                    android:padding="0dp"
                     android:text=""
                     android:textAllCaps="false"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp" />
 
                 <com.victor.loading.newton.NewtonCradleLoading
                     android:id="@+id/newton_cradle_loading"
@@ -198,5 +212,8 @@
 
         </LinearLayout>
 
-</ScrollView>
+    </android.support.v4.widget.NestedScrollView>
+
+    <!-- The main content view where fragments are loaded -->
+
 </android.support.constraint.ConstraintLayout>

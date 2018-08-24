@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_reguler"
                 android:padding="@dimen/text_padding"
-                android:text="Reward :"
+                android:text="Rp. 50.000"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="12sp" />
         </LinearLayout>
