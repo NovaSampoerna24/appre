@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/icons">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,7 +19,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="40dp" />
+                android:layout_height="80dp" />
 
             <ImageView
                 android:layout_width="60dp"
@@ -26,22 +27,24 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@mipmap/logo" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Remunerasi RSUD RAA Soewondo Pati"
-                android:textAlignment="center"
-                android:textColor="@color/primary_text" />
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:text="Remunerasi RSUD RAA Soewondo Pati"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textColor="@color/primary_text" />-->
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="40dp" />
+                android:layout_height="80dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pilih dokter " />
+                android:text="Pilih dokter "
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/accent"/>
 
             <Spinner
                 android:id="@+id/spin_dokter"
@@ -51,7 +54,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
 
                 <EditText
                     android:id="@+id/uyeParola"
@@ -67,7 +71,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
 
                 <EditText
                     android:id="@+id/passwordulangi"
@@ -85,19 +90,20 @@
                 android:id="@+id/yeniUyeButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/btn_detail"
                 android:text="Register"
+                android:textAllCaps="false"
                 android:textColor="#FFFF" />
 
             <Button
                 android:id="@+id/uyeGirisButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/btn_white"
-                android:text="Login"
+                android:background="@drawable/btn_start2"
+                android:text="Sudah punya akun ?"
+                android:textAllCaps="false"
                 android:textColor="@color/colorPrimary" />
         </LinearLayout>
     </ScrollView>

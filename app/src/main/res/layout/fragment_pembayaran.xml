@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.PembayaranFragment">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".MainActivity"
+        tools:showIn="@layout/app_bar_main">
+
+        <android.support.v4.widget.NestedScrollView android:id="@+id/nestedScroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <LinearLayout
+                android:id="@+id/rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="0dp">
+
+                    <Button
+                        android:id="@+id/btnfilter"
+                        android:layout_width="45dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/ic_filterlist"
+                        android:text="hide"
+                        android:textColor="#00ffffff" />
+
+
+                    <TextView
+                        android:id="@+id/text_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="Filter "
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <include layout="@layout/filter" />
+
+                <LinearLayout
+                    android:id="@+id/ln_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_text"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="4dp">
+
+                        <LinearLayout
+                            android:id="@+id/liner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="@dimen/margin_text">
+
+                            <TextView
+                                android:id="@+id/judul"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Data Pendapatan :"
+                                android:textAlignment="center"
+                                android:textColor="@color/secondary_text"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/txtumum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/margin_text"
+                                android:fontFamily="@font/roboto_reguler"
+                                android:text="Jumlah pendapatan Umum:"
+                                android:textAlignment="center"
+                                android:textColor="@color/secondary_text" />
+
+                            <TextView
+                                android:id="@+id/pendapatan_umum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/margin_text"
+                                android:fontFamily="@font/roboto_reguler"
+                                android:text="Rp. 0"
+                                android:textColor="@color/green_liht"
+                                android:textSize="20dp" />
+
+                            <ProgressBar
+                                android:id="@+id/progress_bar3"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="center"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/txtbpjs"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/roboto_reguler"
+                                android:text="Jumlah pendapatan BPJS :"
+                                android:textAlignment="center"
+                                android:textColor="@color/secondary_text" />
+
+                            <TextView
+                                android:id="@+id/pendapatan_bpjs"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/margin_text"
+                                android:fontFamily="@font/roboto_reguler"
+                                android:text="Rp. 0"
+                                android:textColor="@color/green_liht"
+                                android:textSize="20dp" />
+
+                            <ProgressBar
+                                android:id="@+id/progress_bar2"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="center"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/margin_text"
+                                android:fontFamily="@font/roboto_reguler"
+                                android:text="Total pendapatan :"
+                                android:textAlignment="center"
+                                android:textColor="@color/secondary_text" />
+
+                            <TextView
+                                android:id="@+id/pendapatan_total"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/margin_text"
+                                android:fontFamily="@font/roboto_reguler"
+                                android:padding="0dp"
+                                android:text="Rp. 0"
+                                android:textColor="@color/primary"
+                                android:textSize="30dp" />
+
+                            <ProgressBar
+                                android:id="@+id/progress_bar1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/email_d"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="0dp"
+                                android:layout_marginTop="@dimen/margin_text"
+                                android:fontFamily="@font/roboto_medium"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text=""
+                                android:textColor="@color/secondary_text"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <Button
+                        android:id="@+id/btn_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin_text"
+                        android:layout_marginTop="@dimen/margin_text"
+                        android:background="@drawable/btn_detail"
+                        android:fontFamily="@font/roboto_medium"
+                        android:maxHeight="30dp"
+                        android:padding="0dp"
+                        android:text=""
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp" />
+
+                    <com.victor.loading.newton.NewtonCradleLoading
+                        android:id="@+id/newton_cradle_loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+
+                    <include layout="@layout/list_detail" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <!-- The main content view where fragments are loaded -->
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

@@ -3,16 +3,16 @@ package id.go.patikab.rsud.remun.remunerasi.entity;
 import com.google.gson.annotations.SerializedName;
 
 public class DataUser {
-    @SerializedName("user_id")
-    String id;
+    @SerializedName("KDDOKTER")
+    String KDDOKTER;
 
-    public String getId() {
-        return id;
+
+    public String getKDDOKTER() {
+        return KDDOKTER;
     }
-    //    @SerializedName("nama_tindakan")
-//    String nama_tindakan;
-//    @SerializedName("pengolahan")
-//    String pengolahan;
-//    @SerializedName("persentase_pribadi")
-//    String persentase_pribadi;
+
+    public void setKDDOKTER(String KDDOKTER) {
+        this.KDDOKTER = KDDOKTER;
+    }
+
 }
