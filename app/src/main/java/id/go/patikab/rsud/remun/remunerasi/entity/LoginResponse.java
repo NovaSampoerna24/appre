@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class RegisterResponse {
+public class LoginResponse {
     @SerializedName("status")
     String status;
     @SerializedName("message")
@@ -12,12 +12,12 @@ public class RegisterResponse {
     @SerializedName("data")
     List<DataUser> dataUser;
 
-    public String getMessage() {
-        return message;
-    }
-
     public String getStatus() {
         return status;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public List<DataUser> getDataUser() {

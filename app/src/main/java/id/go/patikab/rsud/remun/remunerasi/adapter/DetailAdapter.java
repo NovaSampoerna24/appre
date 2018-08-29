@@ -28,10 +28,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.txt_nm_tindakan.setText(detailLists.get(position).getNama_tindakan());
-        holder.txt_pengolahan.setText(detailLists.get(position).getPengolahan());
-        holder.txt_persentase.setText(detailLists.get(position).getPersentase_pribadi());
-        holder.txt_dapat.setText(detailLists.get(position).getDapat());
+        holder.txt_nm_tindakan.setText("Tindakan : "+detailLists.get(position).getNama_tindakan());
+        holder.txt_pengolahan.setText("Pengolahan : "+detailLists.get(position).getPengolahan());
+        holder.txt_persentase.setText("Persentase : "+detailLists.get(position).getPersentase_pribadi());
+        holder.txt_dapat.setText("Jumlah dapat : "+detailLists.get(position).getDapat());
     }
 
     @Override
