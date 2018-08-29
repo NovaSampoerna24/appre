@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment {
         kd_user = sharedPreferences.getString(login_session, null);
         nama_dokter = sharedPreferences.getString(nm_dokter, null);
         nm_dk.setText(nama_dokter);
-        if(gendermen == false){
+        if(gendermen == true){
             circleImageViewdokter.setImageResource(R.drawable.dk);
         }else{
             circleImageViewdokter.setImageResource(R.drawable.dk_1);

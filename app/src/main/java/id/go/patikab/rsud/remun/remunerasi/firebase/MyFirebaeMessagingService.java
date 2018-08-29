@@ -19,12 +19,20 @@ import java.util.Date;
 
 import id.go.patikab.rsud.remun.remunerasi.MainActivity;
 public class MyFirebaeMessagingService extends FirebaseMessagingService {
+    private static final String TAG = "test message" ;
     SharedPreferences sharedPreferences;
     Context context;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        if (remoteMessage.getData().size() > 0) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+        }
+        if (remoteMessage.getNotification() != null) {
+            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+        }
+//        Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         Intent intent  = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
@@ -32,10 +40,11 @@ public class MyFirebaeMessagingService extends FirebaseMessagingService {
         notificationBuilder.setContentTitle("Remunerasi Notification");
         notificationBuilder.setContentText(remoteMessage.getNotification().getBody());
         notificationBuilder.setAutoCancel(true);
-
         notificationBuilder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0,notificationBuilder.build());
+
+
 
     }
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import id.go.patikab.rsud.remun.remunerasi.database.model.DokterData;
+import id.go.patikab.rsud.remun.remunerasi.database.model.NotifikasiData;
 import id.go.patikab.rsud.remun.remunerasi.entity.DataDokter;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
@@ -18,8 +19,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static String field1_tb = "kd_dokter";
     private static String field2_tb = "nama_dokter";
     private static String nm_tb2 = "tb_dokter_2";
+    private static String nm_tb3 = "tb_notifikasi";
+    private static String field1_tb3 = "title";
+    private static String field2_tb3 = "message";
+    private static String field3_tb3 = "waktu";
 
-    private static final String tb1 ="create table " + nm_tb1 + " ( " +
+    private static final String tb1 = "create table " + nm_tb1 + " ( " +
             "id integer primary key autoincrement, " +
             field1_tb + " text," +
             field2_tb + " text)";
@@ -27,6 +32,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             "id integer primary key autoincrement, " +
             field1_tb + " text," +
             field2_tb + " text)";
+    private static final String tb3 = "create table " + nm_tb3 + " ( " +
+            "id integer primary key autoincrement, " +
+            field1_tb3 + " text, " +
+            field2_tb3 + " text, " +
+            field3_tb3 + " text)";
     private static DatabaseHandler sInstance;
 
 
@@ -48,6 +58,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(tb1);
         db.execSQL(tb2);
+        db.execSQL(tb3);
     }
 
     @Override
@@ -65,6 +76,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+
     public void addRecord2(DokterData dokterData) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -72,6 +84,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(field1_tb, dokterData.getKode());
         values.put(field2_tb, dokterData.getNama());
         db.insert(nm_tb2, null, values);
+        db.close();
+    }
+    public void addRecord3(NotifikasiData notifikasiData) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(field1_tb3, notifikasiData.getTitle());
+        values.put(field2_tb3, notifikasiData.getMessage());
+        values.put(field3_tb3, notifikasiData.getWaktu());
+        db.insert(nm_tb3, null, values);
         db.close();
     }
 
@@ -147,6 +169,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("delete from " + nm_tb1);
         db.close();
     }
+
     public void deleteAllrc2() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from " + nm_tb2);

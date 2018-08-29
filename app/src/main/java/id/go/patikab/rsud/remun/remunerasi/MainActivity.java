@@ -26,12 +26,18 @@ import java.util.Date;
 import java.util.Set;
 
 import butterknife.ButterKnife;
+import id.go.patikab.rsud.remun.remunerasi.api.ApiInterface;
+import id.go.patikab.rsud.remun.remunerasi.entity.LoginResponse;
 import id.go.patikab.rsud.remun.remunerasi.fragment.JadwalFragment;
 import id.go.patikab.rsud.remun.remunerasi.fragment.PembayaranFragment;
 import id.go.patikab.rsud.remun.remunerasi.fragment.ProfileFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.login_session;
 import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.nm_dokter;
 import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.pref;
 
 
@@ -43,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawer;
     NavigationView navigationView;
     SharedPreferences sharedPreferences;
-
+    ApiInterface apiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
         sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-        Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
+//        Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
         kd_user = sharedPreferences.getString(login_session, null);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -215,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
     }
