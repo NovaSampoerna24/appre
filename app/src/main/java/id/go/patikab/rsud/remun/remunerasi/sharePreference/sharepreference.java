@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class sharepreference {
+
     public static final String pref_name = "pf_token";
 
     SharedPreferences tokens;
