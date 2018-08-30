@@ -12,5 +12,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="long_text">test</string>
+    <string name="string_failure">Tidak dapat menjangkau server</string>
+    <string name="coba_lagi">Ok</string>
+    <string name="detail_masalh">Silahkan periksa kembali koneksi internet anda. Terimakasih !</string>
+    <string name="pesan_konek">Tidak tersambung ke internet</string>
 
 </resources>

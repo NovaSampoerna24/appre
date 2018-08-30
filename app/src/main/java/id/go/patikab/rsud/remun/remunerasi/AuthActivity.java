@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import id.go.patikab.rsud.remun.remunerasi.database.DatabaseHandler;
 import id.go.patikab.rsud.remun.remunerasi.database.model.DokterData;
 import id.go.patikab.rsud.remun.remunerasi.entity.LoginResponse;
 import id.go.patikab.rsud.remun.remunerasi.entity.ValDokter;
+import id.go.patikab.rsud.remun.remunerasi.page_dialog.CustomDialogFailure;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -168,7 +171,8 @@ public class AuthActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ValDokter> call, Throwable t) {
                             progressDialog.dismiss();
-                            Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
+                            dialog_failure();
+//                            Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                             Log.d("messge", t.getMessage());
                         }
                     });
@@ -222,7 +226,11 @@ public class AuthActivity extends AppCompatActivity {
         Log.d("tokenmu", token + " ");
 //        }
     }
-
+    private void dialog_failure(){
+        CustomDialogFailure cdd = new CustomDialogFailure(AuthActivity.this);
+        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cdd.show();
+    }
     private void signinsavetoken(String id, String password, String token, final String nama_dokter) {
 
             try {
@@ -256,7 +264,8 @@ public class AuthActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
+                        dialog_failure();
+//                        Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                         Log.d("failure", t.getMessage());
                     }
                 });
