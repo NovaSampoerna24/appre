@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import id.go.patikab.rsud.remun.remunerasi.AuthActivity;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.entity.DetailTindakan;
 
@@ -21,41 +22,31 @@ public class CustomDialogDetail extends Dialog implements View.OnClickListener {
     public Context context;
     public DetailTindakan tindakan;
     public Dialog d;
-    public Button yes, no;
-    TextView tindakane,tarif,tanggal,reward;
-
-    public CustomDialogDetail(Context a, DetailTindakan tindakans) {
+    public Button yes;
+    public CustomDialogDetail(Context a) {
         super(a);
         this.context = a;
-        this.tindakan = tindakans;
 
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setCancelable(false);
         setContentView(R.layout.dialog_custom_detail);
-        yes = (Button) findViewById(R.id.btn_yes);
-        tindakane = (TextView)findViewById(R.id.tindakan);
-        tarif = (TextView) findViewById(R.id.tarife);
-        tanggal = (TextView)findViewById(R.id.tanggal);
-        reward = (TextView)findViewById(R.id.reward);
+        yes = (Button) findViewById(R.id.btn_ok);
         yes.setOnClickListener(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        tindakane.setText(tindakan.getTindakan().toString());
-        tarif.setText(tindakan.getTarif().toString());
-        tanggal.setText(tindakan.getTanggal().toString());
-        reward.setText(tindakan.getTarif_jl1().toString());
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_yes:
+            case R.id.btn_ok:
                 break;
             default:
                 break;

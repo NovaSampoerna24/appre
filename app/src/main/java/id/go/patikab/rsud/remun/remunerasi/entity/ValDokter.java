@@ -10,5 +10,17 @@ public class ValDokter {
     @SerializedName("message")
     String message;
     @SerializedName("data")
-    List<>
+    List<DataDokter>dokterList;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public List<DataDokter> getDokterList() {
+        return dokterList;
+    }
 }
