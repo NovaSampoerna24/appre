@@ -2,6 +2,7 @@ package id.go.patikab.rsud.remun.remunerasi;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,6 +11,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,7 +37,11 @@ import id.go.patikab.rsud.remun.remunerasi.database.DatabaseHandler;
 import id.go.patikab.rsud.remun.remunerasi.database.model.DokterData;
 import id.go.patikab.rsud.remun.remunerasi.entity.LoginResponse;
 import id.go.patikab.rsud.remun.remunerasi.entity.ValDokter;
+<<<<<<< HEAD
 import id.go.patikab.rsud.remun.remunerasi.page_dialog.CustomDialogFailure;
+=======
+import id.go.patikab.rsud.remun.remunerasi.page_dialog.CustomDialogDetail;
+>>>>>>> 06f373dd81dd44a4be019cbc66f42327f6b8253d
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,9 +62,11 @@ public class AuthActivity extends AppCompatActivity {
     Spinner spinnerDokter;
     SpinnerAdapter adapterspin;
     Context context;
-    String id_d = null,nama_dokter;
+    SwipeRefreshLayout swipe;
+    String id_d = null, nama_dokter;
     DokterData[] dokterdatalogin;
     List<DokterData> dokterDataList = new ArrayList<DokterData>();
+    ProgressDialog progressDialog1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,16 +104,35 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
 
+        swipe = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipe.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        refresh();
+                    }
+                }
+        );
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String ps = password.getText().toString().trim();
                 if (TextUtils.isEmpty(password.getText()) || TextUtils.isEmpty(id_d)) {
+                    if (TextUtils.isEmpty(id_d)) {
+                        AlertDialog.Builder ab = new AlertDialog.Builder(AuthActivity.this);
+                        ab.setMessage("Jika dokter belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
+                        ab.setCancelable(false);
+                        ab.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                arg0.dismiss();
+                            }
+                        });
+                        ab.show();
+                    }
                     if (TextUtils.isEmpty(password.getText())) {
                         password.setError("Password belum diisi !");
-                    }
-                    if (TextUtils.isEmpty(id_d)) {
-                        Toast.makeText(AuthActivity.this, "Pilih dokter terlebih dahulu !", Toast.LENGTH_SHORT).show();
                     }
 //                    Log.d("test", "" + password.getText().toString().trim() + " " + spinnerDokter.getSelectedItem().toString().trim() + " " + id_d);
 
@@ -118,8 +146,8 @@ public class AuthActivity extends AppCompatActivity {
                     String token = preferences.getString(my_token, null);
                     Log.d("token", token + " ");
                     if (isOnline() == true) {
-                        signinsavetoken(id_d, ps, token,nama_dokter);
-                    }else{
+                        signinsavetoken(id_d, ps, token, nama_dokter);
+                    } else {
                         progressDialog.dismiss();
                         Toast.makeText(AuthActivity.this, "Periksa Koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
                     }
@@ -128,14 +156,20 @@ public class AuthActivity extends AppCompatActivity {
         });
     }
 
-    public void initSpinnerDokter() {
+    private void refresh() {
+        initSpinnerDokter();
+        swipe.setRefreshing(false);
+    }
+
+    private void initSpinnerDokter() {
         final DatabaseHandler db = DatabaseHandler.getInstance(AuthActivity.this);
         dokterDataList = db.getAllrecord();
         if (dokterDataList.size() > 0) {
             spinneradapterfromlokal();
-            Log.d("sqlite","lokal");
+            Log.d("sqlite", "lokal");
         } else {
             progressDialog.setMessage("Mengambil data dokter");
+            progressDialog.setCancelable(false);
             progressDialog.show();
             db.deleteAllrc();
             if (isOnline() == true) {
@@ -188,6 +222,7 @@ public class AuthActivity extends AppCompatActivity {
             }
         }
     }
+
     public void spinneradapterfromlokal() {
         DatabaseHandler db = DatabaseHandler.getInstance(AuthActivity.this);
         dokterDataList = db.getAllrecord();
@@ -201,7 +236,6 @@ public class AuthActivity extends AppCompatActivity {
             dokterdata[i] = new DokterData();
             dokterdata[i].setKode(kd);
             dokterdata[i].setNama(namah);
-
             Log.d("sqlite", kd + " " + namah + " " + id + " ");
         }
         spinnerDokter = (Spinner) findViewById(R.id.spin_dokter);
@@ -233,51 +267,63 @@ public class AuthActivity extends AppCompatActivity {
     }
     private void signinsavetoken(String id, String password, String token, final String nama_dokter) {
 
-            try {
-                Call<LoginResponse> call = apiInterface.getloginresponse(id, password, token);
-                call.enqueue(new Callback<LoginResponse>() {
-                    @Override
-                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                        String status = response.body().getStatus().toString();
-                        String message = response.body().getMessage().toString();
-                        if (response.isSuccessful()) {
-                            if (status.equals("ok")) {
-                                progressDialog.dismiss();
-                                preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
-                                editor.putString(nm_dokter,nama_dokter);
-                                editor.apply();
-                                startActivity(new Intent(AuthActivity.this, MainActivity.class));
-                                finish();
-                            } else if (status.equals("failed")) {
-                                progressDialog.dismiss();
-                                Toast.makeText(AuthActivity.this, message, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        if (!response.isSuccessful()) {
+        try {
+            Call<LoginResponse> call = apiInterface.getloginresponse(id, password, token);
+            call.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    String status = response.body().getStatus().toString();
+                    String message = response.body().getMessage().toString();
+                    if (response.isSuccessful()) {
+                        if (status.equals("ok")) {
                             progressDialog.dismiss();
-                            Toast.makeText(AuthActivity.this, "Periksa kembali jaringan anda !", Toast.LENGTH_SHORT).show();
+                            preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
+                            editor.putString(nm_dokter, nama_dokter);
+                            editor.apply();
+                            startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                            finish();
+                        } else if (status.equals("failed")) {
+                            progressDialog.dismiss();
+                            Toast.makeText(AuthActivity.this, message, Toast.LENGTH_SHORT).show();
                         }
                     }
-
-                    @Override
-                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    if (!response.isSuccessful()) {
                         progressDialog.dismiss();
+<<<<<<< HEAD
                         dialog_failure();
 //                        Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                         Log.d("failure", t.getMessage());
+=======
+                        Toast.makeText(AuthActivity.this, "Periksa kembali jaringan anda !", Toast.LENGTH_SHORT).show();
+>>>>>>> 06f373dd81dd44a4be019cbc66f42327f6b8253d
                     }
-                });
-            } catch (Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("Exception ", e.getMessage());
-            }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    progressDialog.dismiss();
+                    dialog_failure();
+//                        Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
+                    Log.d("failure", t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d("Exception ", e.getMessage());
+        }
 //        }
 //        else {
 //
 //        }
+    }
+
+    public void dialog_failure() {
+        CustomDialogDetail cdd = new CustomDialogDetail(AuthActivity.this);
+        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cdd.show();
     }
 
     //method untuk cek koneksi

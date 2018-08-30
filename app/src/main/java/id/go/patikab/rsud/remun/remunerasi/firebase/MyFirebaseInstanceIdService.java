@@ -27,3 +27,4 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
         }
     }
 }
+
