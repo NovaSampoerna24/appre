@@ -20,13 +20,11 @@ import id.go.patikab.rsud.remun.remunerasi.entity.DetailTindakan;
 
 public class CustomDialogDetail extends Dialog implements View.OnClickListener {
     public Context context;
-    public DetailTindakan tindakan;
     public Dialog d;
     public Button yes;
     public CustomDialogDetail(Context a) {
         super(a);
         this.context = a;
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

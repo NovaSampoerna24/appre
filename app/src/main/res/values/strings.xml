@@ -16,5 +16,7 @@
     <string name="coba_lagi">Ok</string>
     <string name="detail_masalh">Silahkan periksa kembali koneksi internet anda. Terimakasih !</string>
     <string name="pesan_konek">Tidak tersambung ke internet</string>
+    <string name="title_message">Tidak dapat menjangkau server</string>
+    <string name="detail_message">Periksa kembali koneksi internet anda !</string>
 
 </resources>

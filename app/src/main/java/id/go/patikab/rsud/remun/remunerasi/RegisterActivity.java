@@ -2,13 +2,18 @@ package id.go.patikab.rsud.remun.remunerasi;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,23 +50,28 @@ import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.Share
 import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.pref;
 
 import id.go.patikab.rsud.remun.remunerasi.AuthActivity;
+import id.go.patikab.rsud.remun.remunerasi.page_dialog.CustomDialogDetail;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText password, device_token, repassword;
+    String id_d, nama_dokter;
+    EditText password, repassword;
     Button registerButton, loginButton;
+
     ProgressDialog progressDialog;
+
     SharedPreferences preferences;
     ApiInterface apiInterface;
-    @BindView(R.id.spin_dokter)
-    Spinner spinnerDokter;
+
     SpinnerAdapter adapterspin;
-    Context context;
-    String id_d,nama_dokter;
     DokterData[] dokterdataregister;
     List<DokterData> dokterDataList = new ArrayList<DokterData>();
+    @BindView(R.id.spin_dokter)
+    Spinner spinnerDokter;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,8 +106,20 @@ public class RegisterActivity extends AppCompatActivity {
                 String passworde = password.getText().toString();
                 String passwordulang = repassword.getText().toString();
 
-                if ( TextUtils.isEmpty(id_d)|| passworde == null || passworde.length() < 6 || passwordulang == null || !TextUtils.equals(passworde, passwordulang)) {
+                if (TextUtils.isEmpty(id_d) || passworde == null || passworde.length() < 6 || passwordulang == null || !TextUtils.equals(passworde, passwordulang)) {
+                    if (TextUtils.isEmpty(id_d)) {
+                        AlertDialog.Builder ab = new AlertDialog.Builder(RegisterActivity.this);
+                        ab.setMessage("Jika dokter belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
+                        ab.setCancelable(false);
+                        ab.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                arg0.dismiss();
+                            }
+                        });
+                        ab.show();
+                    }
                     if (TextUtils.isEmpty(passworde)) {
                         password.setError("Password belum diisi !");
                     }
@@ -110,18 +132,17 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!TextUtils.equals(passworde, passwordulang)) {
                         repassword.setError("Password tidak sama !");
                     }
-                    if(TextUtils.isEmpty(id_d)){
-                        Toast.makeText(RegisterActivity.this, "Pilih dokter terlebih dahulu !", Toast.LENGTH_SHORT).show();
-                    }
+
                 } else {
                     progressDialog.setMessage("Register....");
                     progressDialog.setCancelable(false);
                     progressDialog.show();
                     if (isOnline() == true) {
-                        saveToServer(id_d, passworde, passwordulang,nama_dokter);
+                        saveToServer(id_d, passworde, passwordulang, nama_dokter);
                     } else {
                         progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+                        dialog_failure();
+//                        Toast.makeText(RegisterActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -134,6 +155,20 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        refresh();
+                    }
+                }
+        );
+    }
+
+    private void refresh() {
+        initSpinnerDokterregister();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public void initSpinnerDokterregister() {
@@ -175,12 +210,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ValDokter> call, Throwable t) {
-
+                        dialog_failure();
                     }
                 });
 
             } else {
-                Toast.makeText(RegisterActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+                dialog_failure();
+//                Toast.makeText(RegisterActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -200,7 +236,6 @@ public class RegisterActivity extends AppCompatActivity {
             dokterdata[i].setKode(kd);
             dokterdata[i].setNama(namah);
 
-//            Log.d("sqlite", kd + " " + namah + " " + id + " ");
         }
         spinnerDokter = (Spinner) findViewById(R.id.spin_dokter);
         adapterspin = new SpinAdapter(RegisterActivity.this, android.R.layout.simple_dropdown_item_1line, dokterdata);
@@ -224,7 +259,7 @@ public class RegisterActivity extends AppCompatActivity {
                             preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
-                            editor.putString(nm_dokter, nm_dk );
+                            editor.putString(nm_dokter, nm_dk);
                             editor.apply();
                             progressDialog.dismiss();
                             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
@@ -244,13 +279,15 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<RegisterResponse> call, Throwable t) {
                     progressDialog.dismiss();
-                    Toast.makeText(RegisterActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
+                    dialog_failure();
+//                    Toast.makeText(RegisterActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                     Log.d("trowable : ", t.getMessage());
                 }
             });
         } catch (Exception e) {
             progressDialog.dismiss();
-            Toast.makeText(RegisterActivity.this, "Exception to connect", Toast.LENGTH_SHORT).show();
+            dialog_failure();
+//            Toast.makeText(RegisterActivity.this, "Exception to connect", Toast.LENGTH_SHORT).show();
             Log.d("message err : ", e.getMessage());
         }
     }
@@ -271,6 +308,12 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             initSpinnerDokterregister();
         }
+    }
+
+    private void dialog_failure() {
+        CustomDialogDetail cdd = new CustomDialogDetail(RegisterActivity.this);
+        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cdd.show();
     }
 
     public boolean isOnline() {

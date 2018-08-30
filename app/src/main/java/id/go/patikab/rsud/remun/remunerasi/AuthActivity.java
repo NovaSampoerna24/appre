@@ -37,11 +37,8 @@ import id.go.patikab.rsud.remun.remunerasi.database.DatabaseHandler;
 import id.go.patikab.rsud.remun.remunerasi.database.model.DokterData;
 import id.go.patikab.rsud.remun.remunerasi.entity.LoginResponse;
 import id.go.patikab.rsud.remun.remunerasi.entity.ValDokter;
-<<<<<<< HEAD
-import id.go.patikab.rsud.remun.remunerasi.page_dialog.CustomDialogFailure;
-=======
+
 import id.go.patikab.rsud.remun.remunerasi.page_dialog.CustomDialogDetail;
->>>>>>> 06f373dd81dd44a4be019cbc66f42327f6b8253d
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,21 +49,21 @@ import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.Share
 import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.pref;
 
 public class AuthActivity extends AppCompatActivity {
-    EditText username, password;
+    EditText password;
+    String id_d = null, nama_dokter;
     Button loginButton, registerButton;
 
     ProgressDialog progressDialog;
     SharedPreferences preferences;
     ApiInterface apiInterface;
-    @BindView(R.id.spin_dokter)
-    Spinner spinnerDokter;
+
     SpinnerAdapter adapterspin;
-    Context context;
     SwipeRefreshLayout swipe;
-    String id_d = null, nama_dokter;
+
     DokterData[] dokterdatalogin;
     List<DokterData> dokterDataList = new ArrayList<DokterData>();
-    ProgressDialog progressDialog1;
+    @BindView(R.id.spin_dokter)
+    Spinner spinnerDokter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,7 +146,8 @@ public class AuthActivity extends AppCompatActivity {
                         signinsavetoken(id_d, ps, token, nama_dokter);
                     } else {
                         progressDialog.dismiss();
-                        Toast.makeText(AuthActivity.this, "Periksa Koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+                        dialog_failure();
+//                        Toast.makeText(AuthActivity.this, "Periksa Koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -251,22 +249,20 @@ public class AuthActivity extends AppCompatActivity {
             startActivity(new Intent(AuthActivity.this, MainActivity.class));
             finish();
         } else {
-//            if (String.valueOf(dataDokters).toString().trim() == "null") {
             initSpinnerDokter();
-//                Log.d("sd", "sd");
         }
-//            Log.d("obj", String.valueOf(dataDokters).toString().trim() + " ");
         String token = preferences.getString(my_token, null);
         Log.d("tokenmu", token + " ");
 //        }
     }
-    private void dialog_failure(){
-        CustomDialogFailure cdd = new CustomDialogFailure(AuthActivity.this);
+
+    private void dialog_failure() {
+        CustomDialogDetail cdd = new CustomDialogDetail(AuthActivity.this);
         cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         cdd.show();
     }
-    private void signinsavetoken(String id, String password, String token, final String nama_dokter) {
 
+    private void signinsavetoken(String id, String password, String token, final String nama_dokter) {
         try {
             Call<LoginResponse> call = apiInterface.getloginresponse(id, password, token);
             call.enqueue(new Callback<LoginResponse>() {
@@ -291,13 +287,8 @@ public class AuthActivity extends AppCompatActivity {
                     }
                     if (!response.isSuccessful()) {
                         progressDialog.dismiss();
-<<<<<<< HEAD
                         dialog_failure();
-//                        Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
-                        Log.d("failure", t.getMessage());
-=======
-                        Toast.makeText(AuthActivity.this, "Periksa kembali jaringan anda !", Toast.LENGTH_SHORT).show();
->>>>>>> 06f373dd81dd44a4be019cbc66f42327f6b8253d
+//                        Toast.makeText(AuthActivity.this, "Periksa kembali jaringan anda !", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -320,11 +311,6 @@ public class AuthActivity extends AppCompatActivity {
 //        }
     }
 
-    public void dialog_failure() {
-        CustomDialogDetail cdd = new CustomDialogDetail(AuthActivity.this);
-        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        cdd.show();
-    }
 
     //method untuk cek koneksi
     public boolean isOnline() {
