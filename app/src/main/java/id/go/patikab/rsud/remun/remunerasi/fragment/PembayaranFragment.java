@@ -3,6 +3,8 @@ package id.go.patikab.rsud.remun.remunerasi.fragment;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -46,6 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import butterknife.Unbinder;
+import id.go.patikab.rsud.remun.remunerasi.AuthActivity;
 import id.go.patikab.rsud.remun.remunerasi.MainActivity;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.adapter.DetailAdapter;
@@ -53,6 +56,7 @@ import id.go.patikab.rsud.remun.remunerasi.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.api.ApiInterface;
 import id.go.patikab.rsud.remun.remunerasi.entity.DataTindakan;
 import id.go.patikab.rsud.remun.remunerasi.entity.DetailTindakan;
+import id.go.patikab.rsud.remun.remunerasi.page_dialog.CustomDialogDetail;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -701,7 +705,8 @@ public class PembayaranFragment extends Fragment {
                         @Override
                         public void onFailure(Call<DataTindakan> call, Throwable t) {
                             hideLoad();
-                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server !", Toast.LENGTH_SHORT).show();
+                            dialog_failure();
+//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server !", Toast.LENGTH_SHORT).show();
                             Log.d("Failure", t.getMessage());
                         }
                     });
@@ -733,7 +738,6 @@ public class PembayaranFragment extends Fragment {
             }
         }, 500);
     }
-
     //method untuk cek koneksi
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -744,5 +748,11 @@ public class PembayaranFragment extends Fragment {
         }
         //jika tidak ada koneksi return false
         return false;
+    }
+//    dialog failure
+    private void dialog_failure() {
+        CustomDialogDetail cdd = new CustomDialogDetail(context);
+        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cdd.show();
     }
 }
