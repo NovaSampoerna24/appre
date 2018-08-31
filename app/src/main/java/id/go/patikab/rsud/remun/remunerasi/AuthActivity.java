@@ -117,7 +117,7 @@ public class AuthActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(password.getText()) || TextUtils.isEmpty(id_d)) {
                     if (TextUtils.isEmpty(id_d)) {
                         AlertDialog.Builder ab = new AlertDialog.Builder(AuthActivity.this);
-                        ab.setMessage("Jika dokter belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
+                        ab.setMessage("Plih dokter terlebih dahulu, Jika list dokter belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
                         ab.setCancelable(false);
                         ab.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
@@ -167,7 +167,6 @@ public class AuthActivity extends AppCompatActivity {
             Log.d("sqlite", "lokal");
         } else {
             progressDialog.setMessage("Mengambil data dokter");
-            progressDialog.setCancelable(false);
             progressDialog.show();
             db.deleteAllrc();
             if (isOnline() == true) {

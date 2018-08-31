@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(id_d) || passworde == null || passworde.length() < 6 || passwordulang == null || !TextUtils.equals(passworde, passwordulang)) {
                     if (TextUtils.isEmpty(id_d)) {
                         AlertDialog.Builder ab = new AlertDialog.Builder(RegisterActivity.this);
-                        ab.setMessage("Jika dokter belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
+                        ab.setMessage("Plih dokter terlebih dahulu, Jika list dokter belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
                         ab.setCancelable(false);
                         ab.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
@@ -135,7 +135,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } else {
                     progressDialog.setMessage("Register....");
-                    progressDialog.setCancelable(false);
                     progressDialog.show();
                     if (isOnline() == true) {
                         saveToServer(id_d, passworde, passwordulang, nama_dokter);
