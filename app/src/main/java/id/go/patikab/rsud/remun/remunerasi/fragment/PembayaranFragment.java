@@ -211,15 +211,17 @@ public class PembayaranFragment extends Fragment {
         ubin = ButterKnife.bind(this, view);
         // Inflate the layout for this fragment
         btndetail.setText("Detail");
+        getActionBar().setTitle("Remunerasi");
+        date_Awal.setFocusable(false);
+        date_Akhir.setFocusable(false);
+        hariIni();
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActionBar().setTitle("Remunerasi");
-        date_Awal.setFocusable(false);
-        date_Akhir.setFocusable(false);
+
         //        setting dateformat
         dateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         newtonCradleLoading.setLoadingColor(R.color.colorAccent);
@@ -251,7 +253,7 @@ public class PembayaranFragment extends Fragment {
                 }
             }
         });
-        hariIni();
+
     }
 
     @Override
