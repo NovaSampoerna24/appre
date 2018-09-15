@@ -140,8 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
                         saveToServer(id_d, passworde, passwordulang, nama_dokter);
                     } else {
                         progressDialog.dismiss();
-                        dialog_failure();
-//                        Toast.makeText(RegisterActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Periksa kembali koneksi jaringan anda !", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -285,8 +284,8 @@ public class RegisterActivity extends AppCompatActivity {
             });
         } catch (Exception e) {
             progressDialog.dismiss();
-            dialog_failure();
-//            Toast.makeText(RegisterActivity.this, "Exception to connect", Toast.LENGTH_SHORT).show();
+//            dialog_failure();
+            Toast.makeText(RegisterActivity.this, "Exception to connect", Toast.LENGTH_SHORT).show();
             Log.d("message err : ", e.getMessage());
         }
     }

@@ -179,34 +179,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-//        displaySelectedScreen(item.getItemId());
-        Fragment fragmentt = null;
-        Class fragmentclass;
-        switch (item.getItemId()) {
-//            case R.id.nav_jadwal:
-//                fragmentclass = JadwalFragment.class;
+////        displaySelectedScreen(item.getItemId());
+//        Fragment fragmentt = null;
+//        Class fragmentclass;
+//        switch (item.getItemId()) {
+////            case R.id.nav_jadwal:
+////                fragmentclass = JadwalFragment.class;
+////                break;
+////            case R.id.nav_profile:
+////                fragmentclass = ProfileFragment.class;
+////                break;
+//            case R.id.nav_remune:
+//                fragmentclass = PembayaranFragment.class;
 //                break;
-//            case R.id.nav_profile:
-//                fragmentclass = ProfileFragment.class;
-//                break;
-            case R.id.nav_remune:
-                fragmentclass = PembayaranFragment.class;
-                break;
-            default:
-                fragmentclass = PembayaranFragment.class;
-        }
-        try {
-            fragmentt = (Fragment) fragmentclass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.flContent, fragmentt)
-                .detach(fragmentt)
-                .attach(fragmentt)
-                .addToBackStack(null).commit();
+//            default:
+//                fragmentclass = PembayaranFragment.class;
+//        }
+//        try {
+//            fragmentt = (Fragment) fragmentclass.newInstance();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.flContent, fragmentt)
+//                .detach(fragmentt)
+//                .attach(fragmentt)
+//                .addToBackStack(null).commit();
 
         if (id == R.id.nav_logout) {
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();

@@ -38,6 +38,7 @@ import com.victor.loading.newton.NewtonCradleLoading;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,6 +64,7 @@ import retrofit2.Response;
 
 import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.login_session;
 import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.nm_dokter;
 import static id.go.patikab.rsud.remun.remunerasi.database.sharepreference.SharePref.pref;
 
 public class PembayaranFragment extends Fragment {
@@ -79,7 +81,7 @@ public class PembayaranFragment extends Fragment {
             btn_date_akhir;
 
     EditText date_Awal, date_Akhir;
-    DatePickerDialog awaldatepicker, akhirdatepicker;
+      DatePickerDialog awaldatepicker, akhirdatepicker;
     SimpleDateFormat dateFormater;
     String kd_user;
     LinearLayoutManager layoutManager;
@@ -231,6 +233,7 @@ public class PembayaranFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences(pref, Context.MODE_PRIVATE);
         Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
         kd_user = sharedPreferences.getString(login_session, null);
+        emaile.setText(sharedPreferences.getString(nm_dokter,null));
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
@@ -306,6 +309,7 @@ public class PembayaranFragment extends Fragment {
         akhirdatepicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+
                 Calendar newDateAwal = Calendar.getInstance();
                 newDateAwal.set(i, i1, i2);
                 date_Akhir.setText(dateFormater.format(newDateAwal.getTime()));
@@ -313,11 +317,13 @@ public class PembayaranFragment extends Fragment {
                 getdatadetail();
             }
         }, akhircalendar.get(Calendar.YEAR), akhircalendar.get(Calendar.MONTH), akhircalendar.get(Calendar.DAY_OF_MONTH));
+        akhircalendar.add(Calendar.YEAR ,-2);
+        akhirdatepicker.getDatePicker().setMinDate(akhircalendar.getTimeInMillis());
         akhirdatepicker.show();
     }
 
     private void showDialogDateAwal() {
-        Calendar awalcalendar = Calendar.getInstance();
+        final Calendar awalcalendar = Calendar.getInstance();
         awaldatepicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -328,6 +334,8 @@ public class PembayaranFragment extends Fragment {
 //                getdatadetail();
             }
         }, awalcalendar.get(Calendar.YEAR), awalcalendar.get(Calendar.MONTH), awalcalendar.get(Calendar.DAY_OF_MONTH));
+        awalcalendar.add(Calendar.YEAR ,-2);
+        awaldatepicker.getDatePicker().setMinDate(awalcalendar.getTimeInMillis());
         awaldatepicker.show();
     }
 
@@ -350,7 +358,6 @@ public class PembayaranFragment extends Fragment {
                             if (response.isSuccessful()) {
 
                                 if (status.equals("ok")) {
-                                    emaile.setText(nama_dokters);
                                     judule.setText(judul);
                                     pendapatan_bpjs.setText(pendapatan_bpjsr);
                                     pendapatan_umum.setText(pendapatan_umumr);
@@ -376,8 +383,8 @@ public class PembayaranFragment extends Fragment {
                         @Override
                         public void onFailure(Call<DataTindakan> call, Throwable t) {
                             hideLoad();
-                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server !", Toast.LENGTH_SHORT).show();
-
+                            dialog_failure();
+//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server !", Toast.LENGTH_SHORT).show();
                             Log.d("Failure", t.getMessage());
                         }
                     });
@@ -388,6 +395,7 @@ public class PembayaranFragment extends Fragment {
                     Log.d("Exception", e.getMessage());
                 }
             } else {
+                dialog_failure();
                 Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
             }
         }
@@ -413,13 +421,11 @@ public class PembayaranFragment extends Fragment {
                             if (response.isSuccessful()) {
                                 status = response.body().getStatus().toString();
                                 total = response.body().getTotal().toString();
-                                nama_dokter = response.body().getNama_dokter().toString();
                                 judul = response.body().getJudul().toString();
 
                                 pendapatan_bpjs.setText(pendapatan_bpjsr);
                                 pendapatan_umum.setText(pendapatan_umumr);
                                 if (status.equals("ok")) {
-                                    emaile.setText(nama_dokter);
                                     if (response.body().getTotal().equals("0")) {
                                         total_pendapatan.setText("Rp. 0");
                                     } else {
@@ -452,7 +458,8 @@ public class PembayaranFragment extends Fragment {
                         public void onFailure(Call<DataTindakan> call, Throwable t) {
                             newtonCradleLoading.stop();
                             newtonCradleLoading.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
+                            dialog_failure();
+//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                             Log.d("Failure", t.getMessage());
                         }
                     });
@@ -465,7 +472,8 @@ public class PembayaranFragment extends Fragment {
             } else {
                 newtonCradleLoading.stop();
                 newtonCradleLoading.setVisibility(View.GONE);
-                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
+                dialog_failure();
+//                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -527,7 +535,6 @@ public class PembayaranFragment extends Fragment {
                                 pendapatan_bpjs.setText(pendapatan_bpjsr);
                                 pendapatan_umum.setText(pendapatan_umumr);
                                 if (status.equals("ok")) {
-                                    emaile.setText(" " + nama_dokter);
                                     if (response.body().getTotal().equals("0")) {
                                         total_pendapatan.setText("Rp. 0");
                                     } else {
@@ -550,7 +557,8 @@ public class PembayaranFragment extends Fragment {
                         @Override
                         public void onFailure(Call<DataTindakan> call, Throwable t) {
                             hideLoad();
-                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
+                            dialog_failure();
+//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                             Log.d("Failure", t.getMessage());
                         }
                     });
@@ -561,7 +569,8 @@ public class PembayaranFragment extends Fragment {
                 }
             } else {
                 hideLoad();
-                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
+                dialog_failure();
+//                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -604,7 +613,6 @@ public class PembayaranFragment extends Fragment {
                                 pendapatan_bpjs.setText(pendapatan_bpjsr);
                                 pendapatan_umum.setText(pendapatan_umumr);
                                 if (status.equals("ok")) {
-                                    emaile.setText(" " + nama_dokter);
                                     if (response.body().getTotal().equals("0")) {
                                         total_pendapatan.setText("Rp. 0");
                                     } else {
@@ -627,7 +635,8 @@ public class PembayaranFragment extends Fragment {
                         @Override
                         public void onFailure(Call<DataTindakan> call, Throwable t) {
                             hideLoad();
-                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
+                            dialog_failure();
+//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                             Log.d("Failure", t.getMessage());
                         }
                     });
@@ -639,7 +648,8 @@ public class PembayaranFragment extends Fragment {
 
             } else {
                 hideLoad();
-                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
+                dialog_failure();
+//                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -682,7 +692,6 @@ public class PembayaranFragment extends Fragment {
                                 pendapatan_bpjs.setText(pendapatan_bpjsr);
                                 pendapatan_umum.setText(pendapatan_umumr);
                                 if (status.equals("ok")) {
-                                    emaile.setText(" " + nama_dokter);
                                     if (response.body().getTotal().equals("0")) {
                                         total_pendapatan.setText("Rp. 0");
                                     } else {
@@ -717,7 +726,8 @@ public class PembayaranFragment extends Fragment {
                 }
             } else {
                 hideLoad();
-                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
+                dialog_failure();
+//                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -749,9 +759,9 @@ public class PembayaranFragment extends Fragment {
         //jika tidak ada koneksi return false
         return false;
     }
-//    dialog failure
+    //dialog failure
     private void dialog_failure() {
-        CustomDialogDetail cdd = new CustomDialogDetail(context);
+        CustomDialogDetail cdd = new CustomDialogDetail(getActivity());
         cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         cdd.show();
     }

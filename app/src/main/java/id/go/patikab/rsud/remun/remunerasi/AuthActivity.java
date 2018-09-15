@@ -286,8 +286,7 @@ public class AuthActivity extends AppCompatActivity {
                     }
                     if (!response.isSuccessful()) {
                         progressDialog.dismiss();
-                        dialog_failure();
-//                        Toast.makeText(AuthActivity.this, "Periksa kembali jaringan anda !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AuthActivity.this, "Periksa kembali jaringan anda !", Toast.LENGTH_SHORT).show();
                     }
                 }
 
