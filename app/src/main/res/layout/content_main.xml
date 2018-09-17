@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/nav_header_vertical_spacing"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
+    tools:context=".activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <android.support.v4.widget.NestedScrollView android:id="@+id/nestedScroll"
