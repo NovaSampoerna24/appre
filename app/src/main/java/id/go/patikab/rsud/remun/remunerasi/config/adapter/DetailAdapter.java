@@ -13,9 +13,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import id.go.patikab.rsud.remun.remunerasi.activity.DetailTindakanActivity;
+import id.go.patikab.rsud.remun.remunerasi.view.DetailTindakan.DetailTindakanActivity;
 import id.go.patikab.rsud.remun.remunerasi.R;
-import id.go.patikab.rsud.remun.remunerasi.model.object.DetailTindakan;
+import id.go.patikab.rsud.remun.remunerasi.data.api.object.DetailTindakan;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
     List<DetailTindakan> detailTindakanList;

@@ -4,19 +4,23 @@
     tools:showIn="navigation_view">
 
     <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_person"
+        android:title="Profile" />
+    <item
         android:id="@+id/nav_remune"
         android:icon="@drawable/ic_remune"
         android:title="Pembayaran" />
-    <!--<item-->
-        <!--android:id="@+id/nav_profile"-->
-        <!--android:icon="@drawable/ic_profile"-->
-        <!--android:title="Profile" />-->
     <!--<item-->
         <!--android:id="@+id/nav_jadwal"-->
         <!--android:icon="@drawable/ic_jadwal"-->
         <!--android:title="Jadwal" />-->
     <item android:title="Account">
         <menu>
+            <item
+                android:id="@+id/nav_ganti_password"
+                android:icon="@drawable/ic_password"
+                android:title="Ubah Password" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_signout"

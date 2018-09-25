@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+ext.anko_version = '0.10.5'
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -16,6 +18,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    kotlin {
+        experimental {
+            coroutines "enable"
+        }
+    }
+
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -38,11 +46,31 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.victor:lib:1.0.4'
 
+    implementation 'com.amitshekhar.android:android-networking:1.0.2'
+    implementation 'com.amitshekhar.android:jackson-android-networking:1.0.2'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.android.support:support-vector-drawable:27.1.1'
+
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.3"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
+    implementation "org.jetbrains.anko:anko-sqlite:$anko_version"
+
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-design:$anko_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}

@@ -7,9 +7,9 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import static id.go.patikab.rsud.remun.remunerasi.config.database.sharepreference.SharePref.REG_Token;
-import static id.go.patikab.rsud.remun.remunerasi.config.database.sharepreference.SharePref.my_token;
-import static id.go.patikab.rsud.remun.remunerasi.config.database.sharepreference.SharePref.pref;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.REG_Token;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
 
 public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 

@@ -11,7 +11,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import id.go.patikab.rsud.remun.remunerasi.activity.MainActivity;
+import id.go.patikab.rsud.remun.remunerasi.view.MainActivity;
 public class MyFirebaeMessagingService extends FirebaseMessagingService {
     private static final String TAG = "test message" ;
     SharedPreferences sharedPreferences;
