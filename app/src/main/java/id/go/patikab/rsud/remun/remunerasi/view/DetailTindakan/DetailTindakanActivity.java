@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import butterknife.ButterKnife;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.valueDetailTindakan;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DetailPasien;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,15 +39,20 @@ public class DetailTindakanActivity extends AppCompatActivity {
     TextView txtRuang;
     ProgressDialog progressDialog;
 
+    Toolbar mActionBarToolbar;
+    ActionBar actionBar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         setContentView(R.layout.detail_tindakan);
         ButterKnife.bind(DetailTindakanActivity.this);
+
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("Detail Tindakan");
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
 
         Intent in = getIntent();
@@ -63,10 +69,10 @@ public class DetailTindakanActivity extends AppCompatActivity {
         progressDialog.show();
         try {
             if (isOnline() == true) {
-                Call<valueDetailTindakan> call = apiInterface.getValueDetailTindakanCall(id);
-                call.enqueue(new Callback<valueDetailTindakan>() {
+                Call<DetailPasien> call = apiInterface.getValueDetailTindakanCall(id);
+                call.enqueue(new Callback<DetailPasien>() {
                     @Override
-                    public void onResponse(Call<valueDetailTindakan> call, Response<valueDetailTindakan> response) {
+                    public void onResponse(Call<DetailPasien> call, Response<DetailPasien> response) {
                         if (response.isSuccessful()) {
                             txtalamat.setText(response.body().getAlamat());
                             txt_gedung.setText(response.body().getNama_gedung());
@@ -80,7 +86,7 @@ public class DetailTindakanActivity extends AppCompatActivity {
                         }
                     }
                     @Override
-                    public void onFailure(Call<valueDetailTindakan> call, Throwable t) {
+                    public void onFailure(Call<DetailPasien> call, Throwable t) {
                         progressDialog.dismiss();
                         Toast.makeText(DetailTindakanActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                     }

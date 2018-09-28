@@ -12,7 +12,7 @@ import java.util.List;
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.object.DokterData;
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.object.Informasi;
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.object.NotifikasiData;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.DataDokter;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DataDokter;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static String nama_db = "db_dotker";
@@ -148,7 +148,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public List<Informasi> getInformasi(String iddokter) {
         List<Informasi> informasis = new ArrayList<>();
-        String query = "select * from " + nm_tb4 + " where " + field4_tb4 + " = " +
+        String query = "select * from " + nm_tb4 + " where " + field1_tb4+ " = " +
                 "" + iddokter + " ";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);

@@ -32,16 +32,18 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.go.patikab.rsud.remun.remunerasi.R;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
 import id.go.patikab.rsud.remun.remunerasi.view.MainActivity;
 import id.go.patikab.rsud.remun.remunerasi.view.Register.RegisterActivity;
+
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.LoginResponse;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.ValDokter;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DokterGetData;
+
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.DatabaseHandler;
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.object.DokterData;
-import id.go.patikab.rsud.remun.remunerasi.config.adapter.SpinAdapter;
 
+import id.go.patikab.rsud.remun.remunerasi.config.adapter.SpinAdapter;
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -131,7 +133,7 @@ public class AuthActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(password.getText()) || TextUtils.isEmpty(id_d)) {
                     if (TextUtils.isEmpty(id_d)) {
                         AlertDialog.Builder ab = new AlertDialog.Builder(AuthActivity.this);
-                        ab.setMessage("Plih dokter terlebih dahulu, Jika list dokter belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
+                        ab.setMessage("Plih dokterdefault terlebih dahulu, Jika list dokterdefault belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
                         ab.setCancelable(false);
                         ab.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
@@ -183,15 +185,15 @@ public class AuthActivity extends AppCompatActivity {
             spinneradapterfromlokal();
             Log.d("sqlite", "lokal");
         } else {
-            progressDialog.setMessage("Mengambil data dokter");
+            progressDialog.setMessage("Mengambil data dokterdefault");
             progressDialog.show();
             db.deleteListLogin();
             if (isOnline() == true) {
                 try {
-                    Call<ValDokter> call = apiInterface.getlistDokterlogin();
-                    call.enqueue(new Callback<ValDokter>() {
+                    Call<DokterGetData> call = apiInterface.getlistDokterlogin();
+                    call.enqueue(new Callback<DokterGetData>() {
                         @Override
-                        public void onResponse(Call<ValDokter> call, Response<ValDokter> response) {
+                        public void onResponse(Call<DokterGetData> call, Response<DokterGetData> response) {
                             if (response.isSuccessful()) {
                                 progressDialog.dismiss();
                                 int total = response.body().getDokterList().size();
@@ -211,13 +213,13 @@ public class AuthActivity extends AppCompatActivity {
 //                                Log.d("test", "tes");
                             } else {
                                 progressDialog.dismiss();
-                                Toast.makeText(AuthActivity.this, "Gagal mengambil data dokter !", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AuthActivity.this, "Gagal mengambil data dokterdefault !", Toast.LENGTH_SHORT).show();
                             }
                             Log.d("response", response.toString());
                         }
 
                         @Override
-                        public void onFailure(Call<ValDokter> call, Throwable t) {
+                        public void onFailure(Call<DokterGetData> call, Throwable t) {
                             progressDialog.dismiss();
                             dialog_failure();
 //                            Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
@@ -264,10 +266,10 @@ public class AuthActivity extends AppCompatActivity {
 
     private void signinsavetoken(String id, String password, String token, final String nama_dokter) {
         try {
-            Call<LoginResponse> call = apiInterface.getloginresponse(id, password, token);
-            call.enqueue(new Callback<LoginResponse>() {
+            Call<AuthResponse> call = apiInterface.getloginresponse(id, password, token);
+            call.enqueue(new Callback<AuthResponse>() {
                 @Override
-                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                     String status = response.body().getStatus().toString();
                     String message = response.body().getMessage().toString();
                     if (response.isSuccessful()) {
@@ -275,7 +277,7 @@ public class AuthActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
+                            editor.putString(login_session, response.body().getDataUser().get(0).getKddokter());
                             editor.putString(nm_dokter, nama_dokter);
                             editor.apply();
                             startActivity(new Intent(AuthActivity.this, MainActivity.class));
@@ -292,7 +294,7 @@ public class AuthActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                public void onFailure(Call<AuthResponse> call, Throwable t) {
                     progressDialog.dismiss();
                     dialog_failure();
 //                        Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();

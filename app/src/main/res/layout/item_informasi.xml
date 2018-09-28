@@ -4,14 +4,14 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_text"
+    android:layout_marginTop="@dimen/dimens_5dp"
     card_view:cardCornerRadius="3dp"
     card_view:cardElevation="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/margin_10dp">
+        android:padding="@dimen/dimens_10dp">
 
         <LinearLayout
             android:layout_width="match_parent"

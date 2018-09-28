@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.object.DokterData;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.DataDokter;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DataDokter;
 
 public class SpinAdapter extends ArrayAdapter<DokterData> {
     private Context context;

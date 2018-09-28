@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -50,23 +51,39 @@ import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.config.adapter.DetailAdapter;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.DataTindakan;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.DetailTindakan;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DetailTindakan;
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.ContentValues.TAG;
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter;
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
 
 public class PembayaranFragment extends Fragment {
-    TextView total_pendapatan,
-            emaile, judule,
+    Boolean ft_hari = false,
+            ft_bulan = false,
+            ft_tahun = false,
+            ft_click = false,
+            data_detail = false;
+    String judul = "",
+            pendapatan_bpjsr = "",
+            pendapatan_umumr = "",
+            total = "",
+            nama_dokter = "",
+            status = "",
+            kd_user = "",
+            txt_btn_detail,
+            txt_btn_filter ="hide";
+    TextView judule,
+            emaile,
             pendapatan_bpjs,
             pendapatan_umum,
+            total_pendapatan,
             txtumum,
             txtbpjs,
             txtloadmore;
@@ -75,38 +92,46 @@ public class PembayaranFragment extends Fragment {
             btn_date_awal,
             btn_date_akhir;
 
-    EditText date_Awal, date_Akhir;
-    DatePickerDialog awaldatepicker, akhirdatepicker;
-    SimpleDateFormat dateFormater;
-    String kd_user;
-    LinearLayoutManager layoutManager;
+    EditText date_Awal,
+            date_Akhir;
+    ProgressBar progressBar1,
+            progressBar2,
+            progressBar3,
+            loadMoreProgreses;
+
     Toolbar toolbar;
 
+    LinearLayout ln_f,
+            liner,
+            loaded;
+
+    Unbinder ubin;
+
+    DatePickerDialog awaldatepicker,
+            akhirdatepicker;
+    SimpleDateFormat dateFormater;
+    LinearLayoutManager layoutManager;
+
+    NestedScrollView scrolloadm;
     List<DetailTindakan> detailTindakanList;
 
     RecyclerView mrecRecyclerView;
     RecyclerView.Adapter madapter;
     RecyclerView.LayoutManager mlayoutManager;
 
+    int listcount = 5,
+            countplus = 4,
+            currentItems,
+            totalItems,
+            scrollItems;
+
     DrawerLayout drawer;
     NavigationView navigationView;
-
-    int listcount = 5;
-    int countplus = 4;
-    int currentItems, totalItems, scrollItems;
 
     ApiInterface apiInterface;
     SharedPreferences sharedPreferences;
 
     NewtonCradleLoading newtonCradleLoading;
-    ProgressBar progressBar1,
-            progressBar2,
-            progressBar3,
-            loadMoreProgreses;
-    LinearLayout ln_f, liner, loaded;
-    NestedScrollView scrolloadm;
-
-    Unbinder ubin;
 
     public ActionBar getActionBar() {
         return ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -141,8 +166,8 @@ public class PembayaranFragment extends Fragment {
 
     @OnClick(R.id.btnfilter)
     public void btnfilter() {
-        String btn = btnfilters.getText().toString();
-        if (btn == "hide") {
+        txt_btn_filter = btnfilters.getText().toString();
+        if (txt_btn_filter == "hide") {
             ln_f.setVisibility(View.GONE);
             btnfilters.setText("show");
         } else {
@@ -153,8 +178,8 @@ public class PembayaranFragment extends Fragment {
 
     @OnClick(R.id.btn_detail)
     public void btn_detail() {
-        String textn = btndetail.getText().toString();
-        if (textn == "Detail") {
+       txt_btn_detail = btndetail.getText().toString();
+        if (txt_btn_detail == "Detail") {
             newtonCradleLoading.setVisibility(View.VISIBLE);
             newtonCradleLoading.start();
             getListDataDetail();
@@ -201,23 +226,17 @@ public class PembayaranFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pembayaran, container, false);
+
+        View view =  inflater.inflate(R.layout.pembayaran_layout, container, false);
         findViewById1(view);
         ubin = ButterKnife.bind(this, view);
         // Inflate the layout for this fragment
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
         btndetail.setText("Detail");
         getActionBar().setTitle("Remunerasi");
         date_Awal.setFocusable(false);
         date_Akhir.setFocusable(false);
-
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        //        setting dateformat
         dateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         newtonCradleLoading.setLoadingColor(R.color.colorAccent);
 
@@ -228,8 +247,8 @@ public class PembayaranFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences(pref, Context.MODE_PRIVATE);
         Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
         kd_user = sharedPreferences.getString(login_session, null);
-        emaile.setText(sharedPreferences.getString(nm_dokter,null));
-
+        emaile.setText(sharedPreferences.getString(nm_dokter, null));
+//        load more
         scrolloadm.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -247,8 +266,13 @@ public class PembayaranFragment extends Fragment {
                 }
             }
         });
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        hariIni();
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
@@ -257,6 +281,7 @@ public class PembayaranFragment extends Fragment {
     }
 
     private void findViewById1(View view) {
+
         date_Awal = (EditText) view.findViewById(R.id.date_awal);
         date_Akhir = (EditText) view.findViewById(R.id.date_akhir);
 
@@ -270,7 +295,7 @@ public class PembayaranFragment extends Fragment {
         btn_date_awal = (Button) view.findViewById(R.id.start_d);
         btn_date_akhir = (Button) view.findViewById(R.id.end_d);
 
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+//        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 
         newtonCradleLoading = (NewtonCradleLoading) view.findViewById(R.id.newton_cradle_loading);
 
@@ -310,7 +335,7 @@ public class PembayaranFragment extends Fragment {
                 getdatadetail();
             }
         }, akhircalendar.get(Calendar.YEAR), akhircalendar.get(Calendar.MONTH), akhircalendar.get(Calendar.DAY_OF_MONTH));
-        akhircalendar.add(Calendar.YEAR ,-2);
+        akhircalendar.add(Calendar.YEAR, -2);
         akhirdatepicker.getDatePicker().setMinDate(akhircalendar.getTimeInMillis());
         akhirdatepicker.show();
     }
@@ -327,7 +352,7 @@ public class PembayaranFragment extends Fragment {
 //                getdatadetail();
             }
         }, awalcalendar.get(Calendar.YEAR), awalcalendar.get(Calendar.MONTH), awalcalendar.get(Calendar.DAY_OF_MONTH));
-        awalcalendar.add(Calendar.YEAR ,-2);
+        awalcalendar.add(Calendar.YEAR, -2);
         awaldatepicker.getDatePicker().setMinDate(awalcalendar.getTimeInMillis());
         awaldatepicker.show();
     }
@@ -338,13 +363,11 @@ public class PembayaranFragment extends Fragment {
         if (kd_user != null) {
             if (isOnline() == true) {
                 try {
-                    Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
-                    call.enqueue(new Callback<DataTindakan>() {
+                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
+                    call.enqueue(new Callback<TindakanGetData>() {
                         @Override
-                        public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
-                            String status = "", total = "", nama_dokters = "", judul, pendapatan_bpjsr, pendapatan_umumr;
+                        public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
                             status = response.body().getStatus().toString();
-                            nama_dokters = response.body().getNama_dokter().toString();
                             judul = response.body().getJudul().toString();
                             pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                             pendapatan_umumr = response.body().getPendapatan_umum();
@@ -374,7 +397,7 @@ public class PembayaranFragment extends Fragment {
                         }
 
                         @Override
-                        public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        public void onFailure(Call<TindakanGetData> call, Throwable t) {
                             hideLoad();
                             dialog_failure();
 //                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server !", Toast.LENGTH_SHORT).show();
@@ -401,13 +424,10 @@ public class PembayaranFragment extends Fragment {
         if (kd_user != null) {
             if (isOnline() == true) {
                 try {
-                    Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
-                    call.enqueue(new Callback<DataTindakan>() {
+                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
+                    call.enqueue(new Callback<TindakanGetData>() {
                         @Override
-                        public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
-                            String status, total, nama_dokter, judul, pendapatan_bpjsr, pendapatan_umumr;
-
-
+                        public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
                             pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                             pendapatan_umumr = response.body().getPendapatan_umum();
 
@@ -450,7 +470,7 @@ public class PembayaranFragment extends Fragment {
                         }
 
                         @Override
-                        public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        public void onFailure(Call<TindakanGetData> call, Throwable t) {
                             newtonCradleLoading.stop();
                             newtonCradleLoading.setVisibility(View.GONE);
                             dialog_failure();
@@ -515,12 +535,10 @@ public class PembayaranFragment extends Fragment {
         if (kd_user != null) {
             if (isOnline() == true) {
                 try {
-                    Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, ds.format(cal.getTime()), d);
-                    call.enqueue(new Callback<DataTindakan>() {
+                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, ds.format(cal.getTime()), d);
+                    call.enqueue(new Callback<TindakanGetData>() {
                         @Override
-                        public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
-                            String status, total, nama_dokter, judul, pendapatan_bpjsr, pendapatan_umumr;
-
+                        public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
                             if (response.isSuccessful()) {
                                 pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                                 pendapatan_umumr = response.body().getPendapatan_umum();
@@ -550,7 +568,7 @@ public class PembayaranFragment extends Fragment {
                         }
 
                         @Override
-                        public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        public void onFailure(Call<TindakanGetData> call, Throwable t) {
                             hideLoad();
                             dialog_failure();
 //                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
@@ -592,12 +610,10 @@ public class PembayaranFragment extends Fragment {
         if (kd_user != null) {
             if (isOnline() == true) {
                 try {
-                    Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, tanggal_a, d);
-                    call.enqueue(new Callback<DataTindakan>() {
+                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, tanggal_a, d);
+                    call.enqueue(new Callback<TindakanGetData>() {
                         @Override
-                        public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
-                            String status, total, nama_dokter, judul, pendapatan_bpjsr, pendapatan_umumr;
-
+                        public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
                             if (response.isSuccessful()) {
                                 pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                                 pendapatan_umumr = response.body().getPendapatan_umum();
@@ -628,7 +644,7 @@ public class PembayaranFragment extends Fragment {
                         }
 
                         @Override
-                        public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        public void onFailure(Call<TindakanGetData> call, Throwable t) {
                             hideLoad();
                             dialog_failure();
 //                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
@@ -671,12 +687,10 @@ public class PembayaranFragment extends Fragment {
         if (kd_user != null) {
             if (isOnline() == true) {
                 try {
-                    Call<DataTindakan> call = apiInterface.getDataTindakan(kd_user, tanggal_a, d);
-                    call.enqueue(new Callback<DataTindakan>() {
+                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, tanggal_a, d);
+                    call.enqueue(new Callback<TindakanGetData>() {
                         @Override
-                        public void onResponse(Call<DataTindakan> call, Response<DataTindakan> response) {
-                            String status, total, nama_dokter, judul, pendapatan_bpjsr, pendapatan_umumr;
-
+                        public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
                             if (response.isSuccessful()) {
                                 pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                                 pendapatan_umumr = response.body().getPendapatan_umum();
@@ -706,7 +720,7 @@ public class PembayaranFragment extends Fragment {
                         }
 
                         @Override
-                        public void onFailure(Call<DataTindakan> call, Throwable t) {
+                        public void onFailure(Call<TindakanGetData> call, Throwable t) {
                             hideLoad();
                             dialog_failure();
 //                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server !", Toast.LENGTH_SHORT).show();
@@ -742,6 +756,7 @@ public class PembayaranFragment extends Fragment {
             }
         }, 500);
     }
+
     //method untuk cek koneksi
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -753,6 +768,7 @@ public class PembayaranFragment extends Fragment {
         //jika tidak ada koneksi return false
         return false;
     }
+
     //dialog failure
     private void dialog_failure() {
         CustomDialogDetail cdd = new CustomDialogDetail(getActivity());

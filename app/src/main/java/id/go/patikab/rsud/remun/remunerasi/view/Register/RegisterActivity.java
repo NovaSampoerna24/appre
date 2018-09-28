@@ -36,8 +36,8 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.DatabaseHandler;
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.object.DokterData;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.RegisterResponse;
-import id.go.patikab.rsud.remun.remunerasi.data.api.object.ValDokter;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DokterGetData;
 
 
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity  {
                 if (TextUtils.isEmpty(id_d) || passworde == null || passworde.length() < 6 || passwordulang == null || !TextUtils.equals(passworde, passwordulang)) {
                     if (TextUtils.isEmpty(id_d)) {
                         AlertDialog.Builder ab = new AlertDialog.Builder(RegisterActivity.this);
-                        ab.setMessage("Plih dokter terlebih dahulu, Jika list dokter belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
+                        ab.setMessage("Plih dokterdefault terlebih dahulu, Jika list dokterdefault belum keluar , silahkan refresh kembali halaman  dengan menggeser kebawah");
                         ab.setCancelable(false);
                         ab.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
@@ -184,13 +184,13 @@ public class RegisterActivity extends AppCompatActivity  {
             spinneradapterfromlokal2();
             Log.d("sqlite", "lokal");
         } else {
-            progressDialog.setMessage("Mengambil data dokter ...");
+            progressDialog.setMessage("Mengambil data dokterdefault ...");
             progressDialog.show();
             if (isOnline() == true) {
-                Call<ValDokter> call = apiInterface.getDokter();
-                call.enqueue(new Callback<ValDokter>() {
+                Call<DokterGetData> call = apiInterface.getDokter();
+                call.enqueue(new Callback<DokterGetData>() {
                     @Override
-                    public void onResponse(Call<ValDokter> call, Response<ValDokter> response) {
+                    public void onResponse(Call<DokterGetData> call, Response<DokterGetData> response) {
                         if (response.isSuccessful()) {
                             progressDialog.dismiss();
                             int total = response.body().getDokterList().size();
@@ -210,12 +210,12 @@ public class RegisterActivity extends AppCompatActivity  {
 //                            Log.d("test", "tes");
                         } else {
                             progressDialog.dismiss();
-                            Toast.makeText(RegisterActivity.this, "Gagal mengambil data dokter !", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Gagal mengambil data dokterdefault !", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ValDokter> call, Throwable t) {
+                    public void onFailure(Call<DokterGetData> call, Throwable t) {
                         dialog_failure();
                     }
                 });
@@ -254,17 +254,17 @@ public class RegisterActivity extends AppCompatActivity  {
         String token_d = preferences.getString(my_token, null);
 
         try {
-            Call<RegisterResponse> call = apiInterface.getresponse(id_dokter, passworde, token_d, passwordulang);
-            call.enqueue(new Callback<RegisterResponse>() {
+            Call<AuthResponse> call = apiInterface.getresponse(id_dokter, passworde, token_d, passwordulang);
+            call.enqueue(new Callback<AuthResponse>() {
                 @Override
-                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                     String status = response.body().getStatus();
                     String message = response.body().getMessage();
                     if (response.isSuccessful()) {
                         if (status.equals("ok")) {
                             preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString(login_session, response.body().getDataUser().get(0).getKDDOKTER());
+                            editor.putString(login_session, response.body().getDataUser().get(0).getKddokter());
                             editor.putString(nm_dokter, nm_dk);
                             editor.apply();
                             progressDialog.dismiss();
@@ -283,7 +283,7 @@ public class RegisterActivity extends AppCompatActivity  {
                 }
 
                 @Override
-                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                public void onFailure(Call<AuthResponse> call, Throwable t) {
                     progressDialog.dismiss();
                     dialog_failure();
 //                    Toast.makeText(RegisterActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();

@@ -1,22 +1,26 @@
-package id.go.patikab.rsud.remun.remunerasi.data.api.object;
+package id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ValDokter {
+public class AuthResponse {
     @SerializedName("status")
     String status;
     @SerializedName("message")
     String message;
     @SerializedName("data")
-    List<DataDokter>dokterList;
+    List<DataDokter> dataUser;
 
     public String getMessage() {
         return message;
     }
 
-    public List<DataDokter> getDokterList() {
-        return dokterList;
+    public String getStatus() {
+        return status;
+    }
+
+    public List<DataDokter> getDataUser() {
+        return dataUser;
     }
 }

@@ -1,4 +1,4 @@
-package id.go.patikab.rsud.remun.remunerasi.data.api;
+package id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse;
 
 import com.google.gson.annotations.SerializedName;
 

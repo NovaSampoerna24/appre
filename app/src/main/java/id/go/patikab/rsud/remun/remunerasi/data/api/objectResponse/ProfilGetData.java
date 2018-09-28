@@ -1,10 +1,10 @@
-package id.go.patikab.rsud.remun.remunerasi.data.api.object;
+package id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ProfilData {
+public class ProfilGetData {
     @SerializedName("status")
     String status;
     @SerializedName("message")

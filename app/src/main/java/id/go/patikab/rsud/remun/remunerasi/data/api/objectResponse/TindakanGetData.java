@@ -1,10 +1,10 @@
-package id.go.patikab.rsud.remun.remunerasi.data.api.object;
+package id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class DataTindakan {
+public class TindakanGetData {
     @SerializedName("status")
     String status;
     @SerializedName("total")
@@ -17,8 +17,6 @@ public class DataTindakan {
     String nama_dokter;
     @SerializedName("judul")
     String judul;
-
-
     @SerializedName("data")
     List<DetailTindakan>detailTindakanList;
 

@@ -5,15 +5,16 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission./" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="android.support.multidex.MultiDexApplication" >
 
         <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more. -->
@@ -42,33 +43,30 @@
         <activity
             android:name=".view.Register.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.DetailTindakan.DetailTindakanActivity">
+
+        <activity android:name=".view.MainActivity"/>
+
+        <activity android:name=".view.DetailTindakan.DetailTindakanActivity"/>
+        <activity android:name=".view.ubahfoto.UbahFoto">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
-        </activity>
-        <activity android:name=".view.ubahfoto.UbahFoto">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".view.MainActivity" />
         </activity>
         <activity android:name=".view.gantiPassword.GantiPassword">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
+
         <service android:name=".config.firebase.MyFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!--<service android:name=".firebase.MyFirebaeMessagingService">-->
-        <!--<intent-filter>-->
+        <!--<intent-layout_filter>-->
         <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
-        <!--</intent-filter>-->
+        <!--</intent-layout_filter>-->
         <!--</service>-->
     </application>
 

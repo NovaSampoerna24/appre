@@ -17,10 +17,10 @@
         <!--android:title="Jadwal" />-->
     <item android:title="Account">
         <menu>
-            <item
-                android:id="@+id/nav_ganti_password"
-                android:icon="@drawable/ic_password"
-                android:title="Ubah Password" />
+            <!--<item-->
+                <!--android:id="@+id/nav_ganti_password"-->
+                <!--android:icon="@drawable/ic_password"-->
+                <!--android:title="Ubah Password" />-->
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_signout"

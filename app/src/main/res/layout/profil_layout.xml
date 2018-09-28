@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--<android.support.design.widget.CollapsingToolbarLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_scrollFlags="scroll|enterAlways"-->
+            <!--app:titleEnabled="false">-->
+
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?android:actionBarSize"-->
+                <!--android:background="@color/primary"-->
+                <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+        <!--</android.support.design.widget.CollapsingToolbarLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--app:layout_scrollFlags="scroll|enterAlwaysCollapsed">-->
+
+            <!--<de.hdodenhof.circleimageview.CircleImageView-->
+                <!--android:id="@+id/k_icon"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:src="@drawable/ic_profil"-->
+                <!--app:civ_border_color="#FFF"-->
+                <!--app:civ_border_width="2dp"-->
+                <!--app:civ_fill_color="@color/icons" />-->
+
+            <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/k_icon"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="96dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="96dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center_horizontal"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_marginBottom="8dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;tools:src="@drawable/ic_profil"&ndash;&gt;-->
+            <!--&lt;!&ndash;tools:background="@color/colorPrimaryDark" />&ndash;&gt;-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/txt_name"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:textColor="#fff"-->
+                <!--android:textSize="22sp"-->
+                <!--tools:text="Arsenal" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_year"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:textColor="#fff"-->
+                <!--tools:text="1899" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_desc"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:textColor="#fff"-->
+                <!--tools:text="Camp Nou" />-->
+
+        <!--</LinearLayout>-->
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_team_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="enterAlways"
+            app:tabIndicatorColor="#FFF"
+            app:tabSelectedTextColor="#FFF"
+            app:tabTextColor="#DDD" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <!--<FrameLayout-->
+        <!--android:id="@+id/viewpage_team_detail"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpage_team_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</LinearLayout>

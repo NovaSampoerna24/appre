@@ -19,39 +19,38 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.config.util.ActivityIntentKt;
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.DbInterface;
 import id.go.patikab.rsud.remun.remunerasi.view.Auth.AuthActivity;
 import id.go.patikab.rsud.remun.remunerasi.view.PembayaranDokter.PembayaranFragment;
-import id.go.patikab.rsud.remun.remunerasi.view.profile.ProfileFragment;
+import id.go.patikab.rsud.remun.remunerasi.view.profil.AkunFragment;
+import id.go.patikab.rsud.remun.remunerasi.view.profil.*;
 
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
-
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
     String kd_user;
     Toolbar toolbar;
 
-    DbInterface mDb;
+    FragmentManager fragmentManager;
 
     DrawerLayout drawer;
     NavigationView navigationView;
     SharedPreferences sharedPreferences;
-    FragmentManager fragmentManager;
 
+    AkunFragment fragmentprofil;
+    PembayaranFragment fragmentpembayaran;
+    ProfilFragment profilFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 //        butterknife bind
         ButterKnife.bind(this);
 //        find id
         findViewById();
 //        toolbar
         setSupportActionBar(toolbar);
-
 //        cek session
         sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
         if (sharedPreferences.getString(login_session, "").equals("")) {
@@ -69,21 +68,19 @@ public class MainActivity extends AppCompatActivity implements
         sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
 //        Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
         kd_user = sharedPreferences.getString(login_session, null);
+//        loadProfile();
+        fragmentprofil = new AkunFragment();
+        fragmentpembayaran = new PembayaranFragment();
+        profilFragment = new ProfilFragment();
 
-        loadProfile();
+        fragmentManager = getSupportFragmentManager();
 
+        if(savedInstanceState == null){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.flContent,profilFragment )
+                    .commit();
+        }
     }
-//    private void insertInformasi(){
-//
-//        Informasi in= new Informasi();
-//        in.setId_dokter(kd_user);
-//        in.setJudul("Periksa pembayaran terbaru anda ! ");
-//        in.setDeskripsi("Dapatkan informasi pembayaran dengan aplikasi remunerasi");
-//        in.setLabel("informasi");
-//
-//        mDb.addtoInformasi(in);
-//
-//}
 
     private void findViewById() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -119,23 +116,25 @@ public class MainActivity extends AppCompatActivity implements
         if (!item.isChecked()) {
             item.setCheckable(true);
         }
-
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-//        displaySelectedScreen(item.getItemId());
         switch (item.getItemId()) {
-            case R.id.nav_remune:
-                loadPembayaran();
-                break;
 
             case R.id.nav_profile:
-                loadProfile();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.flContent,profilFragment)
+                        .commit();
                 break;
-            case R.id.nav_ganti_password:
-                ActivityIntentKt.opengantiPassword(this,kd_user);
+
+            case R.id.nav_remune:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.flContent, fragmentpembayaran)
+                        .commit();
                 break;
+//          case R.id.nav_jadwal:
+//          break;
             default:
-                loadProfile();
+                break;
         }
 
         if (id == R.id.nav_logout) {
@@ -145,23 +144,9 @@ public class MainActivity extends AppCompatActivity implements
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
-
-    private void loadPembayaran() {
-        fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.flContent, new PembayaranFragment())
-                .commit();
-    }
-
-    private void loadProfile() {
-        fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.flContent, new ProfileFragment())
-                .commit();
-    }
-
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {

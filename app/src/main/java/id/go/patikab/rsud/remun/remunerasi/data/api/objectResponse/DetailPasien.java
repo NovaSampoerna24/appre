@@ -1,8 +1,8 @@
-package id.go.patikab.rsud.remun.remunerasi.data.api.object;
+package id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse;
 
 import com.google.gson.annotations.SerializedName;
 
-public class valueDetailTindakan {
+public class DetailPasien {
     @SerializedName("status")
     String status;
     @SerializedName("msg")
@@ -46,12 +46,13 @@ public class valueDetailTindakan {
         return ruang;
     }
 
-    public valueDetailTindakan(String status, String message, String nama_pasien, String ttl, String alamat, String ruang) {
+    public DetailPasien(String status, String message, String nama_pasien, String ttl, String alamat, String ruang, String nama_gedung) {
         this.status = status;
         this.message = message;
         this.nama_pasien = nama_pasien;
         this.ttl = ttl;
         this.alamat = alamat;
         this.ruang = ruang;
+        this.nama_gedung = nama_gedung;
     }
 }
