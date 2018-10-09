@@ -54,7 +54,11 @@ public interface ApiInterface {
                                     @Part("nama_dokter") RequestBody nama_dokter
 
     );
+//    melihat data profil(foto)
     @GET("android/service/profile/detailProfile.php")
     Call<ProfilGetData> getDataProfil(@Query("id") String id);
+//    get tarifinacbgs perbulan saat itu juga
+    @GET("android/service/tarif_bulan.php")
+    Call<Inacbgs> getTarifInacgs();
 
 }

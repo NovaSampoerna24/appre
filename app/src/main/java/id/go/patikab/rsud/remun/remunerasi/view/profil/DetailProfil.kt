@@ -13,25 +13,24 @@ import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 
 import id.go.patikab.rsud.remun.remunerasi.R
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
 import kotlinx.android.synthetic.main.layout_detail_profil.*
 import id.go.patikab.rsud.remun.remunerasi.config.util.*
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilDetail
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.`object`.Informasi
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilDetail
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient.*
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.support.v4.onRefresh
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.*
 
-class DetailProfil : Fragment() , ProfilView {
-
-    val mPresenter by lazy { ProfilPresenter(this) }
+class DetailProfil : Fragment() , DetailView {
+    val mPresenter by lazy { DetailPresenter(this) }
     internal lateinit var sharedPreferences: SharedPreferences
     internal var kd_user: String = ""
     internal var nama_dokter: String = ""
     var foton = ""
-    lateinit var editor:SharedPreferences.Editor
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         sharedPreferences = activity!!.getSharedPreferences(pref, Context.MODE_PRIVATE)
@@ -73,6 +72,7 @@ class DetailProfil : Fragment() , ProfilView {
     fun refresh(){
         launch(UI) {
             mPresenter.fetchProfilRetro(kd_user)
+            mPresenter.fetchGaji(kd_user)
         }
     }
     override fun showDetail(detail: ProfilDetail) {
@@ -82,10 +82,13 @@ class DetailProfil : Fragment() , ProfilView {
                     .error(R.drawable.dokterdefault)
                     .into(profile_image2)
         }
-
-
      }
-
+    override fun showGaji(getgaji: TindakanGetData) {
+        val gaji = if (getgaji.total == "0") "Rp 0.0" else getgaji.total
+        total_gaji.text = gaji
+        gajiBpjs.text = getgaji.pendapatan_bpjs
+        gajiumum.text = getgaji.pendapatan_umum
+    }
     fun isOnline():Boolean {
         val cm = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.activeNetworkInfo
@@ -101,19 +104,9 @@ class DetailProfil : Fragment() , ProfilView {
         cdd.show()
     }
 
+
     override fun showInformasi(informasi: List<Informasi>) {
         }
 
-    override fun showLoading() {
-        }
-
-    override fun hideLoading() {
-        }
-
-    override fun showplaceholder() {
-         }
-
-    override fun show() {
-          }
 
 }

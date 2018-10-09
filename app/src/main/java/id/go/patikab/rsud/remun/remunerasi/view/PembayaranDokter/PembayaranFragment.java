@@ -29,6 +29,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.config.adapter.DetailAdapter;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.Inacbgs;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DetailTindakan;
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail;
@@ -65,11 +67,7 @@ import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.Sha
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
 
 public class PembayaranFragment extends Fragment {
-    Boolean ft_hari = false,
-            ft_bulan = false,
-            ft_tahun = false,
-            ft_click = false,
-            data_detail = false;
+
     String judul = "",
             pendapatan_bpjsr = "",
             pendapatan_umumr = "",
@@ -78,7 +76,9 @@ public class PembayaranFragment extends Fragment {
             status = "",
             kd_user = "",
             txt_btn_detail,
-            txt_btn_filter ="hide";
+            txt_btn_filter = "hide",
+            ngarep,
+            mburi;
     TextView judule,
             emaile,
             pendapatan_bpjs,
@@ -86,7 +86,8 @@ public class PembayaranFragment extends Fragment {
             total_pendapatan,
             txtumum,
             txtbpjs,
-            txtloadmore;
+            txtloadmore,
+            ttpd_inacbgs;
 
     Button btndetail,
             btn_date_awal,
@@ -94,18 +95,14 @@ public class PembayaranFragment extends Fragment {
 
     EditText date_Awal,
             date_Akhir;
-    ProgressBar progressBar1,
-            progressBar2,
-            progressBar3,
-            loadMoreProgreses;
-
-    Toolbar toolbar;
-
-    LinearLayout ln_f,
-            liner,
-            loaded;
+    ProgressBar loadMoreProgreses;
 
     Unbinder ubin;
+
+    LinearLayout ln_f,
+            loaded;
+    RelativeLayout liner;
+
 
     DatePickerDialog awaldatepicker,
             akhirdatepicker;
@@ -123,8 +120,15 @@ public class PembayaranFragment extends Fragment {
             countplus = 4,
             currentItems,
             totalItems,
-            scrollItems;
-
+            scrollItems,
+            wulan,
+            dino,
+            taun,
+            kr,
+            rn,
+            dino_d_b,
+            dr;
+    Calendar cb;
     DrawerLayout drawer;
     NavigationView navigationView;
 
@@ -176,9 +180,21 @@ public class PembayaranFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.text_filter)
+    public void btnfilter1() {
+        txt_btn_filter = btnfilters.getText().toString();
+        if (txt_btn_filter == "hide") {
+            ln_f.setVisibility(View.GONE);
+            btnfilters.setText("show");
+        } else {
+            ln_f.setVisibility(View.VISIBLE);
+            btnfilters.setText("hide");
+        }
+    }
+
     @OnClick(R.id.btn_detail)
     public void btn_detail() {
-       txt_btn_detail = btndetail.getText().toString();
+        txt_btn_detail = btndetail.getText().toString();
         if (txt_btn_detail == "Detail") {
             newtonCradleLoading.setVisibility(View.VISIBLE);
             newtonCradleLoading.start();
@@ -227,7 +243,7 @@ public class PembayaranFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view =  inflater.inflate(R.layout.pembayaran_layout, container, false);
+        View view = inflater.inflate(R.layout.pembayaran_layout, container, false);
         findViewById1(view);
         ubin = ButterKnife.bind(this, view);
         // Inflate the layout for this fragment
@@ -266,13 +282,62 @@ public class PembayaranFragment extends Fragment {
                 }
             }
         });
+
+        cb = Calendar.getInstance();
+        wulan = cb.get(Calendar.MONTH) + 1;
+        taun = cb.get(Calendar.YEAR);
+        dino = cb.get(Calendar.DATE);
+
+//        jumlah hari dalam sebulan
+        dino_d_b = cb.getActualMaximum(Calendar.DAY_OF_MONTH);
+//        tanggal awal minggu
+        kr = cb.get(Calendar.DAY_OF_WEEK) ;
+//        satu hari sebelumnya
+        dr = dino - 1;
+        if(dino <= 0 ){
+            dino =1;
+       }
+//       hari minggu pertama
+        rn = (dino - kr)+1;
+        if (rn <= 0) {
+            rn = 1;
+        }
+
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState == null) {
+            hariIni();
+            getInacbgs();
+        }
+    }
 
+    private void getInacbgs() {
+        if (isOnline() == true) {
+            try {
+                Call<Inacbgs> call = apiInterface.getTarifInacgs();
+                call.enqueue(new Callback<Inacbgs>() {
+                    @Override
+                    public void onResponse(Call<Inacbgs> call, Response<Inacbgs> response) {
+                        String tarifo = response.body().getTr().get(0).getTarif_rp();
+                        String status = response.body().getTr().get(0).getStatus();
+
+                        ttpd_inacbgs.setText(tarifo);
+                        Log.d(TAG, status + " jj");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Inacbgs> call, Throwable t) {
+                        Log.d(TAG, t.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -285,9 +350,10 @@ public class PembayaranFragment extends Fragment {
         date_Awal = (EditText) view.findViewById(R.id.date_awal);
         date_Akhir = (EditText) view.findViewById(R.id.date_akhir);
 
-        progressBar1 = (ProgressBar) view.findViewById(R.id.progress_bar1);
-        progressBar2 = (ProgressBar) view.findViewById(R.id.progress_bar2);
-        progressBar3 = (ProgressBar) view.findViewById(R.id.progress_bar3);
+//        progressBar1 = (ProgressBar) view.findViewById(R.id.progress_bar1);
+//        progressBar2 = (ProgressBar) view.findViewById(R.id.progress_bar2);
+//        progressBar3 = (ProgressBar) view.findViewById(R.id.progress_bar3);
+
         loadMoreProgreses = (ProgressBar) view.findViewById(R.id.loadMore);
 
         txtloadmore = (TextView) view.findViewById(R.id.txtloadmore);
@@ -306,7 +372,7 @@ public class PembayaranFragment extends Fragment {
         pendapatan_bpjs = (TextView) view.findViewById(R.id.pendapatan_bpjs);
         txtbpjs = (TextView) view.findViewById(R.id.txtbpjs);
         txtumum = (TextView) view.findViewById(R.id.txtumum);
-
+        ttpd_inacbgs = (TextView) view.findViewById(R.id.pendapatan_total_incbgs);
         ln_f = (LinearLayout) view.findViewById(R.id.ln_filter);
 
         mrecRecyclerView = (RecyclerView) view.findViewById(R.id.list_detail);
@@ -316,7 +382,7 @@ public class PembayaranFragment extends Fragment {
 
         navigationView = (NavigationView) view.findViewById(R.id.nav_view);
 
-        liner = (LinearLayout) view.findViewById(R.id.liner);
+        liner = (RelativeLayout) view.findViewById(R.id.liner);
         loaded = (LinearLayout) view.findViewById(R.id.loaded);
 
         scrolloadm = (NestedScrollView) view.findViewById(R.id.nestedScroll);
@@ -324,6 +390,7 @@ public class PembayaranFragment extends Fragment {
 
     private void showDialogDateAkhir() {
         Calendar akhircalendar = Calendar.getInstance();
+        Calendar ak = Calendar.getInstance();
         akhirdatepicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -334,14 +401,26 @@ public class PembayaranFragment extends Fragment {
                 showLoad();
                 getdatadetail();
             }
-        }, akhircalendar.get(Calendar.YEAR), akhircalendar.get(Calendar.MONTH), akhircalendar.get(Calendar.DAY_OF_MONTH));
-        akhircalendar.add(Calendar.YEAR, -2);
+        },
+                akhircalendar.get(Calendar.YEAR),
+                akhircalendar.get(Calendar.MONTH),
+                akhircalendar.get(Calendar.DAY_OF_MONTH));
+
+        int al = ak.getActualMaximum(Calendar.DAY_OF_MONTH);
+        ak.set(Calendar.DATE, al);
+
+        akhircalendar.add(Calendar.YEAR, 0);
+        akhircalendar.add(Calendar.MONTH, 0);
+        akhircalendar.set(Calendar.DATE, 1);
+
         akhirdatepicker.getDatePicker().setMinDate(akhircalendar.getTimeInMillis());
+        akhirdatepicker.getDatePicker().setMaxDate(ak.getTimeInMillis());
         akhirdatepicker.show();
     }
 
     private void showDialogDateAwal() {
         final Calendar awalcalendar = Calendar.getInstance();
+        final Calendar ak = Calendar.getInstance();
         awaldatepicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -351,71 +430,27 @@ public class PembayaranFragment extends Fragment {
 //                showLoad();
 //                getdatadetail();
             }
-        }, awalcalendar.get(Calendar.YEAR), awalcalendar.get(Calendar.MONTH), awalcalendar.get(Calendar.DAY_OF_MONTH));
-        awalcalendar.add(Calendar.YEAR, -2);
+        },
+                awalcalendar.get(Calendar.YEAR),
+                awalcalendar.get(Calendar.MONTH),
+                awalcalendar.get(Calendar.DAY_OF_MONTH));
+
+        awalcalendar.add(Calendar.YEAR, 0);
+        awalcalendar.add(Calendar.MONTH, 0);
+        awalcalendar.set(Calendar.DATE, 1);
+
+        int al = ak.getActualMaximum(Calendar.DAY_OF_MONTH);
+        ak.set(Calendar.DATE, al);
+
         awaldatepicker.getDatePicker().setMinDate(awalcalendar.getTimeInMillis());
+        awaldatepicker.getDatePicker().setMaxDate(ak.getTimeInMillis());
         awaldatepicker.show();
     }
 
     private void getdatadetail() {
-        String date_aw = date_Awal.getText().toString().trim();
-        String date_ak = date_Akhir.getText().toString().trim();
-        if (kd_user != null) {
-            if (isOnline() == true) {
-                try {
-                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, date_aw, date_ak);
-                    call.enqueue(new Callback<TindakanGetData>() {
-                        @Override
-                        public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
-                            status = response.body().getStatus().toString();
-                            judul = response.body().getJudul().toString();
-                            pendapatan_bpjsr = response.body().getPendapatan_bpjs();
-                            pendapatan_umumr = response.body().getPendapatan_umum();
-                            if (response.isSuccessful()) {
-
-                                if (status.equals("ok")) {
-                                    judule.setText(judul);
-                                    pendapatan_bpjs.setText(pendapatan_bpjsr);
-                                    pendapatan_umum.setText(pendapatan_umumr);
-                                    if (response.body().getTotal().equals("0")) {
-                                        total_pendapatan.setText("Rp. 0");
-                                    } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
-                                    }
-                                } else {
-                                    if (response.body().getTotal().equals("0")) {
-                                        total_pendapatan.setText("Rp. 0");
-                                    } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
-                                    }
-
-                                    Toast.makeText(getActivity(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
-                                }
-
-                                hideLoad();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<TindakanGetData> call, Throwable t) {
-                            hideLoad();
-                            dialog_failure();
-//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server !", Toast.LENGTH_SHORT).show();
-                            Log.d("Failure", t.getMessage());
-                        }
-                    });
-                } catch (Exception e) {
-                    hideLoad();
-                    Toast.makeText(getActivity(), "Exception to connect !", Toast.LENGTH_SHORT).show();
-
-                    Log.d("Exception", e.getMessage());
-                }
-            } else {
-                dialog_failure();
-                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
-            }
-        }
-
+        ngarep = date_Awal.getText().toString().trim();
+        mburi = date_Akhir.getText().toString().trim();
+        getgaji(ngarep, mburi);
     }
 
     private void getListDataDetail() {
@@ -428,30 +463,27 @@ public class PembayaranFragment extends Fragment {
                     call.enqueue(new Callback<TindakanGetData>() {
                         @Override
                         public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
-                            pendapatan_bpjsr = response.body().getPendapatan_bpjs();
-                            pendapatan_umumr = response.body().getPendapatan_umum();
-
 
                             if (response.isSuccessful()) {
-                                status = response.body().getStatus().toString();
+                                pendapatan_bpjsr = response.body().getPendapatan_bpjs();
+                                pendapatan_umumr = response.body().getPendapatan_umum();
                                 total = response.body().getTotal().toString();
                                 judul = response.body().getJudul().toString();
-
-                                pendapatan_bpjs.setText(pendapatan_bpjsr);
-                                pendapatan_umum.setText(pendapatan_umumr);
+                                status = response.body().getStatus().toString();
+                                detailTindakanList = response.body().getDetailTindakanList();
                                 if (status.equals("ok")) {
-
-                                    if (response.body().getTotal().equals("0")) {
+                                    judule.setText(judul);
+                                    pendapatan_bpjs.setText(pendapatan_bpjsr);
+                                    pendapatan_umum.setText(pendapatan_umumr);
+                                    if (total == "0") {
                                         total_pendapatan.setText("Rp. 0");
                                     } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
+                                        total_pendapatan.setText(total);
                                     }
-                                    judule.setText(judul);
-                                    if (response.body().getDetailTindakanList().size() > 0) {
+                                    if (detailTindakanList.size() > 0) {
                                         mrecRecyclerView.setVisibility(View.VISIBLE);
 //                                    mrecRecyclerView.setMinimumHeight(1000);
                                         Log.d("total :", response.body().getTotal().toString());
-                                        detailTindakanList = response.body().getDetailTindakanList();
                                         madapter = new DetailAdapter(detailTindakanList, listcount, getActivity());
                                         mrecRecyclerView.setAdapter(madapter);
                                         btndetail.setText("Sembunyikan");
@@ -495,9 +527,6 @@ public class PembayaranFragment extends Fragment {
     }
 
     private void hideLoad() {
-        progressBar1.setVisibility(View.GONE);
-        progressBar2.setVisibility(View.GONE);
-        progressBar3.setVisibility(View.GONE);
 
         total_pendapatan.setVisibility(View.VISIBLE);
         pendapatan_bpjs.setVisibility(View.VISIBLE);
@@ -505,37 +534,18 @@ public class PembayaranFragment extends Fragment {
     }
 
     private void showLoad() {
-        progressBar1.setVisibility(View.VISIBLE);
-        progressBar2.setVisibility(View.VISIBLE);
-        progressBar3.setVisibility(View.VISIBLE);
 
         total_pendapatan.setVisibility(View.GONE);
         pendapatan_bpjs.setVisibility(View.GONE);
         pendapatan_umum.setVisibility(View.GONE);
     }
 
-    private void getiListBulanan() {
-        Date date = Calendar.getInstance().getTime();
-        DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-        String date_o = formater.format(date);
-        String d = date_o.toString();
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat ds = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            cal.setTime(ds.parse(d));
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        cal.add(Calendar.MONTH, -1);
-        Log.d("test2", "" + ds.format(cal.getTime()));
-        String tanggal_a = ds.format(cal.getTime());
-        date_Awal.setText(tanggal_a);
-        date_Akhir.setText(d);
+    private void getgaji(String ngarep, String mburi) {
+        showLoad();
         if (kd_user != null) {
             if (isOnline() == true) {
                 try {
-                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, ds.format(cal.getTime()), d);
+                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, ngarep, mburi);
                     call.enqueue(new Callback<TindakanGetData>() {
                         @Override
                         public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
@@ -545,22 +555,18 @@ public class PembayaranFragment extends Fragment {
                                 status = response.body().getStatus().toString();
                                 nama_dokter = response.body().getNama_dokter().toString();
                                 judul = response.body().getJudul().toString();
-                                pendapatan_bpjs.setText(pendapatan_bpjsr);
-                                pendapatan_umum.setText(pendapatan_umumr);
+                                total = response.body().getTotal().toString();
                                 if (status.equals("ok")) {
-                                    if (response.body().getTotal().equals("0")) {
+                                    judule.setText(judul);
+                                    pendapatan_bpjs.setText(pendapatan_bpjsr);
+                                    pendapatan_umum.setText(pendapatan_umumr);
+                                    if (total == "0") {
                                         total_pendapatan.setText("Rp. 0");
                                     } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
+                                        total_pendapatan.setText(total);
                                     }
-                                    judule.setText(judul);
 
                                 } else {
-                                    if (response.body().getTotal().equals("0")) {
-                                        total_pendapatan.setText("Rp. 0");
-                                    } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
-                                    }
                                     Toast.makeText(getActivity(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
                                 }
                                 hideLoad();
@@ -586,159 +592,39 @@ public class PembayaranFragment extends Fragment {
 //                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void getiListBulanan() {
+        ngarep = taun + "-" + wulan + "-" + 1;
+        mburi = taun + "-" + wulan + "-" + dino_d_b;
+
+        date_Awal.setText(ngarep);
+        date_Akhir.setText(mburi);
+
+        getgaji(ngarep, mburi);
 
     }
 
     private void getiListMingguan() {
-        Date date = Calendar.getInstance().getTime();
-        DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-        String date_o = formater.format(date);
-        String d = date_o.toString();
 
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat ds = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            cal.setTime(ds.parse(d));
+        ngarep = taun + "-" + wulan + "-" + rn;
+        mburi = taun + "-" + wulan + "-" + dino;
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        cal.add(Calendar.DAY_OF_MONTH, -7);
-        String tanggal_a = ds.format(cal.getTime());
-        date_Awal.setText(tanggal_a);
-        date_Akhir.setText(d);
-        if (kd_user != null) {
-            if (isOnline() == true) {
-                try {
-                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, tanggal_a, d);
-                    call.enqueue(new Callback<TindakanGetData>() {
-                        @Override
-                        public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
-                            if (response.isSuccessful()) {
-                                pendapatan_bpjsr = response.body().getPendapatan_bpjs();
-                                pendapatan_umumr = response.body().getPendapatan_umum();
+        date_Awal.setText(ngarep);
+        date_Akhir.setText(mburi);
 
-                                status = response.body().getStatus().toString();
-                                nama_dokter = response.body().getNama_dokter().toString();
-                                judul = response.body().getJudul().toString();
-                                pendapatan_bpjs.setText(pendapatan_bpjsr);
-                                pendapatan_umum.setText(pendapatan_umumr);
-                                if (status.equals("ok")) {
-                                    if (response.body().getTotal().equals("0")) {
-                                        total_pendapatan.setText("Rp. 0");
-                                    } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
-                                    }
-                                    judule.setText(judul);
-
-                                } else {
-                                    if (response.body().getTotal().equals("0")) {
-                                        total_pendapatan.setText("Rp. 0");
-                                    } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
-                                    }
-                                    Toast.makeText(getActivity(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
-                                }
-                                hideLoad();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<TindakanGetData> call, Throwable t) {
-                            hideLoad();
-                            dialog_failure();
-//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
-                            Log.d("Failure", t.getMessage());
-                        }
-                    });
-                } catch (Exception e) {
-                    hideLoad();
-                    Toast.makeText(getActivity(), "Exception to connect", Toast.LENGTH_SHORT).show();
-                    Log.d("Exception", e.getMessage());
-                }
-
-            } else {
-                hideLoad();
-                dialog_failure();
-//                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
-            }
-        }
+        getgaji(ngarep, mburi);
 
     }
 
     private void getiListHariIni() {
-        Date date = Calendar.getInstance().getTime();
-        DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-        String date_o = formater.format(date);
-        String d = date_o.toString();
+        ngarep = taun + "-" + wulan + "-" + dr;
+        mburi = taun + "-" + wulan + "-" + dino;
 
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat ds = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            cal.setTime(ds.parse(d));
+        date_Awal.setText(ngarep);
+        date_Akhir.setText(mburi);
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        cal.add(Calendar.DAY_OF_MONTH, -1);
-        String tanggal_a = ds.format(cal.getTime());
-        date_Awal.setText(tanggal_a);
-        date_Akhir.setText(d);
-        if (kd_user != null) {
-            if (isOnline() == true) {
-                try {
-                    Call<TindakanGetData> call = apiInterface.getDataTindakan(kd_user, tanggal_a, d);
-                    call.enqueue(new Callback<TindakanGetData>() {
-                        @Override
-                        public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
-                            if (response.isSuccessful()) {
-                                pendapatan_bpjsr = response.body().getPendapatan_bpjs();
-                                pendapatan_umumr = response.body().getPendapatan_umum();
-
-                                status = response.body().getStatus().toString();
-                                judul = response.body().getJudul().toString();
-                                pendapatan_bpjs.setText(pendapatan_bpjsr);
-                                pendapatan_umum.setText(pendapatan_umumr);
-                                if (status.equals("ok")) {
-                                    if (response.body().getTotal().equals("0")) {
-                                        total_pendapatan.setText("Rp. 0");
-                                    } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
-                                    }
-                                    judule.setText(judul);
-
-                                } else {
-                                    if (response.body().getTotal().equals("0")) {
-                                        total_pendapatan.setText("Rp. 0");
-                                    } else {
-                                        total_pendapatan.setText(response.body().getTotal().toString());
-                                    }
-                                    Toast.makeText(getActivity(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
-                                }
-                                hideLoad();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<TindakanGetData> call, Throwable t) {
-                            hideLoad();
-                            dialog_failure();
-//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server !", Toast.LENGTH_SHORT).show();
-                            Log.d("Failure", t.getMessage());
-                        }
-                    });
-                } catch (Exception e) {
-                    hideLoad();
-                    Toast.makeText(getActivity(), "Exception to connect !", Toast.LENGTH_SHORT).show();
-                    Log.d("Exception", e.getMessage());
-                }
-            } else {
-                hideLoad();
-                dialog_failure();
-//                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
-            }
-        }
-
+        getgaji(ngarep, mburi);
     }
 
     private void fetchData() {

@@ -25,6 +25,7 @@ import kotlinx.coroutines.experimental.launch
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.*
 import  id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
 import id.go.patikab.rsud.remun.remunerasi.config.util.*
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData
 
 class ProfilFragment : Fragment(), ProfilView {
 
@@ -56,10 +57,6 @@ class ProfilFragment : Fragment(), ProfilView {
         viewpage_team_detail.adapter = TeamPagerAdapter("No overview", getChildFragmentManager())
         tab_team_detail.setupWithViewPager(viewpage_team_detail)
     }
-
-    override fun showDetail(detail: ProfilDetail) {
-
-    }
     //method untuk cek koneksi
 //    fun isOnline(): Boolean {
 //        val cm = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -70,12 +67,6 @@ class ProfilFragment : Fragment(), ProfilView {
 //        } else false
 //        //jika tidak ada koneksi return false
 //    }
-
-
-
-    override fun showInformasi(informasi: List<Informasi>) {
-    }
-
     override fun showLoading() {
     }
 
@@ -111,5 +102,6 @@ internal class TeamPagerAdapter(private val mOverview: String,
     override fun getPageTitle(position: Int): CharSequence? {
         return mTitles[position]
     }
+
 
 }
