@@ -42,29 +42,38 @@
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/ubah_profil"
-                    android:textAlignment="center"
+                    android:textAlignment="inherit"
                     android:textColor="@color/secondary_text"
-                    android:textSize="18pt" />
+                    android:textSize="8pt"/>
 
                 <ImageView
                     android:id="@+id/foto_profile"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
                     android:layout_gravity="center_horizontal"
                     android:minHeight="150dp"
                     android:minWidth="150dp"
+                    android:layout_marginTop="@dimen/dimens_10dp"
                     android:src="@drawable/dokterdefault" />
 
+                <!--<Button-->
+                    <!--android:id="@+id/btn_ambil_gambar"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="35dp"-->
+                    <!--android:layout_marginTop="@dimen/dimens_5dp"-->
+                    <!--android:background="@drawable/btn_custom"-->
+                    <!--android:text="Pilih Gambar"-->
+                    <!--android:textColor="@color/icons"-->
+                    <!--android:textSize="15sp" />-->
                 <Button
-                    android:id="@+id/btn_ambil_gambar"
+                    android:id="@+id/save_foto"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:layout_marginTop="@dimen/dimens_5dp"
+                    android:layout_marginTop="@dimen/dimens_10dp"
                     android:background="@drawable/btn_custom"
-                    android:text="Pilih Gambar"
+                    android:text="Simpan"
                     android:textColor="@color/icons"
                     android:textSize="15sp" />
-
                 <!--<LinearLayout-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->

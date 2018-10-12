@@ -40,11 +40,9 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DokterGetData;
 
 
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
-
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*;
+import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.*;
 import id.go.patikab.rsud.remun.remunerasi.view.MainActivity;
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail;
 import retrofit2.Call;
@@ -68,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity  {
     Spinner spinnerDokter;
 
     SwipeRefreshLayout swipeRefreshLayout;
-
+    UbahFoto ubahfoto;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -264,11 +262,13 @@ public class RegisterActivity extends AppCompatActivity  {
                         if (status.equals("ok")) {
                             preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString(login_session, response.body().getDataUser().get(0).getKddokter());
+                            String idn = response.body().getDataUser().get(0).getKddokter();
+                            editor.putString(login_session, idn );
                             editor.putString(nm_dokter, nm_dk);
                             editor.apply();
                             progressDialog.dismiss();
                             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                            insert_profile(id_d,nm_dk);
                             finish();
                             deleterecordlokal();
                         } else if (status.equals("failed")) {
@@ -331,5 +331,21 @@ public class RegisterActivity extends AppCompatActivity  {
         //jika tidak ada koneksi return false
         return false;
     }
+    private void insert_profile(String id,String nm){
 
+        Call<ServerResponse> call = apiInterface.insert_profile(id,nm);
+        call.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                if(response.isSuccessful()){
+                    Log.d("tg","Sukses insert profil");
+                }
+
+            }
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+                Log.d("fail",t.getMessage());
+            }
+        });
+    }
 }

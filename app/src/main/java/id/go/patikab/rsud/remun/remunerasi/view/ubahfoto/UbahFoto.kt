@@ -59,11 +59,16 @@ class UbahFoto : AppCompatActivity() {
         id_d = intent.getStringExtra("id_dokter")
         namaDokter = intent.getStringExtra("nama_dokter");
 
-//        toast(id_d.toString())
-        btn_ambil_gambar.setOnClickListener {
+////        toast(id_d.toString())
+//        btn_ambil_gambar.setOnClickListener {
+//
+//        }
+        save_foto.setOnClickListener {
+            uploadFile(id_d,namaDokter)
+        }
+        foto_profile.setOnClickListener {
             ambilGambarGalery()
         }
-
 //        btn_simpan_profile.setOnClickListener({
 //            uploadFile()
 //
@@ -112,7 +117,7 @@ class UbahFoto : AppCompatActivity() {
                 foto_profile.setImageBitmap(bitmap)
                 cursor.close()
 
-                uploadFile()
+
 
             } // When an Video is picked
             else {
@@ -125,7 +130,7 @@ class UbahFoto : AppCompatActivity() {
     }
 
     // Uploading Image/Video
-    private fun uploadFile() {
+    fun uploadFile(id:String,nama:String) {
         progressDialog.setMessage("Mengupload data...")
         progressDialog.setCancelable(false)
         progressDialog.show()
@@ -136,8 +141,8 @@ class UbahFoto : AppCompatActivity() {
         val requestBody = RequestBody.create(MediaType.parse("*/*"), file)
         val fileToUpload = MultipartBody.Part.createFormData("foto", file.getName(), requestBody)
         val filename = RequestBody.create(MediaType.parse("text/plain"), file.getName())
-        val iddokter = RequestBody.create(MediaType.parse("text/plain"), id_d)
-        val nama_dokter = RequestBody.create(MediaType.parse("text/plain"), namaDokter)
+        val iddokter = RequestBody.create(MediaType.parse("text/plain"), id)
+        val nama_dokter = RequestBody.create(MediaType.parse("text/plain"), nama)
 
         var getResponse: ApiInterface
         getResponse = ApiClient.getClient().create(ApiInterface::class.java)

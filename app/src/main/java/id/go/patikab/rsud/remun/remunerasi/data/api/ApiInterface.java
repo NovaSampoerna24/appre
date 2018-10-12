@@ -54,6 +54,11 @@ public interface ApiInterface {
                                     @Part("nama_dokter") RequestBody nama_dokter
 
     );
+    @FormUrlEncoded
+    @POST("android/service/profile/updateProfile.php")
+    Call<ServerResponse> insert_profile(@Field("id_dokter") String id,
+                                        @Field("nama_dokter") String nama_dokter
+    );
 //    melihat data profil(foto)
     @GET("android/service/profile/detailProfile.php")
     Call<ProfilGetData> getDataProfil(@Query("id") String id);

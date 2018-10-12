@@ -642,7 +642,6 @@ public class PembayaranFragment extends Fragment {
             }
         }, 500);
     }
-
     //method untuk cek koneksi
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -654,7 +653,6 @@ public class PembayaranFragment extends Fragment {
         //jika tidak ada koneksi return false
         return false;
     }
-
     //dialog failure
     private void dialog_failure() {
         CustomDialogDetail cdd = new CustomDialogDetail(getActivity());

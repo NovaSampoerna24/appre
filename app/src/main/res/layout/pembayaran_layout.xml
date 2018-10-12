@@ -69,7 +69,7 @@
                         <RelativeLayout
                             android:id="@+id/liner"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
+                            android:layout_height="222dp"
                             android:background="@drawable/btn_custom"
                             android:orientation="vertical"
                             android:padding="@dimen/dimens_10dp">
@@ -78,9 +78,9 @@
                                 android:id="@+id/judul"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAlignment="center"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="Data Pendapatan"
+                                android:textAlignment="center"
                                 android:textColor="@color/icons"
                                 android:textSize="18sp" />
 
@@ -88,8 +88,8 @@
                                 android:id="@+id/pendapatan_total"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@id/judul"
-                                android:layout_marginTop="20dp"
+                                android:layout_above="@+id/tt_pendapatan"
+                                android:layout_alignParentEnd="true"
                                 android:fontFamily="@font/roboto_medium"
                                 android:gravity="center"
                                 android:padding="0dp"
@@ -101,11 +101,12 @@
                                 android:id="@+id/tt_pendapatan"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
                                 android:layout_gravity="center"
+                                android:layout_marginBottom="85dp"
                                 android:fontFamily="@font/roboto_reguler"
                                 android:text="Total pendapatan"
-                                android:layout_below="@id/pendapatan_total"
                                 android:textAlignment="center"
                                 android:textColor="@color/icons"
                                 android:textSize="12sp" />
@@ -189,7 +190,7 @@
                                     <TextView
                                         android:id="@+id/tt_pendapatan_incbgs"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="26dp"
                                         android:layout_alignTop="@+id/pendapatan_umum"
                                         android:layout_centerHorizontal="true"
                                         android:layout_gravity="center"
@@ -217,9 +218,6 @@
                             </LinearLayout>
 
 
-
-
-
                             <!--<ProgressBar-->
                             <!--android:id="@+id/progress_bar3"-->
                             <!--android:layout_width="25dp"-->
@@ -228,17 +226,12 @@
                             <!--android:visibility="gone" />-->
 
 
-
                             <!--<ProgressBar-->
                             <!--android:id="@+id/progress_bar2"-->
                             <!--android:layout_width="25dp"-->
                             <!--android:layout_height="25dp"-->
                             <!--android:layout_gravity="center"-->
                             <!--android:visibility="gone" />-->
-
-
-
-
 
 
                             <!--<ProgressBar-->

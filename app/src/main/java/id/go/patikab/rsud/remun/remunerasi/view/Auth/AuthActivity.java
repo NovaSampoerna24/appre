@@ -33,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse;
 import id.go.patikab.rsud.remun.remunerasi.view.MainActivity;
 import id.go.patikab.rsud.remun.remunerasi.view.Register.RegisterActivity;
 
@@ -50,6 +51,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
+import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.*;
+
 
 public class AuthActivity extends AppCompatActivity {
     EditText password;
@@ -67,6 +70,7 @@ public class AuthActivity extends AppCompatActivity {
     List<DokterData> dokterDataList = new ArrayList<DokterData>();
     @BindView(R.id.spin_dokter)
     Spinner spinnerDokter;
+    UbahFoto ubahfoto;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -277,10 +281,12 @@ public class AuthActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString(login_session, response.body().getDataUser().get(0).getKddokter());
+                            String idn =  response.body().getDataUser().get(0).getKddokter();
+                            editor.putString(login_session,idn);
                             editor.putString(nm_dokter, nama_dokter);
                             editor.apply();
                             startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                            insert_profile(id_d,nama_dokter);
                             finish();
                         } else if (status.equals("failed")) {
                             progressDialog.dismiss();
@@ -323,4 +329,23 @@ public class AuthActivity extends AppCompatActivity {
         //jika tidak ada koneksi return false
         return false;
     }
+
+    private void insert_profile(String id,String nm){
+
+        Call<ServerResponse> call = apiInterface.insert_profile(id,nm);
+        call.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                if(response.isSuccessful()){
+                    Log.d("tg","Sukses insert profil");
+                }
+
+            }
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+                Log.d("fail",t.getMessage());
+            }
+        });
+    }
+
 }

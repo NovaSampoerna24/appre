@@ -18,6 +18,6 @@
     <string name="pesan_konek">Tidak tersambung ke internet</string>
     <string name="title_message">Tidak dapat menjangkau server</string>
     <string name="detail_message">Periksa kembali koneksi internet anda !</string>
-    <string name="ubah_profil">Ubah Foto Profil</string>
+    <string name="ubah_profil">Klik Gambar dibawah dan pilih foto profil anda.</string>
 
 </resources>

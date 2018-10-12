@@ -6,7 +6,9 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.View
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
@@ -20,12 +22,17 @@ import retrofit2.Response
 
 class GantiPassword:AppCompatActivity(){
     var id_d: String? = null
+    internal lateinit var mActionBarToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ubah_password_layout)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
+
+        setSupportActionBar(mActionBarToolbar)
+        supportActionBar?.setTitle("Ganti Password")
+
         id_d = intent?.getStringExtra("id_dokter")
 
         btn_simpan_profile.setOnClickListener({

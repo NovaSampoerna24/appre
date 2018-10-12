@@ -21,7 +21,6 @@ import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.config.util.ActivityIntentKt;
 import id.go.patikab.rsud.remun.remunerasi.view.Auth.AuthActivity;
 import id.go.patikab.rsud.remun.remunerasi.view.PembayaranDokter.PembayaranFragment;
-import id.go.patikab.rsud.remun.remunerasi.view.profil.AkunFragment;
 import id.go.patikab.rsud.remun.remunerasi.view.profil.*;
 
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
