@@ -1,4 +1,4 @@
-package id.go.patikab.rsud.remun.remunerasi.view.profil
+package id.go.patikab.rsud.remun.remunerasi.view.DetailProfil
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -17,9 +17,8 @@ import kotlinx.android.synthetic.main.layout_detail_profil.*
 import id.go.patikab.rsud.remun.remunerasi.config.util.*
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.`object`.Informasi
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilDetail
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient.*
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.support.v4.onRefresh

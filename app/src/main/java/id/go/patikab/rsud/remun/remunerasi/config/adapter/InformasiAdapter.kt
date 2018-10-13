@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.`object`.Informasi
 import kotlinx.android.synthetic.main.item_informasi.view.*
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class InformasiAdapter(private val mItems:List<Informasi>,
-                       private val mOnclick:(informasine:Informasi)->
+class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,
+                       private val mOnclick:(notif:NotifikasiResponse.Notif)->
                        Unit):RecyclerView.Adapter<IFViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IFViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -28,11 +31,15 @@ class InformasiAdapter(private val mItems:List<Informasi>,
 }
 
 class IFViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
-    fun bind(inf:Informasi,onClick:(infs:Informasi)->Unit){
+    fun bind(inf:NotifikasiResponse.Notif,onClick:(inf:NotifikasiResponse.Notif)->Unit){
         with(itemView){
             judule.text = inf.judul
-            deske.text = inf.deskripsi
-            labele.text = inf.label
+            deske.text = inf.pesan
+            if( inf.jp == "1") labele.text = "Pengumuman" else labele.text ="pesan"
+
+
+
+            waktu.text = inf.waktu
             setOnClickListener{
                 onClick(inf)
             }

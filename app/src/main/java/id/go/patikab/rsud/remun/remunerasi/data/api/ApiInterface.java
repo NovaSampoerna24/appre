@@ -65,5 +65,9 @@ public interface ApiInterface {
 //    get tarifinacbgs perbulan saat itu juga
     @GET("android/service/tarif_bulan.php")
     Call<Inacbgs> getTarifInacgs();
+//    get notifikasi
+    @FormUrlEncoded
+    @POST("android/service/pengumuman/pengumuman.php")
+    Call<NotifikasiResponse>get_pengumuman(@Field("id_dokter")String id);
 
 }

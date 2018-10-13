@@ -1,4 +1,4 @@
-package id.go.patikab.rsud.remun.remunerasi.view.profil
+package id.go.patikab.rsud.remun.remunerasi.view.DetailProfil
 
 import android.content.ContentValues
 import android.util.Log

@@ -1,4 +1,4 @@
-package id.go.patikab.rsud.remun.remunerasi.view.profil
+package id.go.patikab.rsud.remun.remunerasi.view.setAkun
 
 
 import android.content.ContentValues.TAG
@@ -53,6 +53,9 @@ class AkunFragment : Fragment() {
             activity?.logout()
             activity?.finish()
 
+        }
+        t_pengumuman.setOnClickListener {
+            activity?.openpengumuman(kd_user)
         }
 
     }

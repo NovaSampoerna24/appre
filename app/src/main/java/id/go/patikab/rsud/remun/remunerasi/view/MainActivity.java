@@ -22,6 +22,7 @@ import id.go.patikab.rsud.remun.remunerasi.config.util.ActivityIntentKt;
 import id.go.patikab.rsud.remun.remunerasi.view.Auth.AuthActivity;
 import id.go.patikab.rsud.remun.remunerasi.view.PembayaranDokter.PembayaranFragment;
 import id.go.patikab.rsud.remun.remunerasi.view.profil.*;
+import id.go.patikab.rsud.remun.remunerasi.view.setAkun.AkunFragment;
 
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
 public class MainActivity extends AppCompatActivity implements

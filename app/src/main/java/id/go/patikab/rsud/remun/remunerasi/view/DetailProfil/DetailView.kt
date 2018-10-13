@@ -1,4 +1,4 @@
-package id.go.patikab.rsud.remun.remunerasi.view.profil
+package id.go.patikab.rsud.remun.remunerasi.view.DetailProfil
 
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilDetail
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData

@@ -1,31 +1,18 @@
 package id.go.patikab.rsud.remun.remunerasi.view.profil
 
-import android.content.ContentValues
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.squareup.picasso.Picasso
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient.*
 import id.go.patikab.rsud.remun.remunerasi.*
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilDetail
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.`object`.Informasi
+import id.go.patikab.rsud.remun.remunerasi.view.DetailProfil.DetailProfil
 import kotlinx.android.synthetic.main.profil_layout.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.*
-import  id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
-import id.go.patikab.rsud.remun.remunerasi.config.util.*
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData
+import id.go.patikab.rsud.remun.remunerasi.view.setAkun.AkunFragment
 
 class ProfilFragment : Fragment(), ProfilView {
 

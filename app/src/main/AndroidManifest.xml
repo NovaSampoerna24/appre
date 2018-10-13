@@ -57,6 +57,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
+        <activity android:name=".view.Notifikasi.Notifikasi"></activity>
 
         <service android:name=".config.firebase.MyFirebaseInstanceIdService">
             <intent-filter>
