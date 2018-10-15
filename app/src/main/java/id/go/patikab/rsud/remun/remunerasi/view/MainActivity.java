@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements
 
         navigationView.setNavigationItemSelectedListener(this);
         sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-//        Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
+        Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
         kd_user = sharedPreferences.getString(login_session, null);
 //        loadProfile();
         fragmentprofil = new AkunFragment();

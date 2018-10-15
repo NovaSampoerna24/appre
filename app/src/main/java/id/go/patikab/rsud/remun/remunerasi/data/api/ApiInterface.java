@@ -55,7 +55,7 @@ public interface ApiInterface {
 
     );
     @FormUrlEncoded
-    @POST("android/service/profile/updateProfile.php")
+    @POST("android/service/profile/insertProfile.php")
     Call<ServerResponse> insert_profile(@Field("id_dokter") String id,
                                         @Field("nama_dokter") String nama_dokter
     );
