@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.`object`.Informasi
 import kotlinx.android.synthetic.main.item_informasi.view.*
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
 import java.text.SimpleDateFormat
-import java.util.*
 
 
-class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,
+class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,private val counte:Int,
                        private val mOnclick:(notif:NotifikasiResponse.Notif)->
                        Unit):RecyclerView.Adapter<IFViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IFViewHolder {
@@ -21,7 +19,8 @@ class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,
     }
 
     override fun getItemCount(): Int {
-        return mItems.size
+
+        return counte
           }
 
     override fun onBindViewHolder(holder: IFViewHolder, position: Int) {
@@ -35,19 +34,17 @@ class IFViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         with(itemView){
             judule.text = inf.judul
             deske.text = inf.pesan
-            if( inf.jp == "1") labele.text = "Pengumuman" else labele.text ="pesan"
+//            if( inf.jp == "1") labele.text = "Pengumuman" else labele.text ="Pesan"
+            labele.text = inf.jenis_p
+//            var dateFormat = SimpleDateFormat("dd/MM/yyyy")
+//            val date= dateFormat.parse(inf.tanggal)
+//            var d = date.toString()
+            waktu.text = inf.readableDate
 
-
-
-            waktu.text = inf.waktu
             setOnClickListener{
                 onClick(inf)
             }
         }
 
 }
-
-
-
-
 }

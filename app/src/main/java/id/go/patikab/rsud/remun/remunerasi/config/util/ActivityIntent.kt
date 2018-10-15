@@ -4,12 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.ConnectivityManager
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
 import id.go.patikab.rsud.remun.remunerasi.view.Auth.AuthActivity
 import id.go.patikab.rsud.remun.remunerasi.view.gantiPassword.GantiPassword
 import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.UbahFoto
 import id.go.patikab.rsud.remun.remunerasi.view.Notifikasi.*
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
+import id.go.patikab.rsud.remun.remunerasi.view.notifikasidetail.NotifikasiDetail
 
 fun Activity.openUbahFoto(iddokter: String, namaDokter: String) {
     startActivity(Intent(this, UbahFoto::class.java).apply {
@@ -32,7 +33,15 @@ fun Activity.opengantiPassword(iddokter: String) {
         putExtra("id_dokter", iddokter)
     })
 }
-fun openEventsDetail(id:String){
+fun Activity.openNotif(notif:NotifikasiResponse.Notif){
+    startActivity(Intent(this, NotifikasiDetail::class.java).apply {
+        putExtra("id",notif.id)
+        putExtra("title",notif.judul)
+        putExtra("pesan",notif.pesan)
+        putExtra("label",notif.jenis_p)
+        putExtra("tanggal",notif.readableDate)
+
+    })
 
 }
 fun Activity.openpengumuman(iddokter: String) {

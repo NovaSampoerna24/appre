@@ -5,10 +5,6 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 
@@ -54,9 +50,7 @@ class AkunFragment : Fragment() {
             activity?.finish()
 
         }
-        t_pengumuman.setOnClickListener {
-            activity?.openpengumuman(kd_user)
-        }
+
 
     }
 

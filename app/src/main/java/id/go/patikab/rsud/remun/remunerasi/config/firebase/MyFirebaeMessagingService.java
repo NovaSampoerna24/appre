@@ -29,14 +29,17 @@ public class MyFirebaeMessagingService extends FirebaseMessagingService {
 //        Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         Intent intent  = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("id",remoteMessage.getData().get(0));
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
-        Notification.Builder notificationBuilder = new Notification.Builder(this);
-        notificationBuilder.setContentTitle("Remunerasi Notification");
-        notificationBuilder.setContentText(remoteMessage.getNotification().getBody());
-        notificationBuilder.setAutoCancel(true);
-        notificationBuilder.setContentIntent(pendingIntent);
+
+        Notification.Builder nBuilder = new Notification.Builder(this);
+        nBuilder.setContentTitle("Remunerasi Notification");
+        nBuilder.setContentText(remoteMessage.getNotification().getBody());
+        nBuilder.setAutoCancel(true);
+        nBuilder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0,notificationBuilder.build());
+        notificationManager.notify(0,nBuilder.build());
 
 
 

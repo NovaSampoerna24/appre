@@ -2,10 +2,8 @@ package id.go.patikab.rsud.remun.remunerasi.view.DetailProfil
 
 import android.content.ContentValues
 import android.util.Log
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilGetData
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData
+import id.go.patikab.rsud.remun.remunerasi.data.api.*
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +13,6 @@ class DetailPresenter(private val mView: DetailView){
 
     suspend fun fetchGaji(kd_user: String){
         val cb = Calendar.getInstance()
-        val dino = cb.get(Calendar.DATE)
         val wulan = cb.get(Calendar.MONTH) + 1
         val taun = cb.get(Calendar.YEAR)
         val dino_d_b = cb.getActualMaximum(Calendar.DAY_OF_MONTH)
@@ -63,4 +60,24 @@ class DetailPresenter(private val mView: DetailView){
 
         })
     }
+        suspend fun getPengumuman(id:String){
+            var getResponse: ApiInterface
+            getResponse  = ApiClient.getClient().create(ApiInterface::class.java)
+            val call: Call<NotifikasiResponse>
+            call = getResponse.get_pengumuman(id)
+            call.enqueue(object :Callback<NotifikasiResponse>{
+                override fun onFailure(call: Call<NotifikasiResponse>, t: Throwable) {
+                    Log.d("TAG",t.message)
+                }
+
+                override fun onResponse(call: Call<NotifikasiResponse>, response: Response<NotifikasiResponse>) {
+                    if(response.isSuccessful){
+                        val notif = response.body()?.data
+                        if (notif != null) {
+                            mView.showInformasi(notif)
+                        }
+                    }
+                }
+            });
+        }
 }

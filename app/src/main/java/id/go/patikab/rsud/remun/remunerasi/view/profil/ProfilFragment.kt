@@ -13,11 +13,18 @@ import kotlinx.android.synthetic.main.profil_layout.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import id.go.patikab.rsud.remun.remunerasi.view.setAkun.AkunFragment
+import id.go.patikab.rsud.remun.remunerasi.view.Notifikasi.*
+
+
+
 
 class ProfilFragment : Fragment(), ProfilView {
 
     val mPresenter by lazy { ProfilPresenter(this) }
-
+    private val tabIcons = intArrayOf(
+            R.drawable.ic_account,
+            R.drawable.ic_notifications_width,
+            R.drawable.ic_person_width)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -33,8 +40,8 @@ class ProfilFragment : Fragment(), ProfilView {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if(savedInstanceState == null){
-           refresh()
+        if (savedInstanceState == null) {
+            refresh()
         }
 
 
@@ -43,7 +50,15 @@ class ProfilFragment : Fragment(), ProfilView {
     override fun show() {
         viewpage_team_detail.adapter = TeamPagerAdapter("No overview", getChildFragmentManager())
         tab_team_detail.setupWithViewPager(viewpage_team_detail)
+        setupTabIcons();
     }
+
+    private fun setupTabIcons() {
+        tab_team_detail.getTabAt(0)?.setIcon(tabIcons[0])
+        tab_team_detail.getTabAt(1)?.setIcon(tabIcons[1])
+        tab_team_detail.getTabAt(2)?.setIcon(tabIcons[2])
+    }
+
     //method untuk cek koneksi
 //    fun isOnline(): Boolean {
 //        val cm = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -65,18 +80,18 @@ class ProfilFragment : Fragment(), ProfilView {
 
 }
 
-internal class TeamPagerAdapter(private val mOverview: String,
-                                fragmentManager: FragmentManager)
+internal class TeamPagerAdapter(private val mOverview: String, fragmentManager: FragmentManager)
     : FragmentPagerAdapter(fragmentManager) {
 
     private val mPages by lazy {
         listOf(
-                DetailProfil().apply { },
+                DetailProfil().apply {},
+                Notifikasi().apply {},
                 AkunFragment().apply {}
         )
     }
 
-    private val mTitles by lazy { listOf("Profil", "Akun") }
+    private val mTitles by lazy { listOf("Profil", "Notifikasi", "Akun") }
 
     override fun getItem(position: Int): Fragment {
         return mPages[position]

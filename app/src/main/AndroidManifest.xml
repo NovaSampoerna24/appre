@@ -58,6 +58,7 @@
                 android:value=".view.MainActivity" />
         </activity>
         <activity android:name=".view.Notifikasi.Notifikasi"></activity>
+        <activity android:name=".view.notifikasidetail.NotifikasiDetail"></activity>
 
         <service android:name=".config.firebase.MyFirebaseInstanceIdService">
             <intent-filter>

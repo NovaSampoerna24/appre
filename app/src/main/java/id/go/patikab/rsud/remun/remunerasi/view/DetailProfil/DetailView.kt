@@ -1,12 +1,10 @@
 package id.go.patikab.rsud.remun.remunerasi.view.DetailProfil
 
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilDetail
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.`object`.Informasi
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
 
 interface  DetailView {
     fun showDetail(detail: ProfilDetail)
-    fun showInformasi(informasi:List<Informasi>)
+    fun showInformasi(informasi:List<NotifikasiResponse.Notif>)
     fun showGaji(getgaji: TindakanGetData)
 
 }

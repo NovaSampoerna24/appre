@@ -211,21 +211,13 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="Informasi:" />
 
-            <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/recycle"-->
-            <!--android:layout_marginTop="@dimen/margin_text"-->
-            <!--android:layout_width="match_parent"-->
-            <!--tools:listitem="@layout/item_informasi"-->
-            <!--android:layout_height="wrap_content"/>-->
-            <include layout="@layout/item_informasi" />
+            <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_data"
+            android:layout_marginTop="@dimen/dimens_5dp"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/item_informasi"
+            android:layout_height="wrap_content"/>
 
-            <include layout="@layout/item_informasi" />
-
-            <include layout="@layout/item_informasi" />
-
-            <include layout="@layout/item_informasi" />
-
-            <include layout="@layout/item_informasi" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
