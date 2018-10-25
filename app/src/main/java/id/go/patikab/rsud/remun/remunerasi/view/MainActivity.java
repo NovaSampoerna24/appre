@@ -131,8 +131,10 @@ public class MainActivity extends AppCompatActivity implements
                         .replace(R.id.flContent, fragmentpembayaran)
                         .commit();
                 break;
-//          case R.id.nav_jadwal:
-//          break;
+          case R.id.nav_pembayaran:
+              ActivityIntentKt.openPembayaranRemid(this,"15","2018-09-01","2018-10-31");
+
+          break;
             default:
                 break;
         }

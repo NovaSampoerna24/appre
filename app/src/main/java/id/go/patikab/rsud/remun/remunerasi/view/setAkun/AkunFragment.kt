@@ -1,7 +1,6 @@
 package id.go.patikab.rsud.remun.remunerasi.view.setAkun
 
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -15,7 +14,7 @@ import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
 import id.go.patikab.rsud.remun.remunerasi.config.util.*
-import kotlinx.android.synthetic.main.akun_layout.*
+import kotlinx.android.synthetic.main.activity_akun.*
 
 class AkunFragment : Fragment() {
 
@@ -31,10 +30,10 @@ class AkunFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         sharedPreferences = activity!!.getSharedPreferences(pref, Context.MODE_PRIVATE)
 //        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
-        kd_user = sharedPreferences?.getString(login_session, null)
-        nama_dokter = sharedPreferences?.getString(nm_dokter, null)
+        kd_user = sharedPreferences.getString(login_session, null)
+        nama_dokter = sharedPreferences.getString(nm_dokter, null)
 
-        return inflater.inflate(R.layout.akun_layout, container, false)
+        return inflater.inflate(R.layout.activity_akun, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

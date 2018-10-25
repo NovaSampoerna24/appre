@@ -22,8 +22,7 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.*
-import org.jetbrains.anko.support.v4.toast
-import kotlinx.android.synthetic.main.layout_detail_profil.*
+import kotlinx.android.synthetic.main.acitivity_detail_profil.*
 import org.jetbrains.anko.support.v4.onRefresh
 import id.go.patikab.rsud.remun.remunerasi.config.adapter.*
 
@@ -38,9 +37,9 @@ class DetailProfil : Fragment(), DetailView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         sharedPreferences = activity!!.getSharedPreferences(pref, Context.MODE_PRIVATE)
 //        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
-        kd_user = sharedPreferences?.getString(login_session, null)
-        nama_dokter = sharedPreferences?.getString(nm_dokter, null)
-        return inflater.inflate(R.layout.layout_detail_profil, container, false)
+        kd_user = sharedPreferences.getString(login_session, null)
+        nama_dokter = sharedPreferences.getString(nm_dokter, null)
+        return inflater.inflate(R.layout.acitivity_detail_profil, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,7 +76,7 @@ class DetailProfil : Fragment(), DetailView {
         launch(UI) {
             mPresenter.fetchProfilRetro(kd_user)
             mPresenter.fetchGaji(kd_user)
-            mPresenter.getPengumuman(kd_user)
+//            mPresenter.getPengumuman(kd_user)
         }
     }
 
@@ -116,7 +115,7 @@ class DetailProfil : Fragment(), DetailView {
         recycle_data?.let {
             with(recycle_data) {
                 layoutManager = LinearLayoutManager(context)
-                var counte = 0
+                var counte :Int
                 if(informasi.size < 5) counte=informasi.size else counte = 5
                 Log.d("count","test"+counte)
                 adapter =

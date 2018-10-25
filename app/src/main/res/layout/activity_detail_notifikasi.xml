@@ -32,7 +32,7 @@
             android:fontFamily="@font/roboto_medium"
             android:text="Title"
             android:textColor="@color/primary_text"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
@@ -50,10 +50,10 @@
                 android:id="@+id/labele"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/accent"
+                android:background="@drawable/btn_detail"
                 android:fontFamily="@font/roboto_medium"
                 android:padding="@dimen/dimens_5dp"
-                android:text="label"
+                android:text="Label"
                 android:textColor="@color/icons"
                 android:textSize="12sp" />
 
@@ -66,16 +66,22 @@
                 android:padding="@dimen/dimens_5dp"
                 android:text="waktu"
                 android:textColor="@color/secondary_text"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#e0e0e0" />
 
         <TextView
             android:id="@+id/pesan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimens_10dp"
             android:text="lorem"
+            android:fontFamily="@font/roboto_reguler"
             android:textColor="@color/secondary_text"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

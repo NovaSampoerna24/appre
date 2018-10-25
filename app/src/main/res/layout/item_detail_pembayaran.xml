@@ -11,6 +11,7 @@
     card_view:cardCornerRadius="3dp">
 
     <LinearLayout
+        android:id="@+id/root_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="3">
@@ -78,40 +79,40 @@
                 android:text="Tarif :"
                 android:textSize="12sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:padding="@dimen/text_padding"
-                android:text="Jp sebelum proporsi:"
-                android:textSize="12sp" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:fontFamily="@font/roboto_medium"-->
+                <!--android:padding="@dimen/text_padding"-->
+                <!--android:text="Jp sebelum proporsi:"-->
+                <!--android:textSize="12sp" />-->
 
-            <TextView
-                android:id="@+id/jp_kotor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_reguler"
-                android:padding="@dimen/text_padding"
-                android:text="Jp sebelum proporsi:"
-                android:textSize="12sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/jp_kotor"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:fontFamily="@font/roboto_reguler"-->
+                <!--android:padding="@dimen/text_padding"-->
+                <!--android:text="Jp sebelum proporsi:"-->
+                <!--android:textSize="12sp" />-->
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:padding="@dimen/text_padding"
-                android:text="Jp sesudah proporsi:"
-                android:textSize="12sp" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:fontFamily="@font/roboto_medium"-->
+                <!--android:padding="@dimen/text_padding"-->
+                <!--android:text="Jp sesudah proporsi:"-->
+                <!--android:textSize="12sp" />-->
 
-            <TextView
-                android:id="@+id/jp_sesudah_proporsi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_reguler"
-                android:padding="@dimen/text_padding"
-                android:text="Jp sesudah proporsi:"
-                android:textSize="12sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/jp_sesudah_proporsi"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:fontFamily="@font/roboto_reguler"-->
+                <!--android:padding="@dimen/text_padding"-->
+                <!--android:text="Jp sesudah proporsi:"-->
+                <!--android:textSize="12sp" />-->
 
         </LinearLayout>
 
@@ -132,7 +133,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tarif_jl1"
+                android:id="@+id/rewarde"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_reguler"

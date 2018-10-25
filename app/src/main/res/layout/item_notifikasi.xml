@@ -65,7 +65,8 @@
                 android:layout_marginTop="@dimen/dimens_5dp"
                 android:text="pembayaran anda telah diperbarui"
                 android:textColor="@color/primary_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:maxLength="30"/>
 
             <TextView
                 android:id="@+id/deske"
@@ -75,7 +76,8 @@
                 android:padding="@dimen/text_padding"
                 android:text="cek pembayaran terbaru bulan ini"
                 android:textColor="@color/secondary_text"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:maxLength="50"/>
 
 
         </LinearLayout>

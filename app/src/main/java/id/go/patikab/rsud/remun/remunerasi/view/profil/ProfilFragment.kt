@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.*
 import id.go.patikab.rsud.remun.remunerasi.view.DetailProfil.DetailProfil
-import kotlinx.android.synthetic.main.profil_layout.*
+import kotlinx.android.synthetic.main.layout_profil_container.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import id.go.patikab.rsud.remun.remunerasi.view.setAkun.AkunFragment
@@ -29,7 +29,7 @@ class ProfilFragment : Fragment(), ProfilView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         refresh()
-        return inflater.inflate(R.layout.profil_layout, container, false)
+        return inflater.inflate(R.layout.layout_profil_container, container, false)
     }
 
     fun refresh() {

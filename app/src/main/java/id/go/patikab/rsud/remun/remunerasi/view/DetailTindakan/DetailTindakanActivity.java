@@ -45,7 +45,7 @@ public class DetailTindakanActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        setContentView(R.layout.detail_tindakan);
+        setContentView(R.layout.activity_detail_tindakan);
         ButterKnife.bind(DetailTindakanActivity.this);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);

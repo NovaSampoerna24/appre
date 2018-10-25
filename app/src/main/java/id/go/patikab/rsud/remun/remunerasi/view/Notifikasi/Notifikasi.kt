@@ -1,6 +1,5 @@
 package id.go.patikab.rsud.remun.remunerasi.view.Notifikasi
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,11 +11,12 @@ import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.NotifikasiResponse
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref
-import kotlinx.android.synthetic.main.notifikasilayout.*
+import kotlinx.android.synthetic.main.layout_notifikasi.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import id.go.patikab.rsud.remun.remunerasi.config.adapter.*
 import id.go.patikab.rsud.remun.remunerasi.config.util.openNotif
+import org.jetbrains.anko.support.v4.onRefresh
 
 class Notifikasi : Fragment(),NotifikasiView {
     private val mPresenter by lazy { NotifikasiPresenter(this) }
@@ -27,20 +27,34 @@ class Notifikasi : Fragment(),NotifikasiView {
 
         sharedPreferences = activity!!.getSharedPreferences(SharePref.pref, Context.MODE_PRIVATE)
 //        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
-        kd_user = sharedPreferences?.getString(SharePref.login_session, null)
-
-        launch(UI) { mPresenter.getPengumuman(kd_user) }
+        kd_user = sharedPreferences.getString(SharePref.login_session, null)
 
 
-        return inflater.inflate(R.layout.notifikasilayout, container, false)
+        return inflater.inflate(R.layout.layout_notifikasi, container, false)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        refresh()
+
+        swiperefreshe.onRefresh {
+            refresh()
+            swiperefreshe.isRefreshing = false
+        }
+
+    }
+    fun refresh(){
+        launch(UI) { mPresenter.getPengumuman(kd_user) }
+    }
     override fun showInformasi(informasi: List<NotifikasiResponse.Notif>) {
-        recycle_data?.let {
-            with(recycle_data) {
+        recycle_datae?.let {
+            with(recycle_datae) {
                 layoutManager = LinearLayoutManager(context)
+                var counte :Int
+                if(informasi.size > 20)counte = 20 else counte = informasi.size
                 adapter =
-                        InformasiAdapter(informasi,informasi.size) { infor ->
+                        InformasiAdapter(informasi,counte) { infor ->
                             activity?.openNotif(infor)
 //                            toast(infor.id+" test")
                         }

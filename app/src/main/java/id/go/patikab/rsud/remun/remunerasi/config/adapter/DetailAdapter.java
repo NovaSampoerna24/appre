@@ -38,7 +38,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_detail_pembayaran, parent, false);
         ViewHolder vh = new ViewHolder(view);
         return vh;
     }
@@ -48,9 +48,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         holder.txt_nm_tindakan.setText( detailTindakanList.get(position).getTindakan());
         holder.tanggal.setText(detailTindakanList.get(position).getTanggal());
         holder.tarif.setText( detailTindakanList.get(position).getTarif());
-        holder.tr_jl1.setText( detailTindakanList.get(position).getTarif_jl1());
-        holder.jp_sebelum_proporsi.setText(detailTindakanList.get(position).getJp_kotor());
-        holder.jp_sesudah_proporsi.setText(detailTindakanList.get(position).getTarif_setelah());
+        holder.rewarde.setText(detailTindakanList.get(position).getJP());
+//        holder.tr_jl1.setText( detailTindakanList.get(position).getTarif_jl1());
+//        holder.jp_sebelum_proporsi.setText(detailTindakanList.get(position).getJp_kotor());
+//        holder.jp_sesudah_proporsi.setText(detailTindakanList.get(position).getTarif_setelah());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,17 +70,17 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txt_nm_tindakan, tanggal, tarif, tr_jl1, jp_sebelum_proporsi, jp_sesudah_proporsi, tr_jtl2;
+        TextView txt_nm_tindakan, tanggal, tarif, tr_jl1, jp_sebelum_proporsi, jp_sesudah_proporsi, tr_jtl2,rewarde;
 
         public ViewHolder(View itemView) {
             super(itemView);
             txt_nm_tindakan = (TextView) itemView.findViewById(R.id.nm_tindakan);
             tanggal = (TextView) itemView.findViewById(R.id.tanggal);
             tarif = (TextView) itemView.findViewById(R.id.tarif);
-            tr_jl1 = (TextView) itemView.findViewById(R.id.tarif_jl1);
-            jp_sebelum_proporsi = (TextView) itemView.findViewById(R.id.jp_kotor);
-            jp_sesudah_proporsi = (TextView)itemView.findViewById(R.id.jp_sesudah_proporsi);
-//            tr_jtl1 = (TextView) itemView.findViewById(R.id.tarif_jtl1);
+//            tr_jl1 = (TextView) itemView.findViewById(R.id.tarif_jl1);
+//            jp_sebelum_proporsi = (TextView) itemView.findViewById(R.id.jp_kotor);
+//            jp_sesudah_proporsi = (TextView)itemView.findViewById(R.id.jp_sesudah_proporsi);
+            rewarde = (TextView) itemView.findViewById(R.id.rewarde);
 //            tr_jtl2 = (TextView) itemView.findViewById(R.id.tarif_jtl2);
         }
     }

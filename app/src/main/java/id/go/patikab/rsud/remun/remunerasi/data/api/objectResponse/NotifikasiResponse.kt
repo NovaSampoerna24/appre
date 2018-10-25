@@ -1,7 +1,7 @@
 package id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.synthetic.main.item_informasi.view.*
+import kotlinx.android.synthetic.main.item_notifikasi.view.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

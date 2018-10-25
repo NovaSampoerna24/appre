@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="id.go.patikab.rsud.remun.remunerasi">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,17 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="android.support.multidex.MultiDexApplication" >
+        android:name="android.support.multidex.MultiDexApplication"
+        android:launchMode="singleInstance">
 
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+
         <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notifications_width" />
+         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/primary" />
-        <!--<meta-data-->
-        <!--android:name="com.google.firebase.messaging.default_notification_icon"-->
-        <!--android:resource="@drawable/ic_launcher_background" />-->
-        <!-- [END fcm_default_icon] -->
+            android:resource="@color/colorAccent" />
+
         <activity
             android:name=".view.StartActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
@@ -44,7 +45,7 @@
             android:name=".view.Register.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".view.MainActivity"/>
+        <activity android:name=".view.MainActivity" />
 
         <activity android:name=".view.DetailTindakan.DetailTindakanActivity"/>
         <activity android:name=".view.ubahfoto.UbahFoto">
@@ -59,17 +60,22 @@
         </activity>
         <activity android:name=".view.Notifikasi.Notifikasi"></activity>
         <activity android:name=".view.notifikasidetail.NotifikasiDetail"></activity>
+        <activity android:name=".view.DetailTindakan.DetailRM"></activity>
 
         <service android:name=".config.firebase.MyFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <!--<service android:name=".firebase.MyFirebaeMessagingService">-->
-        <!--<intent-layout_filter>-->
-        <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
-        <!--</intent-layout_filter>-->
-        <!--</service>-->
+        <service
+            android:name=".config.firebase.MyFirebaeMessagingService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
+
 
 </manifest>

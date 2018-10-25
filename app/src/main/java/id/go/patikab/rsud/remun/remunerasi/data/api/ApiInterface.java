@@ -45,6 +45,11 @@ public interface ApiInterface {
     Call<TindakanGetData> getDataTindakan(@Query("id_dokter") String id,
                                           @Query("start") String start,
                                           @Query("end") String end);
+    //    getdetailpembayaran rm
+    @GET("android/service/list_pasien_dokter.php")
+    Call<ListPasienDokter> getReMid(@Query("id_dokter") String id,
+                                          @Query("dari") String start,
+                                          @Query("sampai") String end);
 //    insert/update foto profil
     @Multipart
     @POST("android/service/profile/updateProfile.php")

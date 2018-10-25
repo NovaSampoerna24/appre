@@ -284,6 +284,7 @@ public class AuthActivity extends AppCompatActivity {
                             String idn =  response.body().getDataUser().get(0).getKddokter();
                             editor.putString(login_session,idn);
                             editor.putString(nm_dokter, nama_dokter);
+                            editor.putString("psw",password);
                             editor.apply();
                             startActivity(new Intent(AuthActivity.this, MainActivity.class));
                             insert_profile(id_d,nama_dokter);

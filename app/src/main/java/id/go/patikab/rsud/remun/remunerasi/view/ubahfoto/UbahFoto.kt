@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -20,11 +19,10 @@ import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse
-import kotlinx.android.synthetic.main.ubah_foto_layout.*
+import kotlinx.android.synthetic.main.activity_ubah_foto.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.jetbrains.anko.progressDialog
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -43,12 +41,12 @@ class UbahFoto : AppCompatActivity() {
     var namaDokter = ""
     private lateinit var context: Context
     private var permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-
+    var v = false
     internal lateinit var mActionBarToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ubah_foto_layout)
+        setContentView(R.layout.activity_ubah_foto)
 
         mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(mActionBarToolbar)
@@ -64,7 +62,7 @@ class UbahFoto : AppCompatActivity() {
 //
 //        }
         save_foto.setOnClickListener {
-            uploadFile(id_d,namaDokter)
+            if(v == false)toast("Pilih gambar terlebih dulu !") else uploadFile(id_d,namaDokter)
         }
         foto_profile.setOnClickListener {
             ambilGambarGalery()
@@ -113,13 +111,11 @@ class UbahFoto : AppCompatActivity() {
 //                toast(str1)
                 // Set the Image in ImageView for Previewing the Media
                 val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(selectedImage))
-
+                v = true
                 foto_profile.setImageBitmap(bitmap)
                 cursor.close()
 
-
-
-            } // When an Video is picked
+            }
             else {
                 Toast.makeText(this, "You haven't picked Image/Video", Toast.LENGTH_LONG).show()
             }

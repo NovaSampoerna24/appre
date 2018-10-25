@@ -14,7 +14,7 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail
-import kotlinx.android.synthetic.main.ubah_password_layout.*
+import kotlinx.android.synthetic.main.activity_ubah_password.*
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +26,7 @@ class GantiPassword:AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ubah_password_layout)
+        setContentView(R.layout.activity_ubah_password)
 
         mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
 

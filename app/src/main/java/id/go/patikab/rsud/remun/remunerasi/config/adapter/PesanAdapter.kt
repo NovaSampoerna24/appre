@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
-import kotlinx.android.synthetic.main.item_informasi.view.*
+import kotlinx.android.synthetic.main.item_notifikasi.view.*
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
-import java.text.SimpleDateFormat
+
 
 
 class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,private val counte:Int,
@@ -15,13 +15,12 @@ class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,private
                        Unit):RecyclerView.Adapter<IFViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IFViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return IFViewHolder(inflater.inflate(R.layout.item_informasi, parent, false))
+        return IFViewHolder(inflater.inflate(R.layout.item_notifikasi, parent, false))
     }
 
     override fun getItemCount(): Int {
-
         return counte
-          }
+    }
 
     override fun onBindViewHolder(holder: IFViewHolder, position: Int) {
         holder.bind(mItems[position], mOnclick)
@@ -30,10 +29,13 @@ class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,private
 }
 
 class IFViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
+
     fun bind(inf:NotifikasiResponse.Notif,onClick:(inf:NotifikasiResponse.Notif)->Unit){
         with(itemView){
             judule.text = inf.judul
+
             deske.text = inf.pesan
+//            if(inf.pesan.length >= 40) deske.text = inf.pesan + "..."
 //            if( inf.jp == "1") labele.text = "Pengumuman" else labele.text ="Pesan"
             labele.text = inf.jenis_p
 //            var dateFormat = SimpleDateFormat("dd/MM/yyyy")
@@ -47,4 +49,6 @@ class IFViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         }
 
 }
+
+
 }

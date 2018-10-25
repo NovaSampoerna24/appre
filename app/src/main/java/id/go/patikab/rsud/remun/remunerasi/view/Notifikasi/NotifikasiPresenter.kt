@@ -2,11 +2,9 @@ package id.go.patikab.rsud.remun.remunerasi.view.Notifikasi
 
 import android.content.ContentValues
 import android.util.Log
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
+import id.go.patikab.rsud.remun.remunerasi.data.api.*
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
 
-import id.go.patikab.rsud.remun.remunerasi.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
