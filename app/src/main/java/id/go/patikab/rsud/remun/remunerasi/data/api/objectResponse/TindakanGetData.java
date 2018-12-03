@@ -20,32 +20,26 @@ public class TindakanGetData {
     @SerializedName("data")
     List<DetailTindakan>detailTindakanList;
 
-
     public String getStatus() {
         return status;
     }
-
     public String getTotal() {
         return total;
     }
-
     public String getPendapatan_bpjs() {
         return pendapatan_bpjs;
     }
-
     public String getPendapatan_umum() {
         return pendapatan_umum;
     }
-
     public String getNama_dokter() {
         return nama_dokter;
     }
-
     public String getJudul() {
         return judul;
     }
-
     public List<DetailTindakan> getDetailTindakanList() {
         return detailTindakanList;
     }
+
 }

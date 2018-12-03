@@ -8,19 +8,19 @@
         android:icon="@drawable/ic_person"
         android:title="Profile" />
     <item
-        android:id="@+id/nav_remune"
+        android:id="@+id/nav_pembayaran"
         android:icon="@drawable/ic_remune"
-        android:title="Pembayaran" />
+        android:title="Taksiran penghasilan"/>
     <!--<item-->
         <!--android:id="@+id/nav_jadwal"-->
         <!--android:icon="@drawable/ic_jadwal"-->
         <!--android:title="Jadwal" />-->
     <item android:title="Account">
         <menu>
-            <item
-                android:id="@+id/nav_pembayaran"
-                android:icon="@drawable/ic_password"
-                android:title="pembayaran rm" />
+            <!--<item-->
+                <!--android:id="@+id/nav_pembayaran"-->
+                <!--android:icon="@drawable/ic_password"-->
+                <!--android:title="pembayaran rm" />-->
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_signout"

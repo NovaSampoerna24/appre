@@ -21,7 +21,6 @@ public class StartActivity extends AppCompatActivity {
     @OnClick(R.id.bt_masuk)
     public void btmasuk(){
         startActivity(new Intent(StartActivity.this,AuthActivity.class));
-
     }
     @OnClick(R.id.bt_daftar)
     public void btdaftar(){
@@ -35,9 +34,9 @@ public class StartActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-        if (!preferences.getString(login_session,"").equals("")) {
-            startActivity(new Intent(StartActivity.this, MainActivity.class));
-            finish();
+        if (preferences.getString(login_session,"") != "") {
+            startActivity(new Intent(StartActivity.this, MainApps.class));
+            this.finish();
         }
     }
 }

@@ -47,19 +47,17 @@ import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.config.adapter.DetailAdapter;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.Inacbgs;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.Inacbgs;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DetailTindakan;
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import static android.content.ContentValues.TAG;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter;
 import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
 
 public class PembayaranFragment extends Fragment {
 
@@ -73,7 +71,8 @@ public class PembayaranFragment extends Fragment {
             txt_btn_detail,
             txt_btn_filter = "hide",
             ngarep,
-            mburi;
+            mburi,
+            nnmm;
     TextView judule,
             emaile,
             pendapatan_bpjs,
@@ -175,17 +174,6 @@ public class PembayaranFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.text_filter)
-    public void btnfilter1() {
-        txt_btn_filter = btnfilters.getText().toString();
-        if (txt_btn_filter == "hide") {
-            ln_f.setVisibility(View.GONE);
-            btnfilters.setText("show");
-        } else {
-            ln_f.setVisibility(View.VISIBLE);
-            btnfilters.setText("hide");
-        }
-    }
 
     @OnClick(R.id.btn_detail)
     public void btn_detail() {
@@ -245,7 +233,9 @@ public class PembayaranFragment extends Fragment {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         btndetail.setText("Detail");
+        if (getActionBar() != null){
         getActionBar().setTitle("Remunerasi");
+        }
         date_Awal.setFocusable(false);
         date_Akhir.setFocusable(false);
         dateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -256,9 +246,10 @@ public class PembayaranFragment extends Fragment {
         mrecRecyclerView.setLayoutManager(layoutManager);
 
         sharedPreferences = getActivity().getSharedPreferences(pref, Context.MODE_PRIVATE);
-        Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
+//        Log.d("tokene", sharedPreferences.getString(my_token, null) + " ");
         kd_user = sharedPreferences.getString(login_session, null);
-        emaile.setText(sharedPreferences.getString(nm_dokter, null));
+        nnmm = sharedPreferences.getString(nm_dokter, null);
+        emaile.setText(nnmm);
 //        load more
         scrolloadm.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -429,25 +420,20 @@ public class PembayaranFragment extends Fragment {
                 awalcalendar.get(Calendar.YEAR),
                 awalcalendar.get(Calendar.MONTH),
                 awalcalendar.get(Calendar.DAY_OF_MONTH));
-
         awalcalendar.add(Calendar.YEAR, 0);
         awalcalendar.add(Calendar.MONTH, 0);
         awalcalendar.set(Calendar.DATE, 1);
-
         int al = ak.getActualMaximum(Calendar.DAY_OF_MONTH);
         ak.set(Calendar.DATE, al);
-
         awaldatepicker.getDatePicker().setMinDate(awalcalendar.getTimeInMillis());
         awaldatepicker.getDatePicker().setMaxDate(ak.getTimeInMillis());
         awaldatepicker.show();
     }
-
     private void getdatadetail() {
         ngarep = date_Awal.getText().toString().trim();
         mburi = date_Akhir.getText().toString().trim();
         getgaji(ngarep, mburi);
     }
-
     private void getListDataDetail() {
         String date_aw = date_Awal.getText().toString();
         String date_ak = date_Akhir.getText().toString();
@@ -458,15 +444,14 @@ public class PembayaranFragment extends Fragment {
                     call.enqueue(new Callback<TindakanGetData>() {
                         @Override
                         public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
-
                             if (response.isSuccessful()) {
                                 pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                                 pendapatan_umumr = response.body().getPendapatan_umum();
                                 total = response.body().getTotal().toString();
-                                judul = response.body().getJudul().toString();
-                                status = response.body().getStatus().toString();
+                                judul = response.body().getJudul();
+                                status = response.body().getStatus();
                                 detailTindakanList = response.body().getDetailTindakanList();
-                                if (status.equals("ok")) {
+                                if (status == "ok") {
                                     judule.setText(judul);
                                     pendapatan_bpjs.setText(pendapatan_bpjsr);
                                     pendapatan_umum.setText(pendapatan_umumr);
@@ -477,59 +462,49 @@ public class PembayaranFragment extends Fragment {
                                     }
                                     if (detailTindakanList.size() > 0) {
                                         mrecRecyclerView.setVisibility(View.VISIBLE);
-//                                    mrecRecyclerView.setMinimumHeight(1000);
+//                                      mrecRecyclerView.setMinimumHeight(1000);
                                         Log.d("total :", response.body().getTotal().toString());
                                         madapter = new DetailAdapter(detailTindakanList, listcount, getActivity());
                                         mrecRecyclerView.setAdapter(madapter);
                                         btndetail.setText("Sembunyikan");
-
                                     } else {
                                         Toast.makeText(getActivity(), "Detail Tindakan kosong ! perbarui tindakan anda", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
                                     Toast.makeText(getActivity(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                             newtonCradleLoading.stop();
                             newtonCradleLoading.setVisibility(View.GONE);
-
                         }
-
                         @Override
                         public void onFailure(Call<TindakanGetData> call, Throwable t) {
                             newtonCradleLoading.stop();
                             newtonCradleLoading.setVisibility(View.GONE);
                             dialog_failure();
-//                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
+//                          Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
                             Log.d("Failure", t.getMessage());
                         }
                     });
-
                 } catch (Exception e) {
                     newtonCradleLoading.stop();
                     newtonCradleLoading.setVisibility(View.GONE);
-                    Log.w("Exception", e.getMessage());
+//                    Log.w("Exception", e.getMessage());
                 }
             } else {
                 newtonCradleLoading.stop();
                 newtonCradleLoading.setVisibility(View.GONE);
                 dialog_failure();
-//                Toast.makeText(getActivity(), "Periksa kembali koneksi internet !", Toast.LENGTH_SHORT).show();
-            }
+           }
         }
-
     }
-
     private void hideLoad() {
-
         total_pendapatan.setVisibility(View.VISIBLE);
         pendapatan_bpjs.setVisibility(View.VISIBLE);
         pendapatan_umum.setVisibility(View.VISIBLE);
     }
 
     private void showLoad() {
-
         total_pendapatan.setVisibility(View.GONE);
         pendapatan_bpjs.setVisibility(View.GONE);
         pendapatan_umum.setVisibility(View.GONE);
@@ -547,27 +522,22 @@ public class PembayaranFragment extends Fragment {
                             if (response.isSuccessful()) {
                                 pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                                 pendapatan_umumr = response.body().getPendapatan_umum();
-                                status = response.body().getStatus().toString();
-                                nama_dokter = response.body().getNama_dokter().toString();
-                                judul = response.body().getJudul().toString();
-                                total = response.body().getTotal().toString();
+                                status = response.body().getStatus();
+                                nama_dokter = nnmm;
+                                judul = response.body().getJudul();
+                                total = response.body().getTotal();
                                 if (status.equals("ok")) {
                                     judule.setText(judul);
                                     pendapatan_bpjs.setText(pendapatan_bpjsr);
                                     pendapatan_umum.setText(pendapatan_umumr);
-                                    if (total == "0") {
-                                        total_pendapatan.setText("Rp. 0");
-                                    } else {
-                                        total_pendapatan.setText(total);
-                                    }
-
+                                    if (total == "0") { total_pendapatan.setText("Rp. 0"); }
+                                    else {total_pendapatan.setText(total); }
                                 } else {
                                     Toast.makeText(getActivity(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
                                 }
                                 hideLoad();
                             }
                         }
-
                         @Override
                         public void onFailure(Call<TindakanGetData> call, Throwable t) {
                             hideLoad();
@@ -592,33 +562,24 @@ public class PembayaranFragment extends Fragment {
     private void getiListBulanan() {
         ngarep = taun + "-" + wulan + "-" + 1;
         mburi = taun + "-" + wulan + "-" + dino_d_b;
-
         date_Awal.setText(ngarep);
         date_Akhir.setText(mburi);
-
         getgaji(ngarep, mburi);
-
     }
 
     private void getiListMingguan() {
-
         ngarep = taun + "-" + wulan + "-" + rn;
         mburi = taun + "-" + wulan + "-" + dino;
-
         date_Awal.setText(ngarep);
         date_Akhir.setText(mburi);
-
         getgaji(ngarep, mburi);
-
     }
 
     private void getiListHariIni() {
         ngarep = taun + "-" + wulan + "-" + dr;
         mburi = taun + "-" + wulan + "-" + dino;
-
         date_Awal.setText(ngarep);
         date_Akhir.setText(mburi);
-
         getgaji(ngarep, mburi);
     }
 
@@ -631,7 +592,7 @@ public class PembayaranFragment extends Fragment {
                 madapter = new DetailAdapter(detailTindakanList, madapter.getItemCount() + countplus, getActivity());
                 mrecRecyclerView.setAdapter(madapter);
                 mrecRecyclerView.scrollToPosition(madapter.getItemCount() - ((countplus * 2)));
-//                mrecRecyclerView.smoothScrollToPosition();
+//              mrecRecyclerView.smoothScrollToPosition();
                 loadMoreProgreses.setVisibility(View.GONE);
                 txtloadmore.setVisibility(View.GONE);
             }
@@ -645,7 +606,7 @@ public class PembayaranFragment extends Fragment {
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             return true;
         }
-        //jika tidak ada koneksi return false
+        // jika tidak ada koneksi return false
         return false;
     }
     //dialog failure

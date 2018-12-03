@@ -2,9 +2,9 @@ package id.go.patikab.rsud.remun.remunerasi.view.ubahfoto
 
 import android.Manifest
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -29,6 +29,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
+import id.go.patikab.rsud.remun.remunerasi.config.util.openhome
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.foto_profil
+import org.jetbrains.anko.indeterminateProgressDialog
+
 private const val FILE_PICKER_ID = 12
 private const val PERMISSION_REQUEST = 10
 
@@ -36,13 +41,13 @@ class UbahFoto : AppCompatActivity() {
     lateinit var mediaPath: String
     lateinit var str1: String
     lateinit var message: String
-    internal lateinit var progressDialog: ProgressDialog
     var id_d = ""
     var namaDokter = ""
     private lateinit var context: Context
     private var permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     var v = false
     internal lateinit var mActionBarToolbar: Toolbar
+    internal lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +57,7 @@ class UbahFoto : AppCompatActivity() {
         setSupportActionBar(mActionBarToolbar)
         supportActionBar?.setTitle("Ubah Foto")
 
-        progressDialog = ProgressDialog(this)
+
         context = this
         id_d = intent.getStringExtra("id_dokter")
         namaDokter = intent.getStringExtra("nama_dokter");
@@ -62,7 +67,7 @@ class UbahFoto : AppCompatActivity() {
 //
 //        }
         save_foto.setOnClickListener {
-            if(v == false)toast("Pilih gambar terlebih dulu !") else uploadFile(id_d,namaDokter)
+            if (v == false) toast("Pilih gambar terlebih dulu !") else uploadFile(id_d, namaDokter)
         }
         foto_profile.setOnClickListener {
             ambilGambarGalery()
@@ -115,8 +120,7 @@ class UbahFoto : AppCompatActivity() {
                 foto_profile.setImageBitmap(bitmap)
                 cursor.close()
 
-            }
-            else {
+            } else {
                 Toast.makeText(this, "You haven't picked Image/Video", Toast.LENGTH_LONG).show()
             }
         } catch (e: Exception) {
@@ -126,11 +130,14 @@ class UbahFoto : AppCompatActivity() {
     }
 
     // Uploading Image/Video
-    fun uploadFile(id:String,nama:String) {
-        progressDialog.setMessage("Mengupload data...")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
+    fun uploadFile(id: String, nama: String) {
+//        progressDialog.setMessage("Mengupload data...")
+//        progressDialog.setCancelable(false)
+//        progressDialog.show()
         // Map is used to multipart the file using okhttp3.RequestBody
+
+        indeterminateProgressDialog("This a progress dialog").show()
+
         val file = File(mediaPath)
         Log.d("lval", mediaPath)
         // Parsing any Media type file
@@ -149,18 +156,19 @@ class UbahFoto : AppCompatActivity() {
             override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>) {
                 message = response.body()?.message.toString()
                 if (response.isSuccessful) {
-                    progressDialog.dismiss()
+//                        progressDialog.dismiss()
                     toast(message)
                     finish()
+                    openhome()
                 } else {
-                    progressDialog.dismiss()
+//                    progressDialog.dismiss()
                     toast(message)
                 }
 
             }
 
             override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
                 toast(t.message + " ")
             }
         })
@@ -194,7 +202,7 @@ class UbahFoto : AppCompatActivity() {
             }
             if (allSuccess)
                 toast("Permission dibolehkan")
-                ambilGambarGalery()
+            ambilGambarGalery()
         }
     }
 

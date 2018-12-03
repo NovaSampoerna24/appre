@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ListPasienDokter(@SerializedName("status") val status: String,
                             @SerializedName("msg") val msg: String,
+                            @SerializedName("pendapatan") val pendapatan: String,
                             @SerializedName("data") val remidList: List<Remid>) {
     data class Remid(@SerializedName("NAMA") val nama: String,
                      @SerializedName("TOTAL") val total: String,
@@ -12,9 +13,12 @@ data class ListPasienDokter(@SerializedName("status") val status: String,
                      @SerializedName("PORSI") val porsi: String,
                      @SerializedName("TOTAL_PORSI") val total_porsi: String,
                      @SerializedName("TINDAKAN") val tindakanList: List<Tindakan>) {
+        data class Tindakan(@SerializedName("id_tindakan") val idtindakan: String,
+                            @SerializedName("tindakan") val tindakan: String,
+                            @SerializedName("tarif_jp") val tarif_jp: String,
+                            @SerializedName("reward") val reward: String,
+                            @SerializedName("tarif_tindakan") val tarif_tindakan: String)
 
-        data class Tindakan(@SerializedName("tindakan") val tindakan: String,
-                            @SerializedName("jp3") val jp3: String)
     }
 
 }

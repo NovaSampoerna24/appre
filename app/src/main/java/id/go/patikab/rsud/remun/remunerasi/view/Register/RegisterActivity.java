@@ -24,7 +24,6 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +39,14 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DokterGetData;
 
 
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*;
-import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.*;
-import id.go.patikab.rsud.remun.remunerasi.view.MainActivity;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse;
+
+import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.UbahFoto;
+import id.go.patikab.rsud.remun.remunerasi.view.MainApps;
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity  {
 
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
         if (!preferences.getString(login_session, "").equals("")) {
-            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+            startActivity(new Intent(RegisterActivity.this, MainApps.class));
             finish();
         } else {
             initSpinnerDokterregister();
@@ -267,7 +270,7 @@ public class RegisterActivity extends AppCompatActivity  {
                             editor.putString(nm_dokter, nm_dk);
                             editor.apply();
                             progressDialog.dismiss();
-                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                            startActivity(new Intent(RegisterActivity.this, MainApps.class));
                             insert_profile(id_d,nm_dk);
                             finish();
                             deleterecordlokal();

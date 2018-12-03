@@ -2,8 +2,15 @@ package id.go.patikab.rsud.remun.remunerasi.view.DetailProfil
 
 import android.content.ContentValues
 import android.util.Log
-import id.go.patikab.rsud.remun.remunerasi.data.api.*
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
+import android.view.Menu
+import android.widget.ArrayAdapter
+import id.go.patikab.rsud.remun.remunerasi.R
+import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
+import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.TindakanGetData
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilGetData
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.MenuModel
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.NotifikasiResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -11,34 +18,6 @@ import java.util.*
 
 class DetailPresenter(private val mView: DetailView){
 
-    suspend fun fetchGaji(kd_user: String){
-        val cb = Calendar.getInstance()
-        val wulan = cb.get(Calendar.MONTH) + 1
-        val taun = cb.get(Calendar.YEAR)
-        val dino_d_b = cb.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-        val a = taun.toString() + "-" + wulan + "-" + 1
-        val en = taun.toString() + "-" + wulan + "-" + dino_d_b
-
-        var getResponse: ApiInterface
-        getResponse  = ApiClient.getClient().create(ApiInterface::class.java)
-        val call: Call<TindakanGetData>
-        call = getResponse.getDataTindakan(kd_user,a,en)
-        call.enqueue(object : Callback<TindakanGetData> {
-            override fun onFailure(call: Call<TindakanGetData>, t: Throwable) {
-                Log.d(ContentValues.TAG,t.message)
-            }
-
-            override fun onResponse(call: Call<TindakanGetData>, response: Response<TindakanGetData>) {
-                if(response.isSuccessful){
-                    val gaji = response.body()
-                    gaji?.let {
-                        mView.showGaji(gaji)
-                    }
-                }
-            }
-        })
-    }
     suspend fun fetchProfilRetro(kd_user: String) {
 
         var getResponse: ApiInterface
@@ -60,24 +39,26 @@ class DetailPresenter(private val mView: DetailView){
 
         })
     }
-        suspend fun getPengumuman(id:String){
-            var getResponse: ApiInterface
-            getResponse  = ApiClient.getClient().create(ApiInterface::class.java)
-            val call: Call<NotifikasiResponse>
-            call = getResponse.get_pengumuman(id)
-            call.enqueue(object :Callback<NotifikasiResponse>{
-                override fun onFailure(call: Call<NotifikasiResponse>, t: Throwable) {
-                    Log.d("TAG",t.message)
-                }
-
-                override fun onResponse(call: Call<NotifikasiResponse>, response: Response<NotifikasiResponse>) {
-                    if(response.isSuccessful){
-                        val notif = response.body()?.data
-                        if (notif != null) {
-                            mView.showInformasi(notif)
-                        }
-                    }
-                }
-            });
+    fun getmenu(){
+        val sdf = MutableList(0){
+            MenuModel("","test","")
         }
+
+        sdf.add(MenuModel("0","Heart",""))
+        sdf.add(MenuModel("1","Atomic",""))
+        sdf.add(MenuModel("2","Stethoscope",""))
+        sdf.add(MenuModel("3","Hospital",""))
+        sdf.add(MenuModel("4","Report",""))
+        sdf.add(MenuModel("5","Book",""))
+
+        val myImageList =  ArrayList<Int>()
+        myImageList.add(R.drawable.heart)
+        myImageList.add(R.drawable.atomic)
+        myImageList.add(R.drawable.stethoscope)
+        myImageList.add(R.drawable.hospital)
+        myImageList.add(R.drawable.report)
+        myImageList.add(R.drawable.book)
+
+        mView.showMenu(sdf,myImageList)
+    }
 }

@@ -32,13 +32,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.go.patikab.rsud.remun.remunerasi.R;
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse;
-import id.go.patikab.rsud.remun.remunerasi.view.MainActivity;
+import id.go.patikab.rsud.remun.remunerasi.view.MainApps;
 import id.go.patikab.rsud.remun.remunerasi.view.Register.RegisterActivity;
 
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DokterGetData;
 
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.DatabaseHandler;
@@ -50,13 +46,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
-import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.*;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter;
 
+import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
+import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
+import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.*;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse;
 
 public class AuthActivity extends AppCompatActivity {
     EditText password;
-    String id_d = null, nama_dokter;
+    String id_d,
+            nama_dokter,kd_user;
     Button loginButton, registerButton;
 
     ProgressDialog progressDialog;
@@ -70,7 +74,6 @@ public class AuthActivity extends AppCompatActivity {
     List<DokterData> dokterDataList = new ArrayList<DokterData>();
     @BindView(R.id.spin_dokter)
     Spinner spinnerDokter;
-    UbahFoto ubahfoto;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,21 +85,20 @@ public class AuthActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //cek session
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-        if (!preferences.getString(login_session, "").equals("")) {
-            startActivity(new Intent(AuthActivity.this, MainActivity.class));
-            finish();
-        } else {
-            initSpinnerDokter();
-        }
+        kd_user = preferences.getString(login_session, "");
         String token = preferences.getString(my_token, null);
+        if (kd_user == "") {
+            initSpinnerDokter();
+        } else {
+            startActivity(new Intent(AuthActivity.this, MainApps.class));
+            finish();
+        }
         Log.d("tokenmu", token + " ");
-
 
 
         password = (EditText) findViewById(R.id.passwordLogin);
         loginButton = (Button) findViewById(R.id.girisButton);
         registerButton = (Button) findViewById(R.id.registerButton);
-
 
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -109,9 +111,9 @@ public class AuthActivity extends AppCompatActivity {
         spinnerDokter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                DokterData dokterDataeLogin = (DokterData) adapterspin.getItem(i);
-                id_d = dokterDataeLogin.getKode().toString();
-                nama_dokter = dokterDataeLogin.getNama().toString();
+                DokterData dokter = (DokterData) adapterspin.getItem(i);
+                id_d = dokter.getKode().toString();
+                nama_dokter = dokter.getNama().toString();
 //                Toast.makeText(AuthActivity.this, id_d + " ", Toast.LENGTH_SHORT).show();
             }
 
@@ -172,7 +174,6 @@ public class AuthActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void refresh() {
@@ -181,6 +182,7 @@ public class AuthActivity extends AppCompatActivity {
         initSpinnerDokter();
         swipe.setRefreshing(false);
     }
+
     private void initSpinnerDokter() {
         progressDialog = new ProgressDialog(this);
         final DatabaseHandler db = DatabaseHandler.getInstance(AuthActivity.this);
@@ -278,17 +280,17 @@ public class AuthActivity extends AppCompatActivity {
                     String message = response.body().getMessage().toString();
                     if (response.isSuccessful()) {
                         if (status.equals("ok")) {
+                            String idm = response.body().getDataUser().get(0).getKddokter().toString();
                             progressDialog.dismiss();
                             preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            String idn =  response.body().getDataUser().get(0).getKddokter();
-                            editor.putString(login_session,idn);
+                            editor.putString(login_session, idm);
                             editor.putString(nm_dokter, nama_dokter);
-                            editor.putString("psw",password);
+                            editor.putString("psw", password);
                             editor.apply();
-                            startActivity(new Intent(AuthActivity.this, MainActivity.class));
-                            insert_profile(id_d,nama_dokter);
+                            insert_profile(id_d, nama_dokter);
                             finish();
+                            startActivity(new Intent(AuthActivity.this, MainApps.class));
                         } else if (status.equals("failed")) {
                             progressDialog.dismiss();
                             Toast.makeText(AuthActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -331,20 +333,21 @@ public class AuthActivity extends AppCompatActivity {
         return false;
     }
 
-    private void insert_profile(String id,String nm){
+    private void insert_profile(String id, String nm) {
 
-        Call<ServerResponse> call = apiInterface.insert_profile(id,nm);
+        Call<ServerResponse> call = apiInterface.insert_profile(id, nm);
         call.enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                if(response.isSuccessful()){
-                    Log.d("tg","Sukses insert profil");
+                if (response.isSuccessful()) {
+                    Log.d("tg", "Sukses insert profil");
                 }
 
             }
+
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                Log.d("fail",t.getMessage());
+                Log.d("fail", t.getMessage());
             }
         });
     }

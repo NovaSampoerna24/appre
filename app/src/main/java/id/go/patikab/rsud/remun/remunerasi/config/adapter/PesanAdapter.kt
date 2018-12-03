@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
 import kotlinx.android.synthetic.main.item_notifikasi.view.*
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.NotifikasiResponse
 
 
-
-class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,private val counte:Int,
-                       private val mOnclick:(notif:NotifikasiResponse.Notif)->
-                       Unit):RecyclerView.Adapter<IFViewHolder>(){
+class InformasiAdapter(private val mItems: List<NotifikasiResponse.Notif>,
+                       private val counte: Int,
+                       private val mOnclick: (notif: NotifikasiResponse.Notif) ->
+                       Unit) : RecyclerView.Adapter<IFViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IFViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return IFViewHolder(inflater.inflate(R.layout.item_notifikasi, parent, false))
@@ -28,10 +28,10 @@ class InformasiAdapter(private val mItems:List<NotifikasiResponse.Notif>,private
 
 }
 
-class IFViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
+class IFViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(inf:NotifikasiResponse.Notif,onClick:(inf:NotifikasiResponse.Notif)->Unit){
-        with(itemView){
+    fun bind(inf: NotifikasiResponse.Notif, onClick: (inf: NotifikasiResponse.Notif) -> Unit) {
+        with(itemView) {
             judule.text = inf.judul
 
             deske.text = inf.pesan
@@ -43,12 +43,12 @@ class IFViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
 //            var d = date.toString()
             waktu.text = inf.readableDate
 
-            setOnClickListener{
+            setOnClickListener {
                 onClick(inf)
             }
         }
 
-}
+    }
 
 
 }

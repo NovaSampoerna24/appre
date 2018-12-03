@@ -45,22 +45,21 @@
             android:name=".view.Register.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".view.MainActivity" />
-
-        <activity android:name=".view.DetailTindakan.DetailTindakanActivity"/>
+        <activity android:name=".view.MainApps"/>
+        <activity android:name=".view.Pembayaran.DetailTindakanActivity"/>
         <activity android:name=".view.ubahfoto.UbahFoto">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainActivity" />
+                android:value=".view.MainApps" />
         </activity>
         <activity android:name=".view.gantiPassword.GantiPassword">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainActivity" />
+                android:value=".view.MainApps" />
         </activity>
         <activity android:name=".view.Notifikasi.Notifikasi"></activity>
         <activity android:name=".view.notifikasidetail.NotifikasiDetail"></activity>
-        <activity android:name=".view.DetailTindakan.DetailRM"></activity>
+        <!--<activity android:name=".view.DetailTindakan.DetailRM"></activity>-->
 
         <service android:name=".config.firebase.MyFirebaseInstanceIdService">
             <intent-filter>

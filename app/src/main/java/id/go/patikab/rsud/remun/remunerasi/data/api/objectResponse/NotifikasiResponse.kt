@@ -1,7 +1,6 @@
 package id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.synthetic.main.item_notifikasi.view.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,8 +20,6 @@ data class NotifikasiResponse(@SerializedName("status") val status: String,
         }
         val readableDate: String
             get() {
-                if (tanggal == null) return "-"
-
                 return try {
                     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     val obj = sdf.parse(tanggal)

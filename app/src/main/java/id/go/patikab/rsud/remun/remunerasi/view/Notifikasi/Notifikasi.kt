@@ -10,32 +10,34 @@ import android.view.View
 import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.NotifikasiResponse
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter
 import kotlinx.android.synthetic.main.layout_notifikasi.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import id.go.patikab.rsud.remun.remunerasi.config.adapter.*
+import id.go.patikab.rsud.remun.remunerasi.config.adapter.InformasiAdapter
 import id.go.patikab.rsud.remun.remunerasi.config.util.openNotif
+import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 
 class Notifikasi : Fragment(),NotifikasiView {
     private val mPresenter by lazy { NotifikasiPresenter(this) }
-    internal lateinit var sharedPreferences: SharedPreferences
-    internal var kd_user: String=""
-
+    var kd_user:String =""
+    var nama_dokter:String = ""
+    var prefs :SharedPreferences? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        sharedPreferences = activity!!.getSharedPreferences(SharePref.pref, Context.MODE_PRIVATE)
+        prefs = ctx.getSharedPreferences(pref,0)
 //        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
-        kd_user = sharedPreferences.getString(SharePref.login_session, null)
-
+        kd_user = prefs?.getString(login_session, null).toString()
+        nama_dokter = prefs?.getString(nm_dokter, null).toString()
 
         return inflater.inflate(R.layout.layout_notifikasi, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         refresh()
 
         swiperefreshe.onRefresh {
@@ -61,6 +63,24 @@ class Notifikasi : Fragment(),NotifikasiView {
             }
         }
     }
+    override fun hideloading() {
+        recycle_datae.visibility = View.VISIBLE
+        progress_circular.visibility = View.GONE
+        no_data.visibility = View.GONE
+   }
+
+    override fun showloading() {
+        recycle_datae.visibility = View.GONE
+        progress_circular.visibility = View.VISIBLE
+        no_data.visibility = View.GONE
+   }
+
+    override fun placeholder() {
+        recycle_datae.visibility = View.GONE
+        progress_circular.visibility = View.GONE
+        no_data.visibility = View.VISIBLE
+    }
+
 
 
 }

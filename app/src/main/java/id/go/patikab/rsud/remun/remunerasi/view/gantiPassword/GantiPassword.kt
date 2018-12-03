@@ -1,6 +1,7 @@
 package id.go.patikab.rsud.remun.remunerasi.view.gantiPassword
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
@@ -8,22 +9,26 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail
 import kotlinx.android.synthetic.main.activity_ubah_password.*
+import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class GantiPassword:AppCompatActivity(){
-    var id_d: String? = null
     internal lateinit var mActionBarToolbar: Toolbar
-
+    var kd_user:String = ""
+    var nama_dokter:String = ""
+    var prefs :SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ubah_password)
@@ -32,9 +37,12 @@ class GantiPassword:AppCompatActivity(){
 
         setSupportActionBar(mActionBarToolbar)
         supportActionBar?.setTitle("Ganti Password")
-
-        id_d = intent?.getStringExtra("id_dokter")
-
+        //        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
+        prefs = this.getSharedPreferences(SharePref.pref,0)
+//        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
+        kd_user = prefs?.getString(SharePref.login_session, null).toString()
+        nama_dokter = prefs?.getString(SharePref.nm_dokter, null).toString()
+//        Log.d("test user",kd_user)
         btn_simpan_profile.setOnClickListener({
             validsitext()
 
@@ -58,7 +66,7 @@ class GantiPassword:AppCompatActivity(){
         }else{
 //            toast("ubah sandi")
             if (isOnline()==true){
-                simpangantipassword(id_d.toString(),password1.text.toString())
+                simpangantipassword(kd_user,password1.text.toString())
             }else{
                 dialog_failure()
             }
@@ -71,7 +79,7 @@ class GantiPassword:AppCompatActivity(){
         val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.activeNetworkInfo
         //jika ada koneksi return true
-        return if (netInfo != null && netInfo.isConnectedOrConnecting) {
+        return if (netInfo != null && netInfo.isConnected) {
             true
         } else false
         //jika tidak ada koneksi return false

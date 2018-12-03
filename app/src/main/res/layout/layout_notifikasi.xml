@@ -10,23 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle_datae"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_datae"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+            <android.support.v4.widget.ContentLoadingProgressBar
+                android:id="@+id/progress_circular"
+                style="@style/Base.Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:indeterminate="true" />
 
-
-            </LinearLayout>
-        </ScrollView>
+            <TextView
+                android:id="@+id/no_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="Data tidak ada " />
+        </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

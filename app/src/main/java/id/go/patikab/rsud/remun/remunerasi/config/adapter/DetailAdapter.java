@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import id.go.patikab.rsud.remun.remunerasi.view.DetailTindakan.DetailTindakanActivity;
+import id.go.patikab.rsud.remun.remunerasi.view.Pembayaran.DetailTindakanActivity;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DetailTindakan;
 

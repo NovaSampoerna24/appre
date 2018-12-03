@@ -7,16 +7,13 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import id.go.patikab.rsud.remun.remunerasi.*
+import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.view.DetailProfil.DetailProfil
 import kotlinx.android.synthetic.main.layout_profil_container.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import id.go.patikab.rsud.remun.remunerasi.view.setAkun.AkunFragment
-import id.go.patikab.rsud.remun.remunerasi.view.Notifikasi.*
-
-
-
+import id.go.patikab.rsud.remun.remunerasi.view.Notifikasi.Notifikasi
 
 class ProfilFragment : Fragment(), ProfilView {
 
@@ -43,8 +40,6 @@ class ProfilFragment : Fragment(), ProfilView {
         if (savedInstanceState == null) {
             refresh()
         }
-
-
     }
 
     override fun show() {
@@ -58,8 +53,7 @@ class ProfilFragment : Fragment(), ProfilView {
         tab_team_detail.getTabAt(1)?.setIcon(tabIcons[1])
         tab_team_detail.getTabAt(2)?.setIcon(tabIcons[2])
     }
-
-    //method untuk cek koneksi
+//    method untuk cek koneksi
 //    fun isOnline(): Boolean {
 //        val cm = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 //        val netInfo = cm.activeNetworkInfo
@@ -77,7 +71,6 @@ class ProfilFragment : Fragment(), ProfilView {
 
     override fun showplaceholder() {
     }
-
 }
 
 internal class TeamPagerAdapter(private val mOverview: String, fragmentManager: FragmentManager)
