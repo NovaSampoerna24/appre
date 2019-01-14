@@ -221,7 +221,6 @@ public class PembayaranFragment extends Fragment {
     public PembayaranFragment() {
         // Required empty public constructor
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -308,6 +307,7 @@ public class PembayaranFragment extends Fragment {
                 call.enqueue(new Callback<Inacbgs>() {
                     @Override
                     public void onResponse(Call<Inacbgs> call, Response<Inacbgs> response) {
+                        Log.d("response code",response.code()+ " --");
                         String tarifo = response.body().getTr().get(0).getTarif_rp();
                         String status = response.body().getTr().get(0).getStatus();
 
@@ -317,11 +317,11 @@ public class PembayaranFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<Inacbgs> call, Throwable t) {
-                        Log.d(TAG, t.getMessage());
+                        Log.d("failure", t.getMessage().toString()+" -- ");
                     }
                 });
             } catch (Exception e) {
-                Log.d(TAG, e.getMessage());
+                Log.d("exception", e.getMessage().toString()+" -- ");
             }
         }
     }
@@ -444,6 +444,7 @@ public class PembayaranFragment extends Fragment {
                     call.enqueue(new Callback<TindakanGetData>() {
                         @Override
                         public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
+                            Log.d("response code",response.code()+ " --");
                             if (response.isSuccessful()) {
                                 pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                                 pendapatan_umumr = response.body().getPendapatan_umum();
@@ -483,7 +484,7 @@ public class PembayaranFragment extends Fragment {
                             newtonCradleLoading.setVisibility(View.GONE);
                             dialog_failure();
 //                          Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
-                            Log.d("Failure", t.getMessage());
+                            Log.d("Failure", t.getMessage().toString()+"--");
                         }
                     });
                 } catch (Exception e) {
@@ -519,6 +520,7 @@ public class PembayaranFragment extends Fragment {
                     call.enqueue(new Callback<TindakanGetData>() {
                         @Override
                         public void onResponse(Call<TindakanGetData> call, Response<TindakanGetData> response) {
+                            Log.d("response code",response.code()+ " --");
                             if (response.isSuccessful()) {
                                 pendapatan_bpjsr = response.body().getPendapatan_bpjs();
                                 pendapatan_umumr = response.body().getPendapatan_umum();
@@ -543,13 +545,13 @@ public class PembayaranFragment extends Fragment {
                             hideLoad();
                             dialog_failure();
 //                            Toast.makeText(getActivity(), "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
-                            Log.d("Failure", t.getMessage());
+                            Log.d("Failure", t.getMessage().toString()+" -- ");
                         }
                     });
                 } catch (Exception e) {
                     hideLoad();
                     Toast.makeText(getActivity(), "Exception to connect !", Toast.LENGTH_SHORT).show();
-                    Log.d("Exception", e.getMessage());
+                    Log.d("Exception", e.getMessage().toString()+" -- ");
                 }
             } else {
                 hideLoad();

@@ -19,7 +19,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:background="@drawable/button_filter_range">
-
                 <ImageView
                     android:id="@+id/k_foto"
                     android:layout_width="wrap_content"
@@ -59,26 +58,38 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:background="#e0e0e0" />
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pengumuman"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/dimens_10dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:text="Informasi:"
-                android:visibility="gone" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycle_datae"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/item_menu" />
+                    <android.support.v4.widget.ContentLoadingProgressBar
+                        android:id="@+id/progress_circular"
+                        style="@style/Base.Widget.AppCompat.ProgressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:indeterminate="true" />
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/no_data"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:text="" />
+                </LinearLayout>
+
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

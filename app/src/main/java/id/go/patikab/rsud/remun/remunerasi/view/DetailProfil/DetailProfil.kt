@@ -2,13 +2,11 @@ package id.go.patikab.rsud.remun.remunerasi.view.DetailProfil
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.TypedArray
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,40 +14,37 @@ import com.squareup.picasso.Picasso
 
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.config.util.openUbahFoto
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.foto_profil
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient.base_Url_upload
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.MenuModel
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilDetail
-import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.CustomDialogDetail
 import kotlinx.android.synthetic.main.acitivity_detail_profil.*
 import id.go.patikab.rsud.remun.remunerasi.config.adapter.*
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.NotifikasiResponse
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.support.v4.ctx
-import org.jetbrains.anko.support.v4.onRefresh
-import org.jetbrains.anko.support.v4.share
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ResponseMenu
 import org.jetbrains.anko.support.v4.toast
-
+import id.go.patikab.rsud.remun.remunerasi.config.util.*
 class DetailProfil : Fragment(), DetailView {
-
 
     val mPresenter by lazy { DetailPresenter(this) }
     var kd_user: String = ""
     var nama_dokter: String = ""
     var prefs: SharedPreferences? = null
-
+    var email: String = ""
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         prefs = ctx.getSharedPreferences(pref, 0)
 //        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
         kd_user = prefs?.getString(login_session, null).toString()
         nama_dokter = prefs?.getString(nm_dokter, null).toString()
-
+        email = prefs?.getString(email_device, "").toString()
         launch(UI) {
-            mPresenter.getmenu()
+            mPresenter.getmenu1()
+            mPresenter.fetchProfilRetro(kd_user)
+            mPresenter.getPengumuman(kd_user)
         }
         if (kd_user != "") {
             if (isOnline() == true) {
@@ -62,6 +57,7 @@ class DetailProfil : Fragment(), DetailView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        txt_overview.text = mOverview
+
         txt_nama.text = nama_dokter
         profile_image2.setOnClickListener {
             activity?.openUbahFoto(kd_user, nama_dokter);
@@ -77,6 +73,7 @@ class DetailProfil : Fragment(), DetailView {
     fun refresh() {
         launch(UI) {
             mPresenter.fetchProfilRetro(kd_user)
+            mPresenter.getPengumuman(kd_user)
         }
     }
 
@@ -101,23 +98,62 @@ class DetailProfil : Fragment(), DetailView {
         //jika tidak ada koneksi return false
     }
 
-    fun dialog_failure() {
-        val cdd = CustomDialogDetail(context)
-        cdd.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        cdd.show()
+
+    override fun showMenu(menu: List<ResponseMenu.Menune>) {
+//        recycle_data?.let {
+//            with(recycle_data) {
+//                layoutManager = GridLayoutManager(context, 3)
+//
+//                adapter = MenuAdapter(menu) { m ->
+//                    if (m.messagee != "0" ) {
+//                        toast(m.messagee)
+//                    } else {
+//                        activity?.openwebMenu(m.url)
+//                    }
+//                }
+//
+//            }
+//        }
     }
+    override fun showMenu1(menu: List<MenuModel>, icon: ArrayList<Int>) {
+        recycle_datae?.let {
+            with(recycle_datae) {
+                layoutManager = GridLayoutManager(context, 2)
 
-    override fun showMenu(menu: List<MenuModel>, icon: ArrayList<Int>) {
-        recycle_data?.let {
-            with(recycle_data) {
-                layoutManager = GridLayoutManager(context, 3)
-
-                adapter = MenuAdapter(menu, icon) { m ->
+                adapter = Menu1Adapter(menu, icon) { m ->
                     toast("test " + m.nama)
                 }
             }
         }
     }
-
-
+    override fun showInformasi(informasi: List<NotifikasiResponse.Notif>) {
+//        Log.d("test nt",informasi.get(0).judul)
+        recycle_datae?.let {
+            with(recycle_datae) {
+                layoutManager = LinearLayoutManager(context)
+                var counte :Int
+                if(informasi.size > 5)counte = 5 else counte = informasi.size
+                adapter =
+                        InformasiAdapter(informasi,counte) { infor ->
+                            activity?.openNotif(infor)
+//                            toast(infor.id+" test")
+                        }
+            }
+        }
+    }
+    override fun hideloading() {
+        recycle_datae.visibility = View.VISIBLE
+        progress_circular.visibility = View.GONE
+        no_data.visibility = View.GONE
+    }
+    override fun showloading() {
+        recycle_datae.visibility = View.GONE
+        progress_circular.visibility = View.VISIBLE
+        no_data.visibility = View.GONE
+    }
+    override fun placeholder() {
+        recycle_datae.visibility = View.GONE
+        progress_circular.visibility = View.GONE
+        no_data.visibility = View.VISIBLE
+    }
 }

@@ -11,20 +11,25 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.view.Auth.AuthActivity;
-import id.go.patikab.rsud.remun.remunerasi.view.Register.RegisterActivity;
+import id.go.patikab.rsud.remun.remunerasi.view.Login.Login;
+import id.go.patikab.rsud.remun.remunerasi.view.Daftar.Daftar;
 
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
 
 public class StartActivity extends AppCompatActivity {
     SharedPreferences preferences;
     @OnClick(R.id.bt_masuk)
-    public void btmasuk(){
-        startActivity(new Intent(StartActivity.this,AuthActivity.class));
+    public void btmasuk() {
+
+        startActivity(new Intent(StartActivity.this,Login.class));
+        this.finish();
     }
     @OnClick(R.id.bt_daftar)
-    public void btdaftar(){
-        startActivity(new Intent(StartActivity.this,RegisterActivity.class));
+    public void btdaftar()
+    {
+
+        startActivity(new Intent(StartActivity.this,Daftar.class));
+        this.finish();
     }
 
     @Override
@@ -34,9 +39,11 @@ public class StartActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
-        if (preferences.getString(login_session,"") != "") {
+        if (preferences.getString(username_device,"") != "") {
+
             startActivity(new Intent(StartActivity.this, MainApps.class));
             this.finish();
+
         }
     }
 }

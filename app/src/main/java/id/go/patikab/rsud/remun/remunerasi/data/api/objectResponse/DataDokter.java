@@ -7,10 +7,13 @@ public class DataDokter {
     String kddokter;
     @SerializedName("NAMADOKTER")
     String nama_dokter;
+    @SerializedName("signature")
+    String signature;
 
-    public DataDokter(String kddokter,String nama_dokter){
+    public DataDokter(String kddokter,String nama_dokter,String signature){
         this.kddokter = kddokter;
         this.nama_dokter = nama_dokter;
+        this.signature = signature;
     }
 
     public String getKddokter() {
@@ -21,5 +24,7 @@ public class DataDokter {
         return nama_dokter;
     }
 
-
+    public String getSignature() {
+        return signature;
+    }
 }

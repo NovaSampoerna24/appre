@@ -33,7 +33,6 @@ public class DialogListTindakan extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setCancelable(false);
         setContentView(R.layout.list_tindakan);
 
         yes = (Button) findViewById(R.id.btn_ok);

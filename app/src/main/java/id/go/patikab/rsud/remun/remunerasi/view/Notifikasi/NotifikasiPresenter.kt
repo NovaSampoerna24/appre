@@ -19,11 +19,11 @@ class NotifikasiPresenter(private val mView: NotifikasiView) {
         call = getResponse.get_pengumuman(id)
         call.enqueue(object : Callback<NotifikasiResponse> {
             override fun onFailure(call: Call<NotifikasiResponse>, t: Throwable) {
-                Log.d("TAG", t.message)
+                Log.d("Failure", t.message.toString() + " --")
                 mView.placeholder()
             }
-
             override fun onResponse(call: Call<NotifikasiResponse>, response: Response<NotifikasiResponse>) {
+                Log.d("response code",response.code().toString()+" -- ")
                 if (response.isSuccessful) {
                     val notif = response.body()?.data
                     if (notif != null) {

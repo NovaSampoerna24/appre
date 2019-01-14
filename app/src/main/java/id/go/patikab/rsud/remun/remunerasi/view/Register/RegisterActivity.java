@@ -25,7 +25,9 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import id.go.patikab.rsud.remun.remunerasi.R;
@@ -39,10 +41,8 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DokterGetData;
 
 
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
+
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse;
 
 import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.UbahFoto;
@@ -52,11 +52,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity  {
+public class RegisterActivity extends AppCompatActivity {
     String id_d, nama_dokter;
     EditText password, repassword;
     Button registerButton, loginButton;
-//
+    //
     ProgressDialog progressDialog;
 
     SharedPreferences preferences;
@@ -70,6 +70,7 @@ public class RegisterActivity extends AppCompatActivity  {
 
     SwipeRefreshLayout swipeRefreshLayout;
     UbahFoto ubahfoto;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,6 +193,7 @@ public class RegisterActivity extends AppCompatActivity  {
                 call.enqueue(new Callback<DokterGetData>() {
                     @Override
                     public void onResponse(Call<DokterGetData> call, Response<DokterGetData> response) {
+                        Log.d("response code",response.code()+" --");
                         if (response.isSuccessful()) {
                             progressDialog.dismiss();
                             int total = response.body().getDokterList().size();
@@ -255,10 +257,16 @@ public class RegisterActivity extends AppCompatActivity  {
         String token_d = preferences.getString(my_token, null);
 
         try {
-            Call<AuthResponse> call = apiInterface.getresponse(id_dokter, passworde, token_d, passwordulang);
+            Map mape = new HashMap<String,String>();
+            mape.put("id_dokter",id_dokter);
+            mape.put("device_token",token_d);
+            mape.put("package_name",getApplicationContext().getPackageName().toString());
+
+            Call<AuthResponse> call = apiInterface.getresponse(id_dokter, passworde, token_d, passwordulang,mape);
             call.enqueue(new Callback<AuthResponse>() {
                 @Override
                 public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                    Log.d("response code",response.code()+" --");
                     String status = response.body().getStatus();
                     String message = response.body().getMessage();
                     if (response.isSuccessful()) {
@@ -266,12 +274,14 @@ public class RegisterActivity extends AppCompatActivity  {
                             preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             String idn = response.body().getDataUser().get(0).getKddokter();
-                            editor.putString(login_session, idn );
+                            String signaturee = response.body().getDataUser().get(0).getNama_dokter();
+                            editor.putString(login_session, idn);
                             editor.putString(nm_dokter, nm_dk);
+                            editor.putString(signature,signaturee);
                             editor.apply();
                             progressDialog.dismiss();
                             startActivity(new Intent(RegisterActivity.this, MainApps.class));
-                            insert_profile(id_d,nm_dk);
+                            insert_profile(id_d, nm_dk);
                             finish();
                             deleterecordlokal();
                         } else if (status.equals("failed")) {
@@ -282,7 +292,7 @@ public class RegisterActivity extends AppCompatActivity  {
                             Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
                         }
                     }
-                    Log.d("message :", message);
+                    Log.d("message :", message.toString()+" --");
                 }
 
                 @Override
@@ -290,14 +300,14 @@ public class RegisterActivity extends AppCompatActivity  {
                     progressDialog.dismiss();
                     dialog_failure();
 //                    Toast.makeText(RegisterActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
-                    Log.d("trowable : ", t.getMessage());
+                    Log.d("trowable : ", t.getMessage().toString()+" --");
                 }
             });
         } catch (Exception e) {
             progressDialog.dismiss();
 //            dialog_failure();
             Toast.makeText(RegisterActivity.this, "Exception to connect", Toast.LENGTH_SHORT).show();
-            Log.d("message err : ", e.getMessage());
+            Log.d("message err : ", e.getMessage().toString()+" --");
         }
     }
 
@@ -334,20 +344,22 @@ public class RegisterActivity extends AppCompatActivity  {
         //jika tidak ada koneksi return false
         return false;
     }
-    private void insert_profile(String id,String nm){
 
-        Call<ServerResponse> call = apiInterface.insert_profile(id,nm);
+    private void insert_profile(String id, String nm) {
+
+        Call<ServerResponse> call = apiInterface.insert_profile(id, nm);
         call.enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                if(response.isSuccessful()){
-                    Log.d("tg","Sukses insert profil");
+                if (response.isSuccessful()) {
+                    Log.d("tg", "Sukses insert profil");
                 }
 
             }
+
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                Log.d("fail",t.getMessage());
+                Log.d("fail", t.getMessage().toString()+" --");
             }
         });
     }

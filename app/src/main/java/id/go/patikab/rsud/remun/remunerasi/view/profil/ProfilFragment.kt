@@ -4,30 +4,24 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
-import id.go.patikab.rsud.remun.remunerasi.view.DetailProfil.DetailProfil
 import kotlinx.android.synthetic.main.layout_profil_container.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import id.go.patikab.rsud.remun.remunerasi.view.DetailProfil.*
 import id.go.patikab.rsud.remun.remunerasi.view.setAkun.AkunFragment
-import id.go.patikab.rsud.remun.remunerasi.view.Notifikasi.Notifikasi
 
-class ProfilFragment : Fragment(), ProfilView {
+class ProfilFragment : AppCompatActivity(), ProfilView {
 
     val mPresenter by lazy { ProfilPresenter(this) }
     private val tabIcons = intArrayOf(
             R.drawable.ic_account,
-            R.drawable.ic_notifications_width,
             R.drawable.ic_person_width)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        refresh()
-        return inflater.inflate(R.layout.layout_profil_container, container, false)
-    }
+//            R.drawable.ic_notifications_width,
 
     fun refresh() {
         launch(UI) {
@@ -35,15 +29,14 @@ class ProfilFragment : Fragment(), ProfilView {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (savedInstanceState == null) {
-            refresh()
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        refresh()
+        setContentView(R.layout.layout_profil_container)
     }
 
     override fun show() {
-        viewpage_team_detail.adapter = TeamPagerAdapter("No overview", getChildFragmentManager())
+        viewpage_team_detail.adapter = TeamPagerAdapter("No overview", supportFragmentManager)
         tab_team_detail.setupWithViewPager(viewpage_team_detail)
         setupTabIcons();
     }
@@ -51,7 +44,7 @@ class ProfilFragment : Fragment(), ProfilView {
     private fun setupTabIcons() {
         tab_team_detail.getTabAt(0)?.setIcon(tabIcons[0])
         tab_team_detail.getTabAt(1)?.setIcon(tabIcons[1])
-        tab_team_detail.getTabAt(2)?.setIcon(tabIcons[2])
+//        tab_team_detail.getTabAt(2)?.setIcon(tabIcons[2])
     }
 //    method untuk cek koneksi
 //    fun isOnline(): Boolean {
@@ -79,12 +72,12 @@ internal class TeamPagerAdapter(private val mOverview: String, fragmentManager: 
     private val mPages by lazy {
         listOf(
                 DetailProfil().apply {},
-                Notifikasi().apply {},
+//                Notifikasi().apply {},
                 AkunFragment().apply {}
         )
     }
 
-    private val mTitles by lazy { listOf("Profil", "Notifikasi", "Akun") }
+    private val mTitles by lazy { listOf("Profil", "Akun") }
 
     override fun getItem(position: Int): Fragment {
         return mPages[position]
@@ -97,6 +90,5 @@ internal class TeamPagerAdapter(private val mOverview: String, fragmentManager: 
     override fun getPageTitle(position: Int): CharSequence? {
         return mTitles[position]
     }
-
 
 }

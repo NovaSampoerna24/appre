@@ -10,9 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.NotifikasiResponse
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
 import kotlinx.android.synthetic.main.layout_notifikasi.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch

@@ -29,7 +29,7 @@ class TDAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(tindakan: ListPasienDokter.Remid.Tindakan) {
         with(itemView) {
             nama_tindakan.text = tindakan.tindakan
-//            tarif_tindakan.text = tindakan.tarif_tindakan
+            txt_qty.text = tindakan.qty
 //            tarif_jp.text = tindakan.tarif_jp
             tarif_reward_tindakan.text = tindakan.reward
         }

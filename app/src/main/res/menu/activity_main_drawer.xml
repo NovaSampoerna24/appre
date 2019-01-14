@@ -3,19 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+    <!--<item-->
+        <!--android:id="@+id/nav_jaspel"-->
+        <!--android:icon="@drawable/ic_star"-->
+        <!--android:title="Jasa Pelayanan"/>-->
+    <!--<item-->
+        <!--android:id="@+id/nav_pembayaran"-->
+        <!--android:icon="@drawable/ic_remune"-->
+        <!--android:title="Ringkasan"/>-->
+    <!--<item-->
+        <!--android:id="@+id/nav_profile"-->
+        <!--android:icon="@drawable/ic_person"-->
+        <!--android:title="Profil" />-->
     <item
-        android:id="@+id/nav_profile"
+        android:id="@+id/nav_beranda"
         android:icon="@drawable/ic_person"
-        android:title="Profile" />
-    <item
-        android:id="@+id/nav_pembayaran"
-        android:icon="@drawable/ic_remune"
-        android:title="Taksiran penghasilan"/>
+        android:title="Beranda" />
     <!--<item-->
         <!--android:id="@+id/nav_jadwal"-->
         <!--android:icon="@drawable/ic_jadwal"-->
         <!--android:title="Jadwal" />-->
-    <item android:title="Account">
+    <item android:title="Akun">
         <menu>
             <!--<item-->
                 <!--android:id="@+id/nav_pembayaran"-->
@@ -24,7 +32,7 @@
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_signout"
-                android:title="Log Out" />
+                android:title="Keluar" />
 
         </menu>
     </item>

@@ -4,7 +4,7 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ListPasienDok
 
 interface DetailRMView{
 
-    fun showRM(RMList:List<ListPasienDokter.Remid>,pendapatan:String)
+    fun showRM(RMList:List<ListPasienDokter.Remid>,pendapatan:String,j_pasien:String,j_tindakan:String)
     fun showLoading()
     fun hideLoading()
     fun showPlaceholder()

@@ -5,22 +5,25 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
+
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
-import id.go.patikab.rsud.remun.remunerasi.view.Auth.AuthActivity
+
 import id.go.patikab.rsud.remun.remunerasi.view.gantiPassword.*
 import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.*
-import id.go.patikab.rsud.remun.remunerasi.view.Notifikasi.*
+import id.go.patikab.rsud.remun.remunerasi.view.Pembayaran.DetailRM
 import id.go.patikab.rsud.remun.remunerasi.view.notifikasidetail.*
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
 import id.go.patikab.rsud.remun.remunerasi.view.MainApps
-import org.jetbrains.anko.act
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import id.go.patikab.rsud.remun.remunerasi.view.WebView.ViewJaspel
+import id.go.patikab.rsud.remun.remunerasi.view.WebView.ViewMenu
+
+import id.go.patikab.rsud.remun.remunerasi.view.Daftar.Daftar
+import id.go.patikab.rsud.remun.remunerasi.view.Login.Login
+import id.go.patikab.rsud.remun.remunerasi.view.aktivasi_akun.Aktifasi
+import id.go.patikab.rsud.remun.remunerasi.view.JasaPelayanan.Jaspel
+import id.go.patikab.rsud.remun.remunerasi.view.profil.ProfilFragment
+import id.go.patikab.rsud.remun.remunerasi.view.Ringkasan.Ringkasan
+import id.go.patikab.rsud.remun.remunerasi.view.about_aplikasi.AboutActivity
 
 fun Activity.openUbahFoto(iddokter: String, namaDokter: String) {
     startActivity(Intent(this, UbahFoto::class.java).apply {
@@ -28,29 +31,34 @@ fun Activity.openUbahFoto(iddokter: String, namaDokter: String) {
         putExtra("nama_dokter", namaDokter)
     })
 }
+fun Activity.openRemid(start:String,end:String){
+    startActivity(Intent(this,DetailRM::class.java).apply {
+        putExtra("start",start)
+        putExtra("end",end)
+    })
+}
+fun Activity.openWebViewlistJaspel(start:String,end:String,sign:String){
+    startActivity(Intent(this,ViewJaspel::class.java).apply {
+        putExtra("dari",start)
+        putExtra("sampai",end)
+        putExtra("sign",sign)
+    })
+}
 
 fun Activity.logout() {
     var sharedPreferences: SharedPreferences
     sharedPreferences = getSharedPreferences(pref, Context.MODE_PRIVATE)
 
-    var psw = sharedPreferences.getString("psw", null)
-    var id = sharedPreferences.getString(login_session, null)
-    var getResponse: ApiInterface
-    getResponse  = ApiClient.getClient().create(ApiInterface::class.java)
-    val call: Call<AuthResponse>
-    call = getResponse.getloginresponse(id,psw,"")
-    call.enqueue(object:Callback<AuthResponse>{
-        override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-        }
-        override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
-        }
-    })
-
     var editor = sharedPreferences.edit()
     editor.putString(login_session, "")
+    editor.putString(signature, "")
+    editor.putString(status_akun, "")
+    editor.putString(username_device, "")
+    editor.putString(nm_dokter, "")
+    editor.putString(email_device, "")
     editor.commit()
-    finish()
-    startActivity(Intent(this, AuthActivity::class.java))
+    startActivity(Intent(this, Login::class.java))
+    this.finish()
 }
 
 fun Activity.opengantiPassword() {
@@ -58,6 +66,7 @@ fun Activity.opengantiPassword() {
 
     })
 }
+
 fun Activity.openhome(){
     startActivity(Intent(this, MainApps::class.java).apply {
         val bundle = Bundle()
@@ -78,6 +87,46 @@ fun Activity.openNotif(notif:NotifikasiResponse.Notif){
 
     })
 
+}
+
+fun Activity.openDaftar(){
+    startActivity(Intent(this,Daftar::class.java).apply {
+
+    })
+}
+fun Activity.openLogin(){
+    startActivity(Intent(this,Login::class.java).apply {
+
+    })
+}
+fun Activity.openAktivasi(){
+    startActivity(Intent(this,Aktifasi::class.java).apply {
+
+    })
+}
+fun Activity.openwebMenu(url:String){
+    startActivity(Intent(this,ViewMenu::class.java).apply {
+        putExtra("url_menu",url)
+    })
+}
+fun Activity.openjasadokter(){
+    startActivity(Intent(this,Jaspel::class.java).apply {
+
+    })
+}
+fun Activity.openakun(){
+    startActivity(Intent(this,ProfilFragment::class.java).apply {
+
+    })
+}
+fun Activity.openringkasanjp(){
+    startActivity(Intent(this,Ringkasan::class.java).apply {
+
+    })
+}
+fun Activity.openabout(){
+    startActivity(Intent(this,AboutActivity::class.java).apply {
+    })
 }
 
 

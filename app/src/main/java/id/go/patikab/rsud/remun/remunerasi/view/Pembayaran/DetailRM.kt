@@ -12,10 +12,14 @@ import id.go.patikab.rsud.remun.remunerasi.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
+import android.os.PersistableBundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +29,7 @@ import android.widget.Toast
 import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker
+import id.go.patikab.rsud.remun.remunerasi.config.adapter.DetailAdapter
 import org.jetbrains.anko.support.v4.ctx
 import kotlinx.android.synthetic.main.layout_remid.*
 import java.util.Calendar
@@ -37,8 +42,11 @@ import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 import id.go.patikab.rsud.remun.remunerasi.view.page_dialog.SublimePickerFragment.Callback
 import org.jetbrains.anko.support.v4.onRefresh
+import id.go.patikab.rsud.remun.remunerasi.config.util.*
+import kotlinx.android.synthetic.main.list_detail.*
+import org.jetbrains.anko.scrollView
 
-class DetailRM : Fragment(), DetailRMView, AdapterView.OnItemSelectedListener {
+class DetailRM : AppCompatActivity(), DetailRMView, AdapterView.OnItemSelectedListener {
     var cb = Calendar.getInstance()
     var wulan = cb.get(Calendar.MONTH) + 1
     var taun = cb.get(Calendar.YEAR)
@@ -48,54 +56,104 @@ class DetailRM : Fragment(), DetailRMView, AdapterView.OnItemSelectedListener {
     var dino_d_b = cb.getActualMaximum(Calendar.DAY_OF_MONTH)
     var tgl_awal = ""
     var tgl_akhir = ""
-    var kd_user:String = ""
-    var nama_dokter:String = ""
-    val listfilter = arrayOf("Hari ini", "Kemarin", "7 hari terkahir", "Bulan ini", "khusus");
+    var title = ""
+    var kd_user: String = ""
+    var nama_dokter: String = ""
+    var device_token: String = ""
+    var signatured: String = ""
+    val listfilter = arrayOf("Filter", "Hari ini", "Kemarin", "7 hari terkahir", "Bulan ini", "khusus");
     private val mPresenter by lazy { DetailRMPresenter(this) }
-    var prefs :SharedPreferences? = null
+    var prefs: SharedPreferences? = null
+    internal lateinit var mActionBarToolbar: Toolbar
+    lateinit var listpasien: List<ListPasienDokter.Remid>
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.layout_remid)
+        mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
-        prefs = ctx.getSharedPreferences(pref,0)
+        setSupportActionBar(mActionBarToolbar)
+        supportActionBar?.setTitle("Detail Ringkasan")
+
+        prefs = getSharedPreferences(pref, Context.MODE_PRIVATE)
 //        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
         kd_user = prefs?.getString(login_session, null).toString()
         nama_dokter = prefs?.getString(nm_dokter, null).toString()
+        device_token = prefs?.getString(my_token, null).toString()
+        signatured = prefs?.getString(signature, null).toString()
 
-
-
-
-        return inflater.inflate(R.layout.layout_remid, container, false)
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        activity?.actionBar?.setTitle("Pembayaran")
-        val aa = ArrayAdapter(ctx, android.R.layout.simple_spinner_item, listfilter)
-        nm_doktere.text = nama_dokter
+        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, listfilter)
+//        nm_doktere.text = nama_dokter
         // Set layout to use when the list of choices appear
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Set Adapter to Spinner
         spinner_filter?.setAdapter(aa)
 
         spinner_filter?.setOnItemSelectedListener(this)
-
+        if (intent != null) {
+            val start: String = intent.getStringExtra("start")
+            val end: String = intent.getStringExtra("end")
+            tgl_awal = start
+            tgl_akhir = end
+//            toast(tgl_awal + " - "+ tgl_akhir)
+            refresh()
+        }
         swiperefreshe.onRefresh {
             refresh()
             swiperefreshe.isRefreshing = false
         }
     }
 
+
+
+
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+////        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
+//        prefs = ctx.getSharedPreferences(pref,0)
+////        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
+//        kd_user = prefs?.getString(login_session, null).toString()
+//        nama_dokter = prefs?.getString(nm_dokter, null).toString()
+//        return inflater.inflate(R.layout.layout_remid, container, false)
+//    }
+//
+//
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        activity?.actionBar?.setTitle("Pembayaran")
+//        val aa = ArrayAdapter(ctx, android.R.layout.simple_spinner_item, listfilter)
+////        nm_doktere.text = nama_dokter
+//        // Set layout to use when the list of choices appear
+//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        // Set Adapter to Spinner
+//        spinner_filter?.setAdapter(aa)
+//
+//        spinner_filter?.setOnItemSelectedListener(this)
+//
+//        swiperefreshe.onRefresh {
+//            refresh()
+//            swiperefreshe.isRefreshing = false
+//        }
+//    }
+
     fun refresh() {
-        if(kd_user !="") {
-            launch(UI) { mPresenter.getRM(kd_user, tgl_awal, tgl_akhir) }
+        if (kd_user != "") {
+            var mape = HashMap<String, String>()
+            mape.put("token", token_server)
+            mape.put("device_token", device_token)
+            mape.put("package_name", packageName)
+//            Log.d("logs id_dokter", kd_user)
+//            Log.d("logs device_token", device_token)
+//            Log.d("logs package_name", packageName.toString())
+//            Log.d("signature end", signatured)
+            launch(UI) { mPresenter.getRM(kd_user, tgl_awal, tgl_akhir, mape, signatured) }
 //            Log.d("test", "test12" + kd_user + tgl_akhir + tgl_awal)
         }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
-        hariini()
+        if (intent == null) {
+            hariini()
+        }
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -105,7 +163,7 @@ class DetailRM : Fragment(), DetailRMView, AdapterView.OnItemSelectedListener {
             hariini()
         }
         if (listfilter[p2] == "Kemarin") {
-          kemarin()
+            kemarin()
         }
         if (listfilter[p2] == "7 hari terkahir") {
             tujuhari()
@@ -121,28 +179,29 @@ class DetailRM : Fragment(), DetailRMView, AdapterView.OnItemSelectedListener {
     }
 
     fun tujuhari() {
-        title.text = "Data pasien dalam 7 hari terakhir"
+        titlee.text = "Data pasien dalam 7 hari terakhir"
         tgl_awal = taun.toString() + "-" + wulan + "-" + if (tujuharisebelum < 1) 1 else tujuharisebelum
         tgl_akhir = taun.toString() + "-" + wulan + "-" + if (dr > 1) dr else 1
         refresh()
     }
 
     fun hariini() {
-        title.text = "Data pasien hari ini"
+        titlee.text = "Data pasien hari ini"
         tgl_awal = taun.toString() + "-" + wulan + "-" + if (dr > 1) dr else 1
         tgl_akhir = taun.toString() + "-" + wulan + "-" + if (dr > 1) dr else 1
         refresh()
     }
 
     fun bulanini() {
-        title.text = "Data pasien bulan ini"
+        titlee.text = "Data pasien bulan ini"
         tgl_awal = taun.toString() + "-" + wulan + "-" + 1
         tgl_akhir = taun.toString() + "-" + wulan + "-" + dino_d_b
         refresh()
     }
-    fun kemarin(){
-        title.text = "Data pasien kemarin"
-        if(dino == 1) dino = 1 else dino=dino-1
+
+    fun kemarin() {
+        titlee.text = "Data pasien kemarin"
+        if (dino == 1) dino = 1 else dino = dino - 1
         tgl_awal = taun.toString() + "-" + wulan + "-" + dino
         tgl_akhir = taun.toString() + "-" + wulan + "-" + dino
         refresh()
@@ -150,19 +209,20 @@ class DetailRM : Fragment(), DetailRMView, AdapterView.OnItemSelectedListener {
 
 
     fun openlistdialog(list: List<ListPasienDokter.Remid.Tindakan>) {
-        val cdd =DialogListTindakan(context, list)
+        val cdd = DialogListTindakan(this, list)
         cdd.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         cdd.show()
 
 
     }
-    fun opendaterange(){
+
+    fun opendaterange() {
 //        val pickerFrag :SublimePickerFragment
 
         val pickerFrag = SublimePickerFragment()
         pickerFrag.setCallback(object : Callback {
             override fun onCancelled() {
-              toast("user cancel")
+                toast("user cancel")
             }
 
             override fun onDateTimeRecurrenceSet(selectedDate: SelectedDate) {
@@ -175,7 +235,7 @@ class DetailRM : Fragment(), DetailRMView, AdapterView.OnItemSelectedListener {
                 val mDateStart2 = formatDate2.format(selectedDate.startDate.time)
                 val mDateEnd2 = formatDate2.format(selectedDate.endDate.time)
 //                Log.d("test1","test1"+mDateStart+"test2"+mDateEnd)
-                title.text = "Data pasien dari $mDateStart2 sampai $mDateEnd2"
+                titlee.text = "Data pasien dari $mDateStart2 sampai $mDateEnd2"
                 tgl_awal = mDateStart
                 tgl_akhir = mDateEnd
                 refresh()
@@ -196,41 +256,44 @@ class DetailRM : Fragment(), DetailRMView, AdapterView.OnItemSelectedListener {
         pickerFrag.arguments = bundle
 
         pickerFrag.setStyle(DialogFragment.STYLE_NO_TITLE, 0)
-        pickerFrag.show(activity?.supportFragmentManager, "SUBLIME_PICKER")
+        pickerFrag.show(this.supportFragmentManager, "SUBLIME_PICKER")
     }
 
     override fun showLoading() {
-        recycle_data.visibility = View.GONE
-        progress_circular.visibility = View.VISIBLE
-        no_data.visibility = View.GONE
+        recycle_data?.visibility = View.GONE
+        progress_circular?.visibility = View.VISIBLE
+        no_data?.visibility = View.GONE
     }
 
     override fun hideLoading() {
-        recycle_data.visibility = View.VISIBLE
-        progress_circular.visibility = View.GONE
-        no_data.visibility = View.GONE
+        recycle_data?.visibility = View.VISIBLE
+        progress_circular?.visibility = View.GONE
+        no_data?.visibility = View.GONE
     }
 
     override fun showPlaceholder() {
-        recycle_data.visibility = View.GONE
-        progress_circular.visibility = View.GONE
-        no_data.visibility = View.VISIBLE
-        pendapatan_total.text = "Rp. 0"
+        recycle_data?.visibility = View.GONE
+        progress_circular?.visibility = View.GONE
+        no_data?.visibility = View.VISIBLE
+//        pendapatan_total.text = "Rp. 0"
     }
 
-    override fun showRM(RMList: List<ListPasienDokter.Remid>, pendapatan: String) {
+    override fun showRM(RMList: List<ListPasienDokter.Remid>, pendapatan: String,pasien:String,tindakan:String) {
         pendapatan_total.text = pendapatan
+        jumlah_pasien.text = pasien
+        jumlah_tindakan.text = tindakan
+        listpasien = RMList
+        var counte = RMList.size
         recycle_data?.let {
             with(recycle_data) {
                 layoutManager = LinearLayoutManager(context)
-                var counte: Int
-                if (RMList.size > 10) counte = 10 else counte = RMList.size
                 adapter = PembayaranRemidAdapter(RMList, counte) { rmlist ->
                     val rem = rmlist.tindakanList
                     openlistdialog(rem)
                 }
             }
         }
-        no_data.visibility = View.GONE
+        no_data?.visibility = View.GONE
     }
+
 }

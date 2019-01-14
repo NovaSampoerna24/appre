@@ -192,7 +192,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         DataDokter getDokter = new DataDokter(
                 cursor.getString(0),
-                cursor.getString(1));
+                cursor.getString(1),
+                cursor.getString(2));
         // return contact
         return getDokter;
     }

@@ -13,6 +13,7 @@ class InformasiAdapter(private val mItems: List<NotifikasiResponse.Notif>,
                        private val counte: Int,
                        private val mOnclick: (notif: NotifikasiResponse.Notif) ->
                        Unit) : RecyclerView.Adapter<IFViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IFViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return IFViewHolder(inflater.inflate(R.layout.item_notifikasi, parent, false))

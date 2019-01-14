@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
-import kotlinx.android.synthetic.main.itempembayaranremid.view.*
+import kotlinx.android.synthetic.main.item_penghasilan_per_pasien.view.*
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ListPasienDokter
 
 class PembayaranRemidAdapter(private val mItem: List<ListPasienDokter.Remid>,
@@ -14,7 +14,7 @@ class PembayaranRemidAdapter(private val mItem: List<ListPasienDokter.Remid>,
                              Unit) : RecyclerView.Adapter<RMViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RMViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return RMViewHolder(inflater.inflate(R.layout.itempembayaranremid, parent, false))
+        return RMViewHolder(inflater.inflate(R.layout.item_penghasilan_per_pasien, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -31,6 +31,7 @@ class RMViewHolder(inflate: View) : RecyclerView.ViewHolder(inflate) {
         with(itemView) {
             nama_pasien.text = remid.nama
             rewarde.text = remid.total
+            txt_tanggal.text = remid.tanggal_pulang
             setOnClickListener {
                 onClicks(remid)
             }

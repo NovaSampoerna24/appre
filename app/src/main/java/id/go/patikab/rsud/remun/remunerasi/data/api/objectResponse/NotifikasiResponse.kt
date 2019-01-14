@@ -14,10 +14,10 @@ data class NotifikasiResponse(@SerializedName("status") val status: String,
                      @SerializedName("tanggal") val tanggal: String,
                      @SerializedName("jenis_pesan") val jp: String,
                      @SerializedName("jam") val jam: String) {
-        val jenis_p:String
-        get(){
-            return if( jp == "1") "Pengumuman" else "Pesan"
-        }
+        val jenis_p: String
+            get() {
+                return if (jp == "1") "Pengumuman" else "Pesan"
+            }
         val readableDate: String
             get() {
                 return try {
@@ -31,7 +31,6 @@ data class NotifikasiResponse(@SerializedName("status") val status: String,
                     "-"
                 }
             }
-
 
 
     }

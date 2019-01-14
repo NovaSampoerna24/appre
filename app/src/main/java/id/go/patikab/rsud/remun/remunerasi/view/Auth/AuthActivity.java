@@ -25,18 +25,17 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.view.MainApps;
 import id.go.patikab.rsud.remun.remunerasi.view.Register.RegisterActivity;
-
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.DokterGetData;
-
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.DatabaseHandler;
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.object.DokterData;
 
@@ -46,14 +45,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.pref;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.my_token;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.login_session;
-import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.nm_dokter;
-
+import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
-import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.*;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.AuthResponse;
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ServerResponse;
 
@@ -93,7 +87,7 @@ public class AuthActivity extends AppCompatActivity {
             startActivity(new Intent(AuthActivity.this, MainApps.class));
             finish();
         }
-        Log.d("tokenmu", token + " ");
+//        Log.d("tokenmu", token + " ");
 
 
         password = (EditText) findViewById(R.id.passwordLogin);
@@ -189,7 +183,7 @@ public class AuthActivity extends AppCompatActivity {
         dokterDataList = db.getAllRecordListLogin();
         if (dokterDataList.size() > 0) {
             spinneradapterfromlokal();
-            Log.d("sqlite", "lokal");
+//            Log.d("sqlite", "lokal");
         } else {
             progressDialog.setMessage("Mengambil data dokterdefault");
             progressDialog.show();
@@ -221,7 +215,7 @@ public class AuthActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
                                 Toast.makeText(AuthActivity.this, "Gagal mengambil data dokterdefault !", Toast.LENGTH_SHORT).show();
                             }
-                            Log.d("response", response.toString());
+                            Log.d("response code ", response.code() +" -- ");
                         }
 
                         @Override
@@ -229,13 +223,13 @@ public class AuthActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             dialog_failure();
 //                            Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
-                            Log.d("messge", t.getMessage());
+                            Log.d("messge", t.getMessage().toString() + " --");
                         }
                     });
                 } catch (Exception e) {
                     progressDialog.dismiss();
                     Toast.makeText(AuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.d("Exception", e.getMessage());
+                    Log.d("Exception", e.getMessage().toString() + " --");
                 }
             } else {
                 progressDialog.dismiss();
@@ -257,7 +251,7 @@ public class AuthActivity extends AppCompatActivity {
             dokterdata[i] = new DokterData();
             dokterdata[i].setKode(kd);
             dokterdata[i].setNama(namah);
-            Log.d("sqlite", kd + " " + namah + " " + id + " ");
+//            Log.d("sqlite", kd + " " + namah + " " + id + " ");
         }
         spinnerDokter = (Spinner) findViewById(R.id.spin_dokter);
         adapterspin = new SpinAdapter(AuthActivity.this, android.R.layout.simple_dropdown_item_1line, dokterdata);
@@ -272,7 +266,11 @@ public class AuthActivity extends AppCompatActivity {
 
     private void signinsavetoken(String id, String password, String token, final String nama_dokter) {
         try {
-            Call<AuthResponse> call = apiInterface.getloginresponse(id, password, token);
+           Map mape = new HashMap<String,String>();
+            mape.put("id_dokter",id);
+            mape.put("device_token",token);
+            mape.put("package_name",getApplicationContext().getPackageName().toString());
+            Call<AuthResponse> call = apiInterface.getloginresponse(id, password, token ,mape);
             call.enqueue(new Callback<AuthResponse>() {
                 @Override
                 public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
@@ -281,11 +279,13 @@ public class AuthActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         if (status.equals("ok")) {
                             String idm = response.body().getDataUser().get(0).getKddokter().toString();
+                            String signaturee = response.body().getDataUser().get(0).getSignature().toString();
                             progressDialog.dismiss();
                             preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString(login_session, idm);
                             editor.putString(nm_dokter, nama_dokter);
+                            editor.putString(signature,signaturee);
                             editor.putString("psw", password);
                             editor.apply();
                             insert_profile(id_d, nama_dokter);
@@ -307,13 +307,13 @@ public class AuthActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     dialog_failure();
 //                        Toast.makeText(AuthActivity.this, "Tidak dapat menjangkau server", Toast.LENGTH_SHORT).show();
-                    Log.d("failure", t.getMessage());
+                    Log.d("failure", t.getMessage().toString());
                 }
             });
         } catch (Exception e) {
             progressDialog.dismiss();
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d("Exception ", e.getMessage());
+            Log.d("Exception ", e.getMessage().toString() + " --");
         }
 //        }
 //        else {
@@ -347,7 +347,7 @@ public class AuthActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                Log.d("fail", t.getMessage());
+                Log.d("fail", t.getMessage().toString() + " --");
             }
         });
     }

@@ -155,6 +155,7 @@ class UbahFoto : AppCompatActivity() {
         call.enqueue(object : Callback<ServerResponse> {
             override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>) {
                 message = response.body()?.message.toString()
+                Log.d("response code", response.code().toString() + " --")
                 if (response.isSuccessful) {
 //                        progressDialog.dismiss()
                     toast(message)
@@ -162,14 +163,14 @@ class UbahFoto : AppCompatActivity() {
                     openhome()
                 } else {
 //                    progressDialog.dismiss()
-                    toast(message)
+//                    toast(message)
                 }
 
             }
 
             override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
 //                progressDialog.dismiss()
-                toast(t.message + " ")
+                Log.d("failure","failed")
             }
         })
     }
