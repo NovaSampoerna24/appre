@@ -67,9 +67,9 @@ class HomePresenter(private val mView: HomeView) {
             MenuModel("","test","")
         }
 
-        sdf.add(MenuModel("0","Jasa Dokter",""))
-        sdf.add(MenuModel("1","Ringkasan JP",""))
-        sdf.add(MenuModel("2","Akun Pelaksana",""))
+        sdf.add(MenuModel("0","Rekapan JP",""))
+        sdf.add(MenuModel("1","Jasa Pelaksana",""))
+        sdf.add(MenuModel("2","Akun",""))
         sdf.add(MenuModel("3","About",""))
 //        sdf.add(MenuModel("4","Report",""))
 //        sdf.add(MenuModel("5","Book",""))

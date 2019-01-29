@@ -81,21 +81,13 @@
         </service>
 
         <activity
-            android:name=".view.about_aplikasi.AboutActivity"
-            android:label="Info"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".view.about_aplikasi.AboutActivity"></activity>
         <activity
-            android:name=".view.JasaPelayanan.Jaspel"
-            android:label="Jasa Pelaksana"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".view.JasaPelayanan.Jaspel"></activity>
         <activity
-            android:name=".view.Ringkasan.Ringkasan"
-            android:label="Ringakasan JP"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".view.Ringkasan.Ringkasan"></activity>
         <activity
-            android:name=".view.profil.ProfilFragment"
-            android:label="Akun"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".view.profil.ProfilFragment"></activity>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,8 @@ class Jaspel : AppCompatActivity(),JaspelView{
     var kd_user:String =""
     var nama_dokter:String = ""
     var prefs : SharedPreferences? = null
+    internal lateinit var mActionBarToolbar: Toolbar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = getSharedPreferences(pref,0)
@@ -31,13 +34,16 @@ class Jaspel : AppCompatActivity(),JaspelView{
         kd_user = prefs?.getString(login_session, null).toString()
         nama_dokter = prefs?.getString(nm_dokter, null).toString()
 
-        setContentView(R.layout.layout_notifikasi)
+        setContentView(R.layout.layout_jp2)
 
         refresh()
         swiperefreshe.onRefresh {
             refresh()
             swiperefreshe.isRefreshing = false
         }
+        mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(mActionBarToolbar)
+        supportActionBar?.setTitle("Rekapan Jasa Pelaksana")
     }
 
     fun refresh(){

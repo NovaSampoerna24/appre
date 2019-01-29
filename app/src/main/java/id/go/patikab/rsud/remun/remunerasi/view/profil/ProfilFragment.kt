@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import id.go.patikab.rsud.remun.remunerasi.view.DetailProfil.*
 import id.go.patikab.rsud.remun.remunerasi.view.setAkun.AkunFragment
 
 class ProfilFragment : AppCompatActivity(), ProfilView {
-
+    internal lateinit var mActionBarToolbar: Toolbar
     val mPresenter by lazy { ProfilPresenter(this) }
     private val tabIcons = intArrayOf(
             R.drawable.ic_account,
@@ -33,6 +34,10 @@ class ProfilFragment : AppCompatActivity(), ProfilView {
         super.onCreate(savedInstanceState)
         refresh()
         setContentView(R.layout.layout_profil_container)
+
+        mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(mActionBarToolbar)
+        supportActionBar?.setTitle("Informasi Akun")
     }
 
     override fun show() {

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +20,16 @@ import kotlinx.android.synthetic.main.activity_ringkasan.*
 class Ringkasan : AppCompatActivity(), RingkasanView {
 
     val mPresenter by lazy { RingkasanPresenter(this) }
+    internal lateinit var mActionBarToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
       refresh()
         setContentView(R.layout.activity_ringkasan)
+
+        mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(mActionBarToolbar)
+        supportActionBar?.setTitle("Jasa Pelaksana")
     }
 
 
