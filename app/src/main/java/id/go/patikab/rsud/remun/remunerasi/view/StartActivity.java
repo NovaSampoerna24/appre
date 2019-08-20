@@ -6,9 +6,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import id.go.patikab.rsud.remun.remunerasi.R;
 import id.go.patikab.rsud.remun.remunerasi.view.Auth.AuthActivity;
 import id.go.patikab.rsud.remun.remunerasi.view.Login.Login;
@@ -18,26 +20,29 @@ import static id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.Sha
 
 public class StartActivity extends AppCompatActivity {
     SharedPreferences preferences;
-    @OnClick(R.id.bt_masuk)
-    public void btmasuk() {
+    Button btn_masuk,btn_daftar;
 
-        startActivity(new Intent(StartActivity.this,Login.class));
-        this.finish();
-    }
-    @OnClick(R.id.bt_daftar)
-    public void btdaftar()
-    {
-
-        startActivity(new Intent(StartActivity.this,Daftar.class));
-        this.finish();
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        ButterKnife.bind(this);
 
+        btn_masuk = (Button)findViewById(R.id.bt_masuk);
+        btn_masuk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(StartActivity.this,Login.class));
+
+            }
+        });
+        btn_daftar = (Button)findViewById(R.id.bt_daftar);
+        btn_daftar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(StartActivity.this,Daftar.class));
+            }
+        });
         preferences = getSharedPreferences(pref, Context.MODE_PRIVATE);
         if (preferences.getString(username_device,"") != "") {
 
@@ -45,5 +50,6 @@ public class StartActivity extends AppCompatActivity {
             this.finish();
 
         }
+
     }
 }

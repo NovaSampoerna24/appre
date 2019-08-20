@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Remunerasi</string>
+    <string name="app_name">Dokter RAA Soewondo</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -20,6 +20,14 @@
     <string name="detail_message">Periksa kembali koneksi internet anda !</string>
     <string name="ubah_profil">Klik Gambar dibawah dan pilih foto profil anda.</string>
 
+    <string name="about">Aplikasi Remunerasi merupakan aplikasi sederhana yang mampu membantu perhitungan jasa pelayanan rumah sakit dengan metode konversi" />
+</string>
+
+    <string name="tim_it_rsud_raa_soewondo_pati">TIM IT RSUD RAA SOEWONDO PATI</string>
+    <string name="dikembangkan_oleh">Dikembangkan oleh :</string>
+    <string name="rsud_raa_soewondo_pati">RSUD RAA SOEWONDO PATI</string>
+    <string name="aplikasi_remunerasi">Aplikasi Remunerasi</string>
+
     <array name="menu_icons">
         <item>@drawable/ic_person</item>
         <item>@drawable/ic_person</item>
@@ -28,4 +36,9 @@
         <item>@drawable/ic_person</item>
         <item>@drawable/ic_person</item>
     </array>
+    <string name="app_key">sekolah100%</string>
+    <string name="update_now">Update Now</string>
+    <string name="skip">Skip</string>
+    <string name="search">Search</string>
+    <string name="type_name">Cari Pasien</string>
 </resources>

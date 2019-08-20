@@ -32,16 +32,16 @@
         android:textColor="@android:color/white"
         android:textSize="16sp"/>
 
+
+</LinearLayout>
+
     <TextView
-        android:id="@+id/txt_version"
+        android:id="@+id/txt_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_medium"
-        android:gravity="right"
-        android:paddingTop="4dp"
-        android:text="v.1"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        android:layout_weight="1"/>
-</LinearLayout>
+        android:fontFamily="@font/roboto_reguler"
+        android:text="User1"
+        android:layout_gravity="left"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 </LinearLayout>

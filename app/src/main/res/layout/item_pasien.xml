@@ -1,0 +1,118 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardElevation="3dp">
+
+    <RelativeLayout
+        android:id="@+id/ln"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/patient"
+                    tools:background="#e0e0e0" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_layout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimens_5dp"
+                android:layout_weight="7"
+                android:orientation="vertical"
+                android:padding="@dimen/dimens_5dp">
+
+                <TextView
+                    android:id="@+id/nama_pasien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Si Suto"
+                    android:textColor="@color/primary_text"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/txt_norm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_reguler"
+                    android:maxLength="50"
+                    android:text="122312"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/txt_penjamin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_reguler"
+                    android:maxLength="50"
+                    android:text="BPJS"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tgllahir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_reguler"
+                    android:maxLength="50"
+                    android:text="20 Januari 1988"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_icon2"-->
+                    <!--android:layout_width="48dp"-->
+                    <!--android:layout_height="48dp"-->
+                    <!--android:src="@drawable/hospital"-->
+                    <!--tools:background="#e0e0e0"-->
+                    <!--android:visibility="gone"/>-->
+
+                <TextView
+                    android:id="@+id/unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wijayakusuma 3"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textColor="@color/primary_text"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/roboto_medium"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

@@ -24,14 +24,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:text="Aplikasi Remunerasi" />
+                android:text="@string/aplikasi_remunerasi" />
             <TextView
                 android:textColor="@color/primary_text"
                 android:fontFamily="@font/roboto_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:text="RSUD RAA SOEWONDO PATI"/>
+                android:text="@string/rsud_raa_soewondo_pati"/>
             <ImageView
                 android:layout_width="70dp"
                 android:layout_height="70dp"
@@ -45,22 +45,22 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:layout_marginTop="20dp"
-                android:text="Aplikasi Remunerasi merupakan aplikasi sederhana yang mampu membantu perhitungan jasa pelayanan rumah sakti dengan metode konversi" />
-            <TextView
+                android:text="@string/aplikasi_remunerasi"/>
+                <TextView
                 android:textColor="@color/secondary_text"
                 android:fontFamily="@font/roboto_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:layout_marginTop="70dp"
-                android:text="Dikembangkan oleh : " />
+                android:text="@string/dikembangkan_oleh" />
             <TextView
                 android:textColor="@color/secondary_text"
                 android:fontFamily="@font/roboto_medium"
                 android:layout_width="match_parent"
                 android:textSize="12sp"
                 android:layout_height="wrap_content"
-                android:text="TIM IT RSUD RAA SOEWONDO PATI" />
+                android:text="@string/tim_it_rsud_raa_soewondo_pati" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

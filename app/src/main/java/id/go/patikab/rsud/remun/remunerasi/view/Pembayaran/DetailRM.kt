@@ -69,8 +69,8 @@ class DetailRM : AppCompatActivity(), DetailRMView, AdapterView.OnItemSelectedLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_remid)
-        mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
 
+        mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(mActionBarToolbar)
         supportActionBar?.setTitle("Detail Ringkasan")
 

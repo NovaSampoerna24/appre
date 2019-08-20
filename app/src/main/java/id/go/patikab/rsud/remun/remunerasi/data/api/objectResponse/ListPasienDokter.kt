@@ -15,6 +15,8 @@ data class ListPasienDokter(@SerializedName("status") val status: String,
                      @SerializedName("PORSI") val porsi: String,
                      @SerializedName("TOTAL_PORSI") val total_porsi: String,
                      @SerializedName("tgl_pulang") val tanggal_pulang: String,
+                     @SerializedName("cara_bayar") val carabayar: String,
+
                      @SerializedName("TINDAKAN") val tindakanList: List<Tindakan>) {
         data class Tindakan(@SerializedName("id_tindakan") val idtindakan: String,
                             @SerializedName("tindakan") val tindakan: String,

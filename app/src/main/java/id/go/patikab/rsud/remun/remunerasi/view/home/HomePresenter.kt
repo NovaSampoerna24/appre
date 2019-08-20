@@ -12,7 +12,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import id.go.patikab.rsud.remun.remunerasi.view.Notifikasi.NotifikasiView
 
 class HomePresenter(private val mView: HomeView) {
 
@@ -67,18 +66,20 @@ class HomePresenter(private val mView: HomeView) {
             MenuModel("","test","")
         }
 
-        sdf.add(MenuModel("0","Rekapan JP",""))
-        sdf.add(MenuModel("1","Jasa Pelaksana",""))
+//        sdf.add(MenuModel("0","Rekapan JP",""))
+        sdf.add(MenuModel("0","Rawat Jalan",""))
+        sdf.add(MenuModel("1","Rawat Inap",""))
         sdf.add(MenuModel("2","Akun",""))
-        sdf.add(MenuModel("3","About",""))
+//        sdf.add(MenuModel("3","Tentang Aplikasi",""))
+
 //        sdf.add(MenuModel("4","Report",""))
 //        sdf.add(MenuModel("5","Book",""))
 
         val myImageList =  ArrayList<Int>()
-        myImageList.add(R.drawable.dokter)
-        myImageList.add(R.drawable.ringkasan)
-        myImageList.add(R.drawable.profil)
-        myImageList.add(R.drawable.hospital)
+        myImageList.add(R.drawable.stethoscope)
+        myImageList.add(R.drawable.bed)
+        myImageList.add(R.drawable.ic_mobile)
+//        myImageList.add(R.drawable.hospital)
 //        myImageList.add(R.drawable.report)
 //        myImageList.add(R.drawable.book)
 
@@ -101,7 +102,7 @@ class HomePresenter(private val mView: HomeView) {
                 if (response.isSuccessful) {
                     val notif = response.body()?.data
                     if (notif != null) {
-                        mView.showInformasi(notif)
+//                        mView.showInformasi(notif)
                         mView.hideloading()
                     }else{
                         mView.placeholder()

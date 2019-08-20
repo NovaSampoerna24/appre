@@ -12,6 +12,8 @@ public class SharePref {
     public static final String username_device = "username";
     public static final String status_akun= "akun_status";
     public static final String email_device = "email_device";
+    public static final String fragmene = "fragmene";
+
 
 
 }

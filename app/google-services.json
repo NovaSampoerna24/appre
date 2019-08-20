@@ -1,96 +1,66 @@
 {
   "project_info": {
-    "project_number": "724988546172",
-    "firebase_url": "https://fir-auth-24317.firebaseio.com",
-    "project_id": "fir-auth-24317",
-    "storage_bucket": "fir-auth-24317.appspot.com"
+    "project_number": "256123575328",
+    "firebase_url": "https://pendaftaranyy.firebaseio.com",
+    "project_id": "pendaftaranyy",
+    "storage_bucket": "pendaftaranyy.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:724988546172:android:3761344b522d40a5",
+        "mobilesdk_app_id": "1:256123575328:android:b855e32241eaf4dd",
         "android_client_info": {
-          "package_name": "id.go.patikab.rsud.remun.remunerasi"
+          "package_name": "id.go.patikab.rsud.doktersoewondo2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "724988546172-7j3f8ilpt5kv0cgu6h77qtmhrp9ff2j1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "id.go.patikab.rsud.remun.remunerasi",
-            "certificate_hash": "e96094fb9171cbfb8694163d9450c47651c0a38a"
-          }
-        },
-        {
-          "client_id": "724988546172-9bg5jt5ojla17o0a189tskdhg4676ja7.apps.googleusercontent.com",
+          "client_id": "256123575328-k4naeh5hiaaa8s9dng7qlstaa0v67vll.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAdsi_CfjugMkNmUPpP-tM7lVDPIplvrEU"
+          "current_key": "AIzaSyDveTQgMDW4G-oNo4mXzYl422nOuMW-85Q"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "724988546172-9bg5jt5ojla17o0a189tskdhg4676ja7.apps.googleusercontent.com",
+              "client_id": "256123575328-k4naeh5hiaaa8s9dng7qlstaa0v67vll.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:724988546172:android:dd9b90a17cff37bd",
+        "mobilesdk_app_id": "1:256123575328:android:707253e1dd9fd8b5",
         "android_client_info": {
-          "package_name": "kejarkoding.com.firebaseauth"
+          "package_name": "rsud.patikab.go.id.pendaftaran.online"
         }
       },
       "oauth_client": [
         {
-          "client_id": "724988546172-eb12oqlos1vio5g2n73vd99p51o93271.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "kejarkoding.com.firebaseauth",
-            "certificate_hash": "54ae965964c3831b31b93156d8d68766de4a8239"
-          }
-        },
-        {
-          "client_id": "724988546172-9bg5jt5ojla17o0a189tskdhg4676ja7.apps.googleusercontent.com",
+          "client_id": "256123575328-k4naeh5hiaaa8s9dng7qlstaa0v67vll.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAdsi_CfjugMkNmUPpP-tM7lVDPIplvrEU"
+          "current_key": "AIzaSyDveTQgMDW4G-oNo4mXzYl422nOuMW-85Q"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "724988546172-9bg5jt5ojla17o0a189tskdhg4676ja7.apps.googleusercontent.com",
+              "client_id": "256123575328-k4naeh5hiaaa8s9dng7qlstaa0v67vll.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

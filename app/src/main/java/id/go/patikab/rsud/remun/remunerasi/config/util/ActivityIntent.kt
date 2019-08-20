@@ -20,10 +20,13 @@ import id.go.patikab.rsud.remun.remunerasi.view.WebView.ViewMenu
 import id.go.patikab.rsud.remun.remunerasi.view.Daftar.Daftar
 import id.go.patikab.rsud.remun.remunerasi.view.Login.Login
 import id.go.patikab.rsud.remun.remunerasi.view.aktivasi_akun.Aktifasi
-import id.go.patikab.rsud.remun.remunerasi.view.JasaPelayanan.Jaspel
+import id.go.patikab.rsud.remun.remunerasi.view.PasienKu.PasienKu
 import id.go.patikab.rsud.remun.remunerasi.view.profil.ProfilFragment
 import id.go.patikab.rsud.remun.remunerasi.view.Ringkasan.Ringkasan
 import id.go.patikab.rsud.remun.remunerasi.view.about_aplikasi.AboutActivity
+import id.go.patikab.rsud.remun.remunerasi.view.akun.AkuneFramgent
+import id.go.patikab.rsud.remun.remunerasi.view.pasien_detail.Pdetailrajal
+import id.go.patikab.rsud.remun.remunerasi.view.pasien_detail_ranap.Pdetailranap
 
 fun Activity.openUbahFoto(iddokter: String, namaDokter: String) {
     startActivity(Intent(this, UbahFoto::class.java).apply {
@@ -88,6 +91,26 @@ fun Activity.openNotif(notif:NotifikasiResponse.Notif){
     })
 
 }
+fun Activity.openPdetail(data:ListPasien.Pasiene){
+//    startActivity(Intent(this, NotifikasiDetail::class.java).apply {
+//
+    val i = Intent(this, Pdetailrajal::class.java)
+    i.putExtra("idxdaftar", data.IDXDAFTAR)
+    i.putExtra("nomr",data.NOMR)
+    startActivity(i)
+
+
+}
+fun Activity.openPdetailRanap(data:ListPasien.Pasiene){
+//    startActivity(Intent(this, NotifikasiDetail::class.java).apply {
+//
+    val i = Intent(this, Pdetailranap::class.java)
+    i.putExtra("idxdaftar", data.IDXDAFTAR)
+    i.putExtra("nomr",data.NOMR)
+    startActivity(i)
+
+
+}
 
 fun Activity.openDaftar(){
     startActivity(Intent(this,Daftar::class.java).apply {
@@ -104,13 +127,28 @@ fun Activity.openAktivasi(){
 
     })
 }
+fun Activity.OpenProfile(){
+    startActivity(Intent(this,AkuneFramgent::class.java).apply {
+
+    })
+}
+fun Activity.OpenSearch(){
+    startActivity(Intent(this,AkuneFramgent::class.java).apply {
+
+    })
+}
 fun Activity.openwebMenu(url:String){
     startActivity(Intent(this,ViewMenu::class.java).apply {
         putExtra("url_menu",url)
     })
 }
-fun Activity.openjasadokter(){
-    startActivity(Intent(this,Jaspel::class.java).apply {
+//fun Activity.openjasadokter(){
+//    startActivity(Intent(this,PasienKu::class.java).apply {
+//
+//    })
+//}
+fun Activity.openPasienku(){
+    startActivity(Intent(this,PasienKu::class.java).apply {
 
     })
 }
@@ -124,6 +162,7 @@ fun Activity.openringkasanjp(){
 
     })
 }
+
 fun Activity.openabout(){
     startActivity(Intent(this,AboutActivity::class.java).apply {
     })

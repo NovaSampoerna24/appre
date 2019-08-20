@@ -77,7 +77,7 @@ internal class TeamPagerAdapter(private val mOverview: String, fragmentManager: 
     private val mPages by lazy {
         listOf(
                 DetailProfil().apply {},
-//                Notifikasi().apply {},
+//                PasienRanap().apply {},
                 AkunFragment().apply {}
         )
     }

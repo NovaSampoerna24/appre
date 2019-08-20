@@ -18,7 +18,8 @@ class NotifikasiDetail : AppCompatActivity() {
 
         mActionBarToolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(mActionBarToolbar)
-        supportActionBar?.setTitle("Notifikasi Remunerasi")
+
+        supportActionBar?.setTitle("PasienRanap Remunerasi")
 
             if(intent.extras != null){
                 val bundle = intent.extras

@@ -25,7 +25,7 @@
             android:resource="@color/colorAccent" />
 
         <activity
-            android:name=".view.StartActivity"
+            android:name=".view.SplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,8 +55,25 @@
         <activity android:name=".view.gantiPassword.GantiPassword">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.akun.AkuneFramgent" />
+        </activity>
+        <activity android:name=".view.akun.AkuneFramgent">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainApps" />
         </activity>
+        <activity android:name=".view.pasien_detail.Pdetailrajal">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
+        <activity android:name=".view.pasien_detail_ranap.Pdetailranap">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
+
+
         <activity android:name=".view.Notifikasi.Notifikasi" />
         <activity android:name=".view.notifikasidetail.NotifikasiDetail" />
         <activity android:name=".view.WebView.ViewJaspel" />
@@ -82,12 +99,14 @@
 
         <activity
             android:name=".view.about_aplikasi.AboutActivity"></activity>
-        <activity
-            android:name=".view.JasaPelayanan.Jaspel"></activity>
+
         <activity
             android:name=".view.Ringkasan.Ringkasan"></activity>
         <activity
             android:name=".view.profil.ProfilFragment"></activity>
+        <activity android:name=".view.PasienKu.PasienKu"/>
+        <activity android:name=".view.PasienRajal.PasienRajal"/>
+        <activity android:name=".view.PasienRanap.PasienRanap"/>
     </application>
 
 </manifest>

@@ -82,6 +82,11 @@ public interface ApiInterface {
     @GET("android/service/profile/detailProfile.php")
     Call<ProfilGetData> getDataProfil(@Query("id") String id);
 
+    @GET("android/service/cek_version.php")
+    Call<VersionCek> getVersion(@Query("nama_aplikasi") String nama_aplikasi,
+                                @Query("versi") String versi,
+                                @Query("app_key") String app_key);
+
     //    get tarifinacbgs perbulan saat itu juga
     @GET("android/service/tarif_bulan.php")
     Call<Inacbgs> getTarifInacgs();
@@ -91,8 +96,42 @@ public interface ApiInterface {
     @POST("android/service/pengumuman/pengumuman.php")
     Call<NotifikasiResponse> get_pengumuman(@Field("id_dokter") String id);
 
+
+    @GET("android/service/pasien_ranap/list_pasien_ranap.php")
+    Call<ListPasien> getListPasienRanap(@Query("id_dokter") String id);
+
+//    list pasien rajal
+    @GET("android/service/pasien_rajal/list_pasien_rajal.php")
+    Call<ListPasien> getListPasienRajal(
+            @Query("id_dokter") String id,
+            @Query("tanggal")String tanggal
+            );
+//    search pasien rajal
+    @GET("android/service/pasien_rajal/search_pasien_rajal.php")
+    Call<ListPasien> getListSearchPasienRajal(
+            @Query("id_dokter") String id,
+            @Query("tanggal") String tanggal,
+            @Query("keyword") String keyword
+            );
+    //    search pasien ranap
+    @GET("android/service/pasien_ranap/search_pasien_ranap.php")
+    Call<ListPasien> getListSearchPasienRanap(
+            @Query("id_dokter") String id,
+            @Query("keyword") String keyword);
+
+//    get detail pasien rajal
+@GET("android/service/pasien_rajal/detail_pasien_rajal.php")
+Call<DetailPasienRajal> getDetailPasien(
+        @Query("idxdaftar") String idxdaftar,
+        @Query("nomr")String nomr);
+    //    get detail pasien ranap
+    @GET("android/service/pasien_ranap/detail_pasien_ranap.php")
+    Call<DetailPasienRanap> getDetailPasienRanap(
+            @Query("idxdaftar") String idxdaftar,
+            @Query("nomr")String nomr);
+
     //    get ringkasan
-//    getdetailpembayaran rm
+    //    getdetailpembayaran rm
     @GET("android/service/ringkasan_pelaksana/ringkasan_pasien.php")
     Call<RingkasanModel> getringkasanPasien(@Query("id_dokter") String id);
 
@@ -107,6 +146,12 @@ public interface ApiInterface {
     //    get list pembayaran
     @GET("android/service/list_jaspel/list_jp.php")
     Call<ListJaspel> getlistJaspel();
+
+    //    get pasienku
+    @GET("android/service/pasien/pasien_ku.php")
+    Call<PasienKuResponse> getPasienku(
+            @Query("id_dokter")String id
+    );
 
     //    get list menu profil
     @GET("android/service/v1/menu_profil.php")

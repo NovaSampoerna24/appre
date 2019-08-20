@@ -286,7 +286,6 @@ public class AuthActivity extends AppCompatActivity {
                             editor.putString(login_session, idm);
                             editor.putString(nm_dokter, nama_dokter);
                             editor.putString(signature,signaturee);
-                            editor.putString("psw", password);
                             editor.apply();
                             insert_profile(id_d, nama_dokter);
                             finish();

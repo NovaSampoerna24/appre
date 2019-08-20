@@ -29,7 +29,7 @@ class PembayaranRemidAdapter(private val mItem: List<ListPasienDokter.Remid>,
 class RMViewHolder(inflate: View) : RecyclerView.ViewHolder(inflate) {
     fun bind(remid: ListPasienDokter.Remid, onClicks: (ListPasienDokter.Remid) -> Unit) {
         with(itemView) {
-            nama_pasien.text = remid.nama
+            nama_pasien.text = remid.nama +" ("+remid.carabayar+")"
             rewarde.text = remid.total
             txt_tanggal.text = remid.tanggal_pulang
             setOnClickListener {

@@ -1,6 +1,5 @@
 package id.go.patikab.rsud.remun.remunerasi.view.Notifikasi
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
