@@ -37,6 +37,35 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:256123575328:android:1fabeb52c3755609",
+        "android_client_info": {
+          "package_name": "id.go.patikab.rsud.doktersoewondov1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256123575328-k4naeh5hiaaa8s9dng7qlstaa0v67vll.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDveTQgMDW4G-oNo4mXzYl422nOuMW-85Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "256123575328-k4naeh5hiaaa8s9dng7qlstaa0v67vll.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:256123575328:android:707253e1dd9fd8b5",
         "android_client_info": {
           "package_name": "rsud.patikab.go.id.pendaftaran.online"

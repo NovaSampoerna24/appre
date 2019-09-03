@@ -101,12 +101,12 @@ fun Activity.openPdetail(data:ListPasien.Pasiene){
 
 
 }
-fun Activity.openPdetailRanap(data:ListPasien.Pasiene){
+fun Activity.openPdetailRanap(idx:String,nomr:String){
 //    startActivity(Intent(this, NotifikasiDetail::class.java).apply {
 //
     val i = Intent(this, Pdetailranap::class.java)
-    i.putExtra("idxdaftar", data.IDXDAFTAR)
-    i.putExtra("nomr",data.NOMR)
+    i.putExtra("idxdaftar", idx)
+    i.putExtra("nomr",nomr)
     startActivity(i)
 
 

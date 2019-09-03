@@ -13,5 +13,5 @@
     <!--<dimen name="fab_margin">16dp</dimen>-->
     <dimen name="text_margin">16dp</dimen>
     <dimen name="headerTextSize">28sp</dimen>
-    <dimen name="banner_height">160</dimen>
+    <dimen name="banner_height">160dp</dimen>
 </resources>

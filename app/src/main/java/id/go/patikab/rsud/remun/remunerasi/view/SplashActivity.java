@@ -101,7 +101,7 @@ public class SplashActivity extends AppCompatActivity {
         }
         if(versioni != -1){
 //            Toast.makeText(this, versioni.toString(), Toast.LENGTH_SHORT).show();
-//            Log.d("package",getPackageName());
+//            Log.d("packag2e",getPackageName());
             apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Call<VersionCek> call = apiInterface.getVersion(getPackageName(),versioni.toString(),getString(R.string.app_key));
             final Integer finalVersioni = versioni;
@@ -161,6 +161,10 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<VersionCek> call, Throwable t) {
                     Toast.makeText(SplashActivity.this, "Cek Koneksi Anda !", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SplashActivity.this, MainApps.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    finish();
                 }
             });
         }

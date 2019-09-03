@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
@@ -13,8 +12,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
@@ -30,15 +29,15 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.NotifikasiRes
 import kotlinx.android.synthetic.main.layout_home.*
 import id.go.patikab.rsud.remun.remunerasi.config.adapter.InformasiAdapter
 import id.go.patikab.rsud.remun.remunerasi.config.util.*
+import id.go.patikab.rsud.remun.remunerasi.slider.groupie.BannerListener
+import id.go.patikab.rsud.remun.remunerasi.slider.model.BannerPromo
 import id.go.patikab.rsud.remun.remunerasi.view.Notifikasi.NotifikasiView
 import id.go.patikab.rsud.remun.remunerasi.view.pasien_rajal.Prajal
 import id.go.patikab.rsud.remun.remunerasi.view.pasien_ranap.Pranap
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.BannerResponse
-import org.jetbrains.anko.ctx
-import org.jetbrains.anko.support.v4.toast
-import id.go.patikab.rsud.remun.remunerasi.view.MainApps
+import id.go.patikab.rsud.remun.remunerasi.slider.groupie.BannerCarouselItem
 
-class HomeProfil : Fragment(), HomeView, NotifikasiView {
+class HomeProfil : Fragment(), HomeView, NotifikasiView,BannerListener{
+
 
 
     val mPresenter by lazy { HomePresenter(this) }
@@ -53,6 +52,8 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView {
     fun getActionBar(): ActionBar? {
         return (activity as AppCompatActivity).supportActionBar
     }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         prefs = ctx.getSharedPreferences(pref, 0)
@@ -61,12 +62,12 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView {
         nama_dokter = prefs?.getString(nm_dokter, null).toString()
         email = prefs?.getString(email_device, "").toString()
 
-
         return inflater.inflate(R.layout.layout_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         getActionBar()?.setTitle("Beranda")
         launch(UI) {
             mPresenter.getmenu1()
@@ -74,6 +75,10 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView {
         }
         prajal = Prajal()
         pranap = Pranap()
+
+
+
+
     }
 
 
@@ -114,7 +119,6 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView {
         recycle_data?.let {
             with(recycle_data) {
                 layoutManager = GridLayoutManager(context, column)
-
                 adapter = Menu1Adapter(menu, icon) { m ->
                     if (m.id == "0") {
                         val editor = prefs!!.edit()
@@ -144,6 +148,7 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView {
             }
         }
 
+
     }
 
     override fun showInformasi(informasi: List<NotifikasiResponse.Notif>) {
@@ -160,6 +165,8 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView {
                         }
             }
         }
+
+
     }
 
     override fun hideloading() {
@@ -179,4 +186,9 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView {
         progress_circular.visibility = View.GONE
         no_data.visibility = View.VISIBLE
     }
+    override fun onSeeAllPromoClick() {
+          }
+
+    override fun onBannerClick(promo: BannerPromo) {
+         }
 }

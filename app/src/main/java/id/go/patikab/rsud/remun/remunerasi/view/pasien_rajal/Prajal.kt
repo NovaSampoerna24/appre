@@ -27,11 +27,14 @@ import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.toast
 import android.widget.DatePicker
 import android.app.DatePickerDialog
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import java.util.*
 import java.text.SimpleDateFormat
+import kotlin.collections.ArrayList
+
 
 class Prajal : Fragment(), PrajalView {
-
 
     val mPresenter by lazy { PrajalPresenter(this) }
     var kd_user: String = ""
@@ -57,16 +60,18 @@ class Prajal : Fragment(), PrajalView {
         val todayDate = Date()
         tanggal = currentDate.format(todayDate)
         tanggal2 = currentDate2.format(todayDate)
+
         return inflater.inflate(R.layout.layout_pasien_rajal, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getActionBar()?.setTitle("Pasien Rawat Jalan")
-        refresh()
+        refresh(kd_user)
         swiperefreshe.onRefresh {
-            refresh()
+            refresh(kd_user)
             swiperefreshe.isRefreshing = false
         }
+        nmane_dokter.text = nama_dokter
         dt_tanggal.setText(tanggal2)
         dt_tanggal.setOnClickListener {
             DatePickerDialog(ctx, date, myCalendar
@@ -74,6 +79,7 @@ class Prajal : Fragment(), PrajalView {
             myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         }
         }
+
         val myCalendar = Calendar.getInstance()
 
         val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -86,9 +92,10 @@ class Prajal : Fragment(), PrajalView {
 
             dt_tanggal.setText(sdf.format(myCalendar.time))
             updateLabel()
-            refresh()
+            refresh(kd_user)
 
     }
+
 
     private fun updateLabel() {
         val myFormat = "E, dd MMM yyyy" //In which you need put here
@@ -114,30 +121,77 @@ class Prajal : Fragment(), PrajalView {
         }
 
     }
-    fun refresh(){
-        launch(UI) { mPresenter.getPrajal(kd_user,tanggal) }
+    fun refresh(kd_user2:String){
+        launch(UI) {
+            mPresenter.getPrajal(kd_user2,tanggal)
+            mPresenter.getDokter()
+        }
     }
+    fun refresh2(kd_user2: String){
+        launch(UI) {
+            mPresenter.getPrajal(kd_user2,tanggal)
+        }
+    }
+
     fun getSearchPrajal(key:String,tanggal:String){
         launch(UI){
             mPresenter.getSearchPrajal(kd_user,tanggal,key)
+
         }
     }
     override fun hideloading() {
+        adah_jumlah.visibility = View.VISIBLE
         txt_jumlah.visibility = View.VISIBLE
         recycle_datae.visibility = View.VISIBLE
         progress_circular.visibility = View.GONE
         no_data.visibility = View.GONE
     }
     override fun showloading() {
+        adah_jumlah.visibility = View.GONE
         txt_jumlah.visibility = View.GONE
         recycle_datae.visibility = View.GONE
         progress_circular.visibility = View.VISIBLE
         no_data.visibility = View.GONE
     }
     override fun placeholder() {
+        adah_jumlah.visibility = View.GONE
         txt_jumlah.visibility = View.GONE
         recycle_datae.visibility = View.GONE
         progress_circular.visibility = View.GONE
         no_data.visibility = View.VISIBLE
     }
+
+    override fun showDokter(data: List<ListDokter.Dokter>) {
+
+        var spindokter = ArrayList<String>();
+        var isi = ArrayList<String>();
+       for (i in data){
+           spindokter.add(i.NAMADOKTER)
+           isi.add(i.KDDOKTER)
+       }
+
+        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, spindokter )
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        positionSpinner.adapter = adapter
+
+        positionSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // either one will work as well
+                // val item = parent.getItemAtPosition(position) as String
+                val item = adapter.getItem(position)
+                kd_user  = isi.get(positionSpinner.selectedItemPosition)
+//                toast(alerte)
+                refresh2(kd_user)
+
+            }
+
+        }
+
+    }
+
+
 }

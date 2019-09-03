@@ -45,10 +45,12 @@ import android.support.v7.app.AlertDialog
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import id.go.patikab.rsud.remun.remunerasi.slider.groupie.BannerCarouselItem
+import id.go.patikab.rsud.remun.remunerasi.slider.groupie.BannerListener
+import id.go.patikab.rsud.remun.remunerasi.slider.model.BannerPromo
 
 
-class MainApps : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
-
+class MainApps : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, BannerListener {
 
     internal lateinit var drawer: DrawerLayout
     internal lateinit var navigationView: NavigationView
@@ -69,7 +71,7 @@ class MainApps : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
     var prefs: SharedPreferences? = null
     var difragment = ""
     private var doubleBackToExitPressedOnce = false
-    private var groupAdapter = GroupAdapter<ViewHolder>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,6 +135,7 @@ class MainApps : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
                         .commit()
             }
         }
+
 
     }
 
@@ -308,7 +311,13 @@ class MainApps : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         return false
     }
 
+    override fun onSeeAllPromoClick() {
 
+    }
+
+    override fun onBannerClick(promo: BannerPromo) {
+
+    }
 }
 
 

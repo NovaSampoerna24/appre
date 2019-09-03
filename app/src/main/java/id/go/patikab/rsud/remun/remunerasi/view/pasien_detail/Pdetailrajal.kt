@@ -52,6 +52,7 @@ class Pdetailrajal : AppCompatActivity(), PdetailrajalView {
 
         launch(UI) {
             mPresenter.getPdetail(idxdaftar,nomr)
+
         }
 
     }

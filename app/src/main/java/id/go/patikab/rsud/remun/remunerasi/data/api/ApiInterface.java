@@ -96,6 +96,8 @@ public interface ApiInterface {
     @POST("android/service/pengumuman/pengumuman.php")
     Call<NotifikasiResponse> get_pengumuman(@Field("id_dokter") String id);
 
+    @GET("android/service/dokter_aktif.php")
+    Call<ListDokter> getListDokter();
 
     @GET("android/service/pasien_ranap/list_pasien_ranap.php")
     Call<ListPasien> getListPasienRanap(@Query("id_dokter") String id);

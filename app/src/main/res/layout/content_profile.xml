@@ -21,10 +21,11 @@
                 android:text="Informasi Akun"
                 android:layout_marginBottom="20dp"/>
 
-            <RelativeLayout style="@style/profileDetailsLayout">
+            <RelativeLayout
+                style="@style/profileDetailsLayout">
                 <ImageView
                     android:id="@+id/nameImageView"
-                    android:src="@drawable/ic_name"
+                    android:src="@drawable/ic_profile"
                     style="@style/profileDetailsImage" />
 
                 <TextView
@@ -65,7 +66,7 @@
             <RelativeLayout style="@style/profileDetailsLayout">
                 <ImageView
                     android:id="@+id/emailImageView"
-                    android:src="@drawable/ic_email"
+                    android:src="@drawable/ic_email2"
                     style="@style/profileDetailsImage" />
 
                 <TextView
@@ -85,7 +86,7 @@
             <RelativeLayout style="@style/profileDetailsLayout">
                 <ImageView
                     android:id="@+id/addressImageView"
-                    android:src="@drawable/ic_mobile"
+                    android:src="@drawable/ic_mobile2"
                     style="@style/profileDetailsImage" />
                 <LinearLayout
                     android:id="@+id/line4"

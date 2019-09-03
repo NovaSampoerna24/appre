@@ -22,7 +22,7 @@ data class DetailPasienRanap(@SerializedName("status") val status: String,
             get() {
                 if (masukrse == null) return "-"
                 return try {
-                    val sdf = SimpleDateFormat("yyyy-mm-dd", Locale.getDefault())
+                    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     val obj = sdf.parse(masukrse)
 
                     sdf.applyPattern("dd MMM yyyy")
@@ -36,7 +36,7 @@ data class DetailPasienRanap(@SerializedName("status") val status: String,
         get(){
             if(keluarrse == null)return "-"
             return try {
-                val sdf = SimpleDateFormat("yyyy-mm-dd", Locale.getDefault())
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val obj = sdf.parse(keluarrse)
 
                 sdf.applyPattern("dd MMM yyyy")

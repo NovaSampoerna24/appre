@@ -23,7 +23,7 @@ data class DetailPasienRajal(@SerializedName("status") val status: String,
             get() {
                 if (tglreg == null) return "-"
                 return try {
-                    val sdf = SimpleDateFormat("yyyy-mm-dd", Locale.getDefault())
+                    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     val obj = sdf.parse(tglreg)
 
                     sdf.applyPattern("dd MMM yyyy")

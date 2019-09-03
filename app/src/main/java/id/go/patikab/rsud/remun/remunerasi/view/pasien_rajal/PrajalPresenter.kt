@@ -3,6 +3,7 @@ package id.go.patikab.rsud.remun.remunerasi.view.pasien_rajal
 import android.util.Log
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ListDokter
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ListPasien
 import retrofit2.Call
 import retrofit2.Callback
@@ -70,6 +71,35 @@ class PrajalPresenter(private val mView: PrajalView) {
                     if(jumlah == 0){
                         mView.placeholder()
                     }
+                }else{
+                    mView.placeholder()
+                }
+            }
+        });
+    }
+    suspend fun getDokter(){
+
+        var getResponse: ApiInterface
+        getResponse = ApiClient.getClient().create(ApiInterface::class.java)
+        val call: Call<ListDokter>
+        call = getResponse.getListDokter()
+//        Log.d("test id",id)
+        call.enqueue(object : Callback<ListDokter> {
+            override fun onFailure(call: Call<ListDokter>, t: Throwable) {
+                Log.d("Failure", t.message.toString() + " --")
+                mView.placeholder()
+            }
+            override fun onResponse(call: Call<ListDokter>, response: Response<ListDokter>) {
+                Log.d("response code nt2",response.code().toString()+" -- ")
+                if (response.isSuccessful) {
+                    val notif = response.body()?.data
+                    if (notif != null ) {
+                        mView.showDokter(notif)
+                        mView.hideloading()
+                    }else{
+                        mView.placeholder()
+                    }
+
                 }else{
                     mView.placeholder()
                 }

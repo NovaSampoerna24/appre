@@ -39,6 +39,10 @@ class IFXiewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             tgllahir.text = inf.tanggalLahir
             txt_norm.text = inf.NOMR
             txt_penjamin.text = inf.carabayar
+            if(inf.type == "rajal"){
+                prakiraan_waktu_pelayanan.text = inf.waktu
+            }
+
 //            deske.text = inf.pesan
 ////            if(inf.pesan.length >= 40) deske.text = inf.pesan + "..."
 ////            if( inf.jp == "1") labele.text = "Pengumuman" else labele.text ="Pesan"

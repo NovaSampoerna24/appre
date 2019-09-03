@@ -188,6 +188,6 @@
         android:id="@+id/tidak_ada"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cek Koneksi Internet anda !"
+        android:text=""
         />
 </RelativeLayout>

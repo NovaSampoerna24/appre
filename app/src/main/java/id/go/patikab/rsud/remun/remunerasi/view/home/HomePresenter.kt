@@ -77,8 +77,8 @@ class HomePresenter(private val mView: HomeView) {
 
         val myImageList =  ArrayList<Int>()
         myImageList.add(R.drawable.stethoscope)
-        myImageList.add(R.drawable.bed)
-        myImageList.add(R.drawable.ic_mobile)
+        myImageList.add(R.drawable.hospital_bed)
+        myImageList.add(R.drawable.doctor)
 //        myImageList.add(R.drawable.hospital)
 //        myImageList.add(R.drawable.report)
 //        myImageList.add(R.drawable.book)

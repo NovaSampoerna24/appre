@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimens_5dp"
-                android:layout_weight="7"
+                android:layout_weight="5.5"
                 android:orientation="vertical"
                 android:padding="@dimen/dimens_5dp">
 
@@ -87,7 +87,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="4.5"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:orientation="vertical">
@@ -110,8 +110,19 @@
                     android:textColor="@color/primary_text"
                     android:textAlignment="center"
                     android:fontFamily="@font/roboto_medium"/>
+                <TextView
+                    android:id="@+id/prakiraan_waktu_pelayanan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textColor="@color/primary_text"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/roboto_medium"/>
 
             </LinearLayout>
+
         </LinearLayout>
     </RelativeLayout>
 

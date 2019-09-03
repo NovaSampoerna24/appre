@@ -6,7 +6,7 @@
     <gradient
         android:angle="0"
         android:centerX="35%"
-        android:startColor="@color/colorPrimaryDark"
+        android:startColor="@color/primary_dark"
         android:endColor="@color/book_loading_book"
         android:type="linear"
         />

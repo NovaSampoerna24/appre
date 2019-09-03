@@ -30,6 +30,7 @@ class PdetailrajalPresenter(private val mView: PdetailrajalView) {
                 Log.d("response code nt",response.code().toString()+" -- ")
                 if (response.isSuccessful) {
                     val notif = response.body()?.data
+                    Log.d("response",notif.toString())
                     if (notif != null) {
                         mView.showDataPendaftaran(notif)
                         mView.hideloading()

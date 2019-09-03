@@ -5,10 +5,10 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class ListPasien(@SerializedName("status") val status: String,
+data class ListPasien(     @SerializedName("status") val status: String,
                            @SerializedName("message") val message: String,
                            @SerializedName("title") val judul: String,
-                      @SerializedName("jumlah") val jumlah: Int,
+                           @SerializedName("jumlah") val jumlah: Int,
                            @SerializedName("data") val data: List<Pasiene>) {
     data class Pasiene(
                     @SerializedName("NOMR") val NOMR: String,
@@ -17,13 +17,15 @@ data class ListPasien(@SerializedName("status") val status: String,
                      @SerializedName("UNIT") val UNIT: String,
                     @SerializedName("tgllahir") val TGLLAHIR: String,
                     @SerializedName("IDXDAFTAR") val IDXDAFTAR:String,
-                    @SerializedName("carabayar") val carabayar:String
+                    @SerializedName("carabayar") val carabayar:String,
+                    @SerializedName("type") val type:String,
+                    @SerializedName("waktu") val waktu:String
                     ){
         val tanggalLahir: String
             get() {
                 if (TGLLAHIR == null) return "-"
                 return try {
-                    val sdf = SimpleDateFormat("yyyy-mm-dd", Locale.getDefault())
+                    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     val obj = sdf.parse(TGLLAHIR)
 
                     sdf.applyPattern("dd MMM yyyy")

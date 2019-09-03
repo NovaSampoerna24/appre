@@ -16,6 +16,7 @@ class PdetailranapPresenter(private val mView: PdetailranapView) {
 
     suspend fun getPdetailRanap(idxdaftar: String,nomr:String) {
         mView.showloading()
+//        Log.d("log",idxdaftar+"-"+nomr);
         var getResponse: ApiInterface
         getResponse = ApiClient.getClient().create(ApiInterface::class.java)
         val call: Call<DetailPasienRanap>
@@ -23,12 +24,12 @@ class PdetailranapPresenter(private val mView: PdetailranapView) {
 //        Log.d("test id",id)
         call.enqueue(object : Callback<DetailPasienRanap> {
             override fun onFailure(call: Call<DetailPasienRanap>, t: Throwable) {
-                Log.d("Failure", t.message.toString() + " --")
+//                Log.d("Failure", t.message.toString() + " --")
                 mView.placeholder()
             }
             override fun onResponse(call: Call<DetailPasienRanap>, response: Response<DetailPasienRanap>) {
-                Log.d("response code nt",response.code().toString()+" -- ")
-
+//                Log.d("response code nt",response.code().toString()+" -- ")
+//                Log.d("response",response.body().toString())
                 if (response.isSuccessful) {
                     val notif = response.body()?.data
 //                    Log.d("test 3",notif.toString())

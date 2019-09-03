@@ -8,11 +8,6 @@ import android.view.ViewGroup
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.MenuModel
 import kotlinx.android.synthetic.main.item_menu.view.*
-import android.graphics.drawable.Drawable
-import com.squareup.picasso.Picasso
-import id.go.patikab.rsud.remun.remunerasi.R.color.icons
-import kotlinx.android.synthetic.main.acitivity_detail_profil.*
-import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient.base_Url_upload
 class Menu1Adapter(private val mItem: List<MenuModel>,
                   private val myIconList:ArrayList<Int>,
                   private val mOnclik: (remid: MenuModel) ->
