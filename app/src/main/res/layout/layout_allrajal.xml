@@ -45,8 +45,13 @@
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/primary_text"
                     android:text="Dokter Abet"/>
-
-                   <EditText
+<!--                <Spinner-->
+<!--                    android:id="@+id/positionSpinner"-->
+<!--                    android:layout_width="fill_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:spinnerMode="dialog"-->
+<!--                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />-->
+                <EditText
                     android:id="@+id/dt_tanggal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

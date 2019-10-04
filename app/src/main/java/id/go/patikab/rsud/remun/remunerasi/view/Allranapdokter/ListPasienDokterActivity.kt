@@ -1,73 +1,43 @@
-package id.go.patikab.rsud.remun.remunerasi.view.pasien_ranap
+package id.go.patikab.rsud.remun.remunerasi.view.Allranapdokter
 
-import android.content.Context
 import android.content.SharedPreferences
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import id.go.patikab.rsud.remun.remunerasi.R
-import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.*
-import org.jetbrains.anko.support.v4.ctx
+import id.go.patikab.rsud.remun.remunerasi.config.util.openPdetailRanap
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ListDokter
+import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ListPasien
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref
+import id.go.patikab.rsud.remun.remunerasi.view.pasien_rajal.PranapView
+import id.go.patikab.rsud.remun.remunerasi.view.pasien_ranap.PranapPresenter
+import kotlinx.android.synthetic.main.layout_pasien_ranap_all.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.android.synthetic.main.layout_pasien.*
-import id.go.patikab.rsud.remun.remunerasi.config.adapter.PasienAdapter
-import id.go.patikab.rsud.remun.remunerasi.config.util.openPdetailRanap
-import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
-import id.go.patikab.rsud.remun.remunerasi.view.pasien_rajal.PranapView
 import org.jetbrains.anko.support.v4.onRefresh
-import org.jetbrains.anko.support.v4.toast
 import java.text.SimpleDateFormat
 import java.util.*
+import id.go.patikab.rsud.remun.remunerasi.config.adapter.*
+import org.jetbrains.anko.toast
 
-class Pranap : AppCompatActivity(), PranapView {
+class ListPasienDokternapActivity : AppCompatActivity(), PranapView {
 
     val mPresenter by lazy { PranapPresenter(this) }
     var kd_user: String = ""
     var nama_dokter: String = ""
     var prefs: SharedPreferences? = null
     var email: String = ""
-//    fun getActionBar(): ActionBar? {
-//        return (activity as AppCompatActivity).supportActionBar
-//    }
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//
-//        prefs = ctx.getSharedPreferences(pref, 0)
-////        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
-//        kd_user = prefs?.getString(login_session, null).toString()
-//        nama_dokter = prefs?.getString(nm_dokter, null).toString()
-//        email = prefs?.getString(email_device, "").toString()
-//
-//        return inflater.inflate(R.layout.layout_pasien, container, false)
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        getActionBar()?.setTitle("Pasien Rawat Inap")
-//        refresh()
-//        swiperefreshe.onRefresh {
-//            refresh()
-//            swiperefreshe.isRefreshing = false
-//        }
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = getSharedPreferences(pref, 0)
-//        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
-        kd_user = prefs?.getString(login_session, null).toString()
-        nama_dokter = prefs?.getString(nm_dokter, null).toString()
-        email = prefs?.getString(email_device, "").toString()
-        setContentView(R.layout.layout_pasien)
+
+        kd_user = intent?.getStringExtra("kddokter").toString()
+        nama_dokter = intent?.getStringExtra("nmdokter").toString()
+        setContentView(R.layout.layout_pasien_ranap_all)
+
         refresh()
         swiperefreshe.onRefresh {
             refresh()
@@ -88,10 +58,10 @@ class Pranap : AppCompatActivity(), PranapView {
                 var counte :Int
 
                 adapter =
-                        PasienAdapter(data,data.size) { infor ->
-//                            activity?.openNotif(data)
-//                            toast(infor.NOMR+" test")
-                            openPdetailRanap(infor.IDXDAFTAR,infor.NOMR)
+                        PasienAdapter(data, data.size) { infor ->
+                            //                            activity?.openNotif(data)
+                            toast(infor.NAMA)
+//                            openPdetailRanap(infor.IDXDAFTAR, infor.NOMR)
                         }
             }
         }
@@ -137,6 +107,33 @@ class Pranap : AppCompatActivity(), PranapView {
     override fun showDokter(data: List<ListDokter.Dokter>) {
 
 
+        var spindokter = ArrayList<String>();
+        var isi = ArrayList<String>();
+        for (i in data){
+            spindokter.add(i.NAMADOKTER)
+            isi.add(i.KDDOKTER)
+        }
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, spindokter )
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        positionSpinner.adapter = adapter
+
+        positionSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // either one will work as well
+                // val item = parent.getItemAtPosition(position) as String
+                val item = adapter.getItem(position)
+                kd_user  = isi.get(positionSpinner.selectedItemPosition)
+//                toast(alerte)
+                refresh2(kd_user)
+
+            }
+
+        }
 
     }
 

@@ -55,6 +55,7 @@
                         android:text="Dokter Abet"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/txt_tanggal"
                         android:layout_width="match_parent"

@@ -55,6 +55,13 @@
                         android:text="Dokter Abet"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/positionSpinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dialog"
+                        style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
+
                     <TextView
                         android:id="@+id/txt_tanggal"
                         android:layout_width="match_parent"

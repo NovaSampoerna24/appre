@@ -81,6 +81,7 @@ class Login :AppCompatActivity(),LoginView {
             editor.putString(login_session,data[0].kd_dokter)
             editor.putString(nm_dokter,data[0].nama_dokter)
             editor.putString(email_device,data[0].email_user)
+            editor.putString(level_user,data[0].level_user)
             editor.apply()
             openhome()
             finish()

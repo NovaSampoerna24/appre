@@ -91,6 +91,12 @@ public interface ApiInterface {
     @GET("android/service/tarif_bulan.php")
     Call<Inacbgs> getTarifInacgs();
 
+    @GET("/android/PanelAdminDokter/index.php/api/pasien-rajal/{tanggal}")
+    Call<Allrajal> getallrajal(@Path("tanggal")String tanggal);
+
+    @GET("/android/PanelAdminDokter/index.php/api/pasien-ranap")
+    Call<Allranap> getallranap();
+
     //    get notifikasi
     @FormUrlEncoded
     @POST("android/service/pengumuman/pengumuman.php")

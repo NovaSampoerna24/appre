@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="10sp"
         android:layout_marginTop="@dimen/dimens_5dp"
         android:fontFamily="@font/roboto_medium"
         android:text="Rawat Jalan" />

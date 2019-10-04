@@ -45,6 +45,7 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView,BannerListener{
     var nama_dokter: String = ""
     var prefs: SharedPreferences? = null
     var email: String = ""
+    var level :String=""
     internal lateinit var prajal: Prajal
     internal lateinit var pranap: Pranap
     private var groupAdapter = GroupAdapter<ViewHolder>()
@@ -61,6 +62,7 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView,BannerListener{
         kd_user = prefs?.getString(login_session, null).toString()
         nama_dokter = prefs?.getString(nm_dokter, null).toString()
         email = prefs?.getString(email_device, "").toString()
+        level = prefs?.getString(level_user,"").toString()
 
         return inflater.inflate(R.layout.layout_home, container, false)
     }
@@ -70,7 +72,7 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView,BannerListener{
 
         getActionBar()?.setTitle("Beranda")
         launch(UI) {
-            mPresenter.getmenu1()
+            mPresenter.getmenu1(level)
             mPresenter.getPengumuman(kd_user)
         }
         prajal = Prajal()
@@ -121,28 +123,35 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView,BannerListener{
                 layoutManager = GridLayoutManager(context, column)
                 adapter = Menu1Adapter(menu, icon) { m ->
                     if (m.id == "0") {
-                        val editor = prefs!!.edit()
-                        editor.putString(fragmene, "")
-                        editor.apply()
-
-                        fragmentManager?.beginTransaction()
-                                ?.replace(R.id.flContent, prajal)
-                                ?.commit()
+                        activity?.openpasjal()
+//                        val editor = prefs!!.edit()
+//                        editor.putString(fragmene, "")
+//                        editor.apply()
+//
+//                        fragmentManager?.beginTransaction()
+//                                ?.replace(R.id.flContent, prajal)
+//                                ?.commit()
                     } else if (m.id == "1") {
-                        val editor = prefs!!.edit()
-                        editor.putString(fragmene, "")
-                        editor.apply()
-                        fragmentManager?.beginTransaction()
-                                ?.replace(R.id.flContent, pranap)
-                                ?.commit()
+                        activity?.openpasnap()
+//                        val editor = prefs!!.edit()
+//                        editor.putString(fragmene, "")
+//                        editor.apply()
+//                        fragmentManager?.beginTransaction()
+//                                ?.replace(R.id.flContent, pranap)
+//                                ?.commit()
 
                     } else if (m.id == "2") {
                         activity?.OpenProfile()
-                        val editor = prefs!!.edit()
-                        editor.putString(fragmene, "")
-                        editor.apply()
+//                        val editor = prefs!!.edit()
+//                        editor.putString(fragmene, "")
+//                        editor.apply()
                     } else if (m.id == "3") {
-                        activity?.openabout()
+//                        activity?.openabout()
+                        activity?.openallrajal()
+                    }
+                    else if (m.id == "4") {
+//                        activity?.openabout()
+                        activity?.openallranap()
                     }
                 }
             }

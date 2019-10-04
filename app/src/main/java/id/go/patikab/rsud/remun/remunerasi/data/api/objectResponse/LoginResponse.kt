@@ -11,5 +11,6 @@ data class LoginResponse(@SerializedName("status") val status: String? = null,
                     @SerializedName("kd_dokter") val kd_dokter: String? = null,
                     @SerializedName("email") val email_user: String? = null,
                     @SerializedName("nm_dokter") val nama_dokter: String? = null,
-                    @SerializedName("signature") val signatured: String? = null)
+                    @SerializedName("signature") val signatured: String? = null,
+                    @SerializedName("level_user")val level_user:String? = null)
 }

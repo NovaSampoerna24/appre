@@ -14,7 +14,7 @@
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:launchMode="singleInstance"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
@@ -54,6 +54,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainApps" />
         </activity>
+        <activity android:name=".view.pasien_rajal.Prajal">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
+        <activity android:name=".view.pasien_ranap.Pranap">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
         <activity android:name=".view.gantiPassword.GantiPassword">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -70,6 +80,26 @@
                 android:value=".view.MainApps" />
         </activity>
         <activity android:name=".view.pasien_detail_ranap.Pdetailranap">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
+        <activity android:name=".view.Allrajaldokter.AllrajalActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
+        <activity android:name=".view.Allranapdokter.AllranapActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
+        <activity android:name=".view.Allranapdokter.ListPasienDokternapActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
+        <activity android:name=".view.Allrajaldokter.ListPasienDokterjalActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainApps" />

@@ -1,5 +1,7 @@
 package id.go.patikab.rsud.remun.remunerasi.view.home
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import id.go.patikab.rsud.remun.remunerasi.R
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient
@@ -8,6 +10,7 @@ import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ResponseMenu
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.ProfilGetData
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.MenuModel
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.NotifikasiResponse
+import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,7 +64,8 @@ class HomePresenter(private val mView: HomeView) {
 
         })
     }
-    fun getmenu1(){
+    fun getmenu1(lvl:String){
+
         val sdf = MutableList(0){
             MenuModel("","test","")
         }
@@ -70,8 +74,11 @@ class HomePresenter(private val mView: HomeView) {
         sdf.add(MenuModel("0","Rawat Jalan",""))
         sdf.add(MenuModel("1","Rawat Inap",""))
         sdf.add(MenuModel("2","Akun",""))
+        if(lvl=="2") {
+            sdf.add(MenuModel("3", "Rajal All", ""))
+            sdf.add(MenuModel("4", "Ranap All", ""))
 //        sdf.add(MenuModel("3","Tentang Aplikasi",""))
-
+        }
 //        sdf.add(MenuModel("4","Report",""))
 //        sdf.add(MenuModel("5","Book",""))
 
@@ -79,10 +86,12 @@ class HomePresenter(private val mView: HomeView) {
         myImageList.add(R.drawable.stethoscope)
         myImageList.add(R.drawable.hospital_bed)
         myImageList.add(R.drawable.doctor)
-//        myImageList.add(R.drawable.hospital)
+    if(lvl=="2") {
+        myImageList.add(R.drawable.allrajal)
+        myImageList.add(R.drawable.allranap)
 //        myImageList.add(R.drawable.report)
 //        myImageList.add(R.drawable.book)
-
+    }
         mView.showMenu1(sdf,myImageList)
     }
     suspend fun getPengumuman(id: String) {
