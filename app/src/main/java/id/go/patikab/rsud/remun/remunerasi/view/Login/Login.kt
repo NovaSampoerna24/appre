@@ -62,10 +62,10 @@ class Login :AppCompatActivity(),LoginView {
                 mPresenter.getLogin(username,password,token,mape)
             }
         }
-        btn_daftar.onClick {
-            openDaftar()
-            finish()
-        }
+//        btn_daftar.onClick {
+//            openDaftar()
+//            finish()
+//        }
         if(check_login !=""){
             openhome()
             finish()
@@ -100,6 +100,7 @@ class Login :AppCompatActivity(),LoginView {
 
     override fun loading() {
     }
+
 
     private fun insert_profile(id: String, nm: String) {
         var getResponse: ApiInterface

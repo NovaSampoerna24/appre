@@ -71,26 +71,44 @@ class HomePresenter(private val mView: HomeView) {
         }
 
 //        sdf.add(MenuModel("0","Rekapan JP",""))
-        sdf.add(MenuModel("0","Rawat Jalan",""))
-        sdf.add(MenuModel("1","Rawat Inap",""))
-        sdf.add(MenuModel("2","Akun",""))
+
         if(lvl=="2") {
+            sdf.add(MenuModel("0","Rawat Jalan",""))
+            sdf.add(MenuModel("1","Rawat Inap",""))
+            sdf.add(MenuModel("2","Akun",""))
             sdf.add(MenuModel("3", "Rajal All", ""))
             sdf.add(MenuModel("4", "Ranap All", ""))
 //        sdf.add(MenuModel("3","Tentang Aplikasi",""))
+        }else{
+            sdf.add(MenuModel("0","Rawat Jalan",""))
+            sdf.add(MenuModel("1","Rawat Inap",""))
+            sdf.add(MenuModel("5","E-RM RJ",""))
+            sdf.add(MenuModel("6","Remunerasi",""))
+            sdf.add(MenuModel("6","Penunjang",""))
+            sdf.add(MenuModel("2","Akun",""))
         }
+
 //        sdf.add(MenuModel("4","Report",""))
 //        sdf.add(MenuModel("5","Book",""))
 
         val myImageList =  ArrayList<Int>()
+
+    if(lvl=="2") {
         myImageList.add(R.drawable.stethoscope)
         myImageList.add(R.drawable.hospital_bed)
         myImageList.add(R.drawable.doctor)
-    if(lvl=="2") {
         myImageList.add(R.drawable.allrajal)
         myImageList.add(R.drawable.allranap)
 //        myImageList.add(R.drawable.report)
 //        myImageList.add(R.drawable.book)
+    }else{
+        myImageList.add(R.drawable.stethoscope)
+        myImageList.add(R.drawable.hospital_bed)
+        myImageList.add(R.drawable.erm)
+        myImageList.add(R.drawable.remunerasi)
+        myImageList.add(R.drawable.penunjang)
+        myImageList.add(R.drawable.doctor)
+
     }
         mView.showMenu1(sdf,myImageList)
     }

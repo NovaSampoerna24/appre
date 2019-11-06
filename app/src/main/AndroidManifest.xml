@@ -17,8 +17,9 @@
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
+
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notifications_width" />
@@ -38,7 +39,8 @@
         <activity
             android:name=".view.Auth.AuthActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".view.Register.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -50,6 +52,11 @@
         </activity>
         <activity android:name=".view.Pembayaran.DetailTindakanActivity" />
         <activity android:name=".view.ubahfoto.UbahFoto">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainApps" />
+        </activity>
+        <activity android:name=".view.pengembangan.PengembanganActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainApps" />
@@ -75,14 +82,10 @@
                 android:value=".view.MainApps" />
         </activity>
         <activity android:name=".view.pasien_detail.Pdetailrajal">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainApps" />
+
         </activity>
         <activity android:name=".view.pasien_detail_ranap.Pdetailranap">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainApps" />
+
         </activity>
         <activity android:name=".view.Allrajaldokter.AllrajalActivity">
             <meta-data
@@ -104,17 +107,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainApps" />
         </activity>
-
-        <activity android:name=".view.SliderActivity"/>
+        <activity android:name=".view.SliderActivity" />
         <activity android:name=".view.Notifikasi.Notifikasi" />
         <activity android:name=".view.notifikasidetail.NotifikasiDetail" />
         <activity android:name=".view.WebView.ViewJaspel" />
         <activity android:name=".view.WebView.ViewMenu" />
         <activity android:name=".view.Login.Login" />
         <activity android:name=".view.Daftar.Daftar" />
-        <activity android:name=".view.aktivasi_akun.Aktifasi" />
-        <!-- <activity android:name=".view.DetailTindakan.DetailRM"></activity> -->
-
+        <activity android:name=".view.aktivasi_akun.Aktifasi" /> <!-- <activity android:name=".view.DetailTindakan.DetailRM"></activity> -->
         <service android:name=".config.firebase.MyFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -128,16 +128,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <activity
-            android:name=".view.about_aplikasi.AboutActivity"></activity>
-
-        <activity
-            android:name=".view.Ringkasan.Ringkasan"></activity>
-        <activity
-            android:name=".view.profil.ProfilFragment"></activity>
-        <activity android:name=".view.PasienKu.PasienKu"/>
-
+        <activity android:name=".view.about_aplikasi.AboutActivity" />
+        <activity android:name=".view.Ringkasan.Ringkasan" />
+        <activity android:name=".view.profil.ProfilFragment" />
+        <activity android:name=".view.PasienKu.PasienKu" />
     </application>
 
 </manifest>

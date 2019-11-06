@@ -134,6 +134,8 @@ class Pranap : AppCompatActivity(), PranapView {
         progress_circular.visibility = View.GONE
         no_data.visibility = View.VISIBLE
     }
+
+
     override fun showDokter(data: List<ListDokter.Dokter>) {
 
 

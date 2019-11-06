@@ -97,6 +97,20 @@ public interface ApiInterface {
     @GET("/android/PanelAdminDokter/index.php/api/pasien-ranap")
     Call<Allranap> getallranap();
 
+    @FormUrlEncoded
+    @POST("/android/PanelAdminDokter/index.php/admin/laporkan/plush")
+    Call<MessageRes> Postlaporkan(
+            @Field("dokter") String kddokter,
+            @Field("pasien") String idxdaftar,
+            @Field("laporkan") String keterangan
+    );
+    @FormUrlEncoded
+    @POST("/android/PanelAdminDokter/index.php/admin/visit/plush")
+    Call<MessageRes> Postvisit(
+            @Field("dokter") String kddokter,
+            @Field("pasien") String idxdaftar
+    );
+
     //    get notifikasi
     @FormUrlEncoded
     @POST("android/service/pengumuman/pengumuman.php")

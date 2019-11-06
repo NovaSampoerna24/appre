@@ -8,8 +8,8 @@ android {
         applicationId "id.go.patikab.rsud.doktersoewondov1"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 4
-        versionName "4.0"
+        versionCode 9
+        versionName "9.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -96,7 +96,7 @@ dependencies {
     implementation 'com.romandanylyk:pageindicatorview:1.0.1'
     implementation 'com.xwray:groupie:2.1.0'
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.1.0'
-    
+
 
 }
 

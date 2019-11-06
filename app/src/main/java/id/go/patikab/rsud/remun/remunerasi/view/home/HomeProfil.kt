@@ -153,6 +153,19 @@ class HomeProfil : Fragment(), HomeView, NotifikasiView,BannerListener{
 //                        activity?.openabout()
                         activity?.openallranap()
                     }
+                    else if (m.id == "5") {
+//                        activity?.openabout()
+                        activity?.openpengembangan()
+                    }
+                    else if (m.id == "6") {
+//                        activity?.openabout()
+                        activity?.openpengembangan()
+                    }
+                    else if (m.id == "7") {
+//                        activity?.openabout()
+                        activity?.openpengembangan()
+                    }
+
                 }
             }
         }

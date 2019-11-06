@@ -18,7 +18,7 @@ import id.go.patikab.rsud.remun.remunerasi.data.lokal.sharepreference.SharePref.
 import org.jetbrains.anko.support.v4.ctx
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import id.go.patikab.rsud.remun.remunerasi.config.adapter.PasienAdapter
+import id.go.patikab.rsud.remun.remunerasi.config.adapter.PasienRajalAdapter
 import id.go.patikab.rsud.remun.remunerasi.config.util.openNotif
 import id.go.patikab.rsud.remun.remunerasi.config.util.openPdetail
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
@@ -29,6 +29,7 @@ import android.widget.DatePicker
 import android.app.DatePickerDialog
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import org.jetbrains.anko.toast
 import java.util.*
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
@@ -150,8 +151,8 @@ class Prajal : AppCompatActivity(), PrajalView {
         val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
         val format2 = "yyyy-MM-dd"
         val sdf2 = SimpleDateFormat(format2,Locale.getDefault())
-//        tanggal = sdf2.format(myCalendar.time)
-//        dt_tanggal.setText(sdf.format(myCalendar.time))
+        tanggal = sdf2.format(myCalendar.time)
+        dt_tanggal.setText(sdf.format(myCalendar.time))
 
     }
     override fun showPrajal(data: List<ListPasien.Pasiene>) {
@@ -161,9 +162,9 @@ class Prajal : AppCompatActivity(), PrajalView {
             with(recycle_datae) {
                 layoutManager = LinearLayoutManager(context)
                 adapter =
-                        PasienAdapter(data,data.size) { infor ->
-                            openPdetail(infor.copy())
-//                            toast(data[0].NAMA+" test")
+                        PasienRajalAdapter(data,data.size) { infor ->
+                            toast( infor.NAMA +" ")
+//                            openPdetail(infor.copy())
                         }
             }
         }

@@ -33,6 +33,7 @@ import id.go.patikab.rsud.remun.remunerasi.view.pasien_detail.Pdetailrajal
 import id.go.patikab.rsud.remun.remunerasi.view.pasien_detail_ranap.Pdetailranap
 import id.go.patikab.rsud.remun.remunerasi.view.pasien_rajal.Prajal
 import id.go.patikab.rsud.remun.remunerasi.view.pasien_ranap.Pranap
+import id.go.patikab.rsud.remun.remunerasi.view.pengembangan.PengembanganActivity
 
 fun Activity.openUbahFoto(iddokter: String, namaDokter: String) {
     startActivity(Intent(this, UbahFoto::class.java).apply {
@@ -189,6 +190,10 @@ fun Activity.openallrajal(){
 
 fun Activity.openallranap(){
     startActivity(Intent(this,AllranapActivity::class.java).apply {
+    })
+}
+fun Activity.openpengembangan(){
+    startActivity(Intent(this,PengembanganActivity::class.java).apply {
     })
 }
 
