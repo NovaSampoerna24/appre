@@ -19,7 +19,9 @@ data class ListPasien(     @SerializedName("status") val status: String,
                     @SerializedName("IDXDAFTAR") val IDXDAFTAR:String,
                     @SerializedName("carabayar") val carabayar:String,
                     @SerializedName("type") val type:String,
-                    @SerializedName("waktu") val waktu:String
+                    @SerializedName("waktu") val waktu:String,
+                    @SerializedName("keterangan") val keterangan:String,
+                    @SerializedName("visit") val visit:String
                     ){
         val tanggalLahir: String
             get() {

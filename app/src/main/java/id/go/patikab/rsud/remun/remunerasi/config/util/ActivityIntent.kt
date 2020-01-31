@@ -13,6 +13,10 @@ import id.go.patikab.rsud.remun.remunerasi.view.ubahfoto.*
 import id.go.patikab.rsud.remun.remunerasi.view.Pembayaran.DetailRM
 import id.go.patikab.rsud.remun.remunerasi.view.notifikasidetail.*
 import id.go.patikab.rsud.remun.remunerasi.data.api.objectResponse.*
+import id.go.patikab.rsud.remun.remunerasi.view.Allrajaldokter.AllrajalActivity
+import id.go.patikab.rsud.remun.remunerasi.view.Allrajaldokter.ListPasienDokterjalActivity
+import id.go.patikab.rsud.remun.remunerasi.view.Allranapdokter.AllranapActivity
+import id.go.patikab.rsud.remun.remunerasi.view.Allranapdokter.ListPasienDokternapActivity
 import id.go.patikab.rsud.remun.remunerasi.view.MainApps
 import id.go.patikab.rsud.remun.remunerasi.view.WebView.ViewJaspel
 import id.go.patikab.rsud.remun.remunerasi.view.WebView.ViewMenu
@@ -27,6 +31,9 @@ import id.go.patikab.rsud.remun.remunerasi.view.about_aplikasi.AboutActivity
 import id.go.patikab.rsud.remun.remunerasi.view.akun.AkuneFramgent
 import id.go.patikab.rsud.remun.remunerasi.view.pasien_detail.Pdetailrajal
 import id.go.patikab.rsud.remun.remunerasi.view.pasien_detail_ranap.Pdetailranap
+import id.go.patikab.rsud.remun.remunerasi.view.pasien_rajal.Prajal
+import id.go.patikab.rsud.remun.remunerasi.view.pasien_ranap.Pranap
+import id.go.patikab.rsud.remun.remunerasi.view.pengembangan.PengembanganActivity
 
 fun Activity.openUbahFoto(iddokter: String, namaDokter: String) {
     startActivity(Intent(this, UbahFoto::class.java).apply {
@@ -112,6 +119,7 @@ fun Activity.openPdetailRanap(idx:String,nomr:String){
 
 }
 
+
 fun Activity.openDaftar(){
     startActivity(Intent(this,Daftar::class.java).apply {
 
@@ -167,6 +175,42 @@ fun Activity.openabout(){
     startActivity(Intent(this,AboutActivity::class.java).apply {
     })
 }
+fun Activity.openpasjal(){
+    startActivity(Intent(this,Prajal::class.java).apply {
+    })
+}
+fun Activity.openpasnap(){
+    startActivity(Intent(this,Pranap::class.java).apply {
+    })
+}
+fun Activity.openallrajal(){
+    startActivity(Intent(this,AllrajalActivity::class.java).apply {
+    })
+}
 
+fun Activity.openallranap(){
+    startActivity(Intent(this,AllranapActivity::class.java).apply {
+    })
+}
+fun Activity.openpengembangan(){
+    startActivity(Intent(this,PengembanganActivity::class.java).apply {
+    })
+}
 
+fun Activity.openpasiendokterrajal(kddokter:String,nmdokter:String,tanggal:String){
+//    startActivity(Intent(this, NotifikasiDetail::class.java).apply {
+    val i = Intent(this, ListPasienDokterjalActivity::class.java)
+    i.putExtra("kddokter", kddokter)
+    i.putExtra("nmdokter",nmdokter)
+    i.putExtra("tanggal",tanggal)
+    startActivity(i)
+}
+
+fun Activity.openpasiendokterranap(kddokter:String,nmdokter:String){
+//    startActivity(Intent(this, NotifikasiDetail::class.java).apply {
+    val i = Intent(this, ListPasienDokternapActivity::class.java)
+    i.putExtra("kddokter", kddokter)
+    i.putExtra("nmdokter",nmdokter)
+    startActivity(i)
+}
 

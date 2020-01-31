@@ -62,10 +62,10 @@ class Login :AppCompatActivity(),LoginView {
                 mPresenter.getLogin(username,password,token,mape)
             }
         }
-        btn_daftar.onClick {
-            openDaftar()
-            finish()
-        }
+//        btn_daftar.onClick {
+//            openDaftar()
+//            finish()
+//        }
         if(check_login !=""){
             openhome()
             finish()
@@ -81,6 +81,7 @@ class Login :AppCompatActivity(),LoginView {
             editor.putString(login_session,data[0].kd_dokter)
             editor.putString(nm_dokter,data[0].nama_dokter)
             editor.putString(email_device,data[0].email_user)
+            editor.putString(level_user,data[0].level_user)
             editor.apply()
             openhome()
             finish()
@@ -99,6 +100,7 @@ class Login :AppCompatActivity(),LoginView {
 
     override fun loading() {
     }
+
 
     private fun insert_profile(id: String, nm: String) {
         var getResponse: ApiInterface

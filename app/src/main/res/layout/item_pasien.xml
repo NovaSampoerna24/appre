@@ -15,6 +15,7 @@
         android:padding="15dp">
 
         <LinearLayout
+            android:id="@+id/lin1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="10">
@@ -123,6 +124,108 @@
 
             </LinearLayout>
 
+        </LinearLayout>
+        <View android:id="@+id/divid" android:layout_below="@id/lin1" style="@style/Divider.Horizontal"/>
+        <LinearLayout
+            android:id="@+id/lin2"
+            android:layout_below="@id/divid"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:text="Waktu Visit"
+                android:textAlignment="center"
+                android:textColor="@color/primary_text"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:text="Keterangan"
+                android:textAlignment="center"
+                android:textColor="@color/primary_text"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lin3"
+            android:layout_below="@id/lin2"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+            <TextView
+                android:id="@+id/txtwaktuvisit"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:text="09:10"
+                android:textColor="@color/secondary_text"
+                android:textAlignment="center"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/txtketerangan"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:textColor="@color/secondary_text"
+                android:text="Keterangan Pasien"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lin4"
+            android:layout_below="@id/lin3"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimens_5dp"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+            <Button
+                android:id="@+id/btnvisit"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:padding="@dimen/dimens_5dp"
+                android:layout_margin="@dimen/dimens_5dp"
+                android:background="@drawable/gradient_background"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_height="30dp"
+                android:text="Visit"/>
+            <Button
+                android:id="@+id/btnlaporkan"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:padding="@dimen/dimens_5dp"
+                android:layout_margin="@dimen/dimens_5dp"
+                android:background="@drawable/gradient_background3"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_height="30dp"
+                android:text="Laporkan"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_below="@id/lin4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+<!--            <Button-->
+<!--                android:id="@+id/btndetailpas"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_height="35dp"-->
+<!--                android:text="Detail Pasien"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="14sp"-->
+<!--                android:fontFamily="@font/roboto_medium"-->
+<!--                android:layout_marginTop="@dimen/dimens_5dp"-->
+<!--                android:background="@color/accent"-->
+<!--                android:textAllCaps="false"-->
+                />
         </LinearLayout>
     </RelativeLayout>
 

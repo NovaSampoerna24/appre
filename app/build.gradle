@@ -8,8 +8,8 @@ android {
         applicationId "id.go.patikab.rsud.doktersoewondov1"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 9
+        versionName "9.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -27,7 +27,7 @@ android {
 
         }
         debug {
-            buildConfigField "String", "SERVER_URL", '"http://onlines.rsud.patikab.go.id:8081/"'
+            buildConfigField "String", "SERVER_URL", '"http://onlines.rsud.patikab.go.id:8080/"'
             buildConfigField "String", "SERVER_URL_IMAGES", '"http://onlines.rsud.patikab.go.id:8081/android/service/upload/"'
         }
 
@@ -96,7 +96,7 @@ dependencies {
     implementation 'com.romandanylyk:pageindicatorview:1.0.1'
     implementation 'com.xwray:groupie:2.1.0'
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.1.0'
-    
+
 
 }
 

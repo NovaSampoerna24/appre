@@ -8,6 +8,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginPresenter(private val mView:LoginView){
+
     suspend fun getLogin(username:String,password:String,token:String,map:HashMap<String,String>){
         mView.loading()
         var getResponse: ApiInterface

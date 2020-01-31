@@ -103,6 +103,7 @@ public class SplashActivity extends AppCompatActivity {
 //            Toast.makeText(this, versioni.toString(), Toast.LENGTH_SHORT).show();
 //            Log.d("packag2e",getPackageName());
             apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
             Call<VersionCek> call = apiInterface.getVersion(getPackageName(),versioni.toString(),getString(R.string.app_key));
             final Integer finalVersioni = versioni;
             call.enqueue(new Callback<VersionCek>() {

@@ -4,8 +4,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/dimens_10dp">
+    android:orientation="vertical">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/primary"
+            app:title="Pasien Rawat Jalan"/>
+
+    </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/dimens_10dp">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefreshe"
         android:layout_width="match_parent"
@@ -29,13 +45,8 @@
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/primary_text"
                     android:text="Dokter Abet"/>
-                <Spinner
-                    android:id="@+id/positionSpinner"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dialog"
-                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
-                <EditText
+
+                   <EditText
                     android:id="@+id/dt_tanggal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -63,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="Jumlah : 20"
+                    android:text="Jumlah : "
                     android:textSize="20sp"
                     android:textStyle="bold" />
                 </RelativeLayout>
@@ -94,4 +105,5 @@
         android:text="Pasien tidak ditemukan" />
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>
 </LinearLayout>

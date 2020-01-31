@@ -211,37 +211,42 @@ class MainApps : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         // Handle navigation view item clicks here.
         val id = item.itemId
         if (item.itemId == R.id.nav_jaspel) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.flContent, prajal)
-                    .commit()
-//            difragment = "rajal"
-            val editor = prefs!!.edit()
-            editor.putString(fragmene, "rajal")
-            editor.apply()
+            openpasjal()
+//            fragmentManager.beginTransaction()
+//                    .replace(R.id.flContent, prajal)
+//                    .commit()
+////            difragment = "rajal"
+//            val editor = prefs!!.edit()
+//            editor.putString(fragmene, "rajal")
+//            editor.apply()
         } else if (item.itemId == R.id.nav_pembayaran) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.flContent, pranap)
-                    .commit()
-//            difragment = "ranap"
-            val editor = prefs!!.edit()
-            editor.putString(fragmene, "ranap")
-            editor.apply()
+            openpasnap()
+//            fragmentManager.beginTransaction()
+//                    .replace(R.id.flContent, pranap)
+//                    .commit()
+////            difragment = "ranap"
+//            val editor = prefs!!.edit()
+//            editor.putString(fragmene, "ranap")
+//            editor.apply()
         } else if (item.itemId == R.id.nav_profile) {
-            val editor = prefs!!.edit()
-            editor.putString(fragmene, "")
-            editor.apply()
+//            val editor = prefs!!.edit()
+//            editor.putString(fragmene, "")
+//            editor.apply()
             OpenProfile()
-        } else if (item.itemId == R.id.nav_beranda) {
-            val editor = prefs!!.edit()
-            editor.putString(fragmene, "")
-            editor.apply()
-            fragmentManager.beginTransaction()
-                    .replace(R.id.flContent, beranda)
-                    .commit()
-        }else if (item.itemId == R.id.nav_logout){
+        }
+//        else if (item.itemId == R.id.nav_beranda) {
+//            val editor = prefs!!.edit()
+//            editor.putString(fragmene, "")
+//            editor.apply()
+//            fragmentManager.beginTransaction()
+//                    .replace(R.id.flContent, beranda)
+//                    .commit()
+//        }
+        else if (item.itemId == R.id.nav_logout){
             logout()
         }
         else {
+
             val editor = prefs!!.edit()
             editor.putString(fragmene, "")
             editor.apply()

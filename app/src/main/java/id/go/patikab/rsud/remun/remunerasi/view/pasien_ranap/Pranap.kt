@@ -29,30 +29,45 @@ import org.jetbrains.anko.support.v4.toast
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Pranap : Fragment(), PranapView {
+class Pranap : AppCompatActivity(), PranapView {
 
     val mPresenter by lazy { PranapPresenter(this) }
     var kd_user: String = ""
     var nama_dokter: String = ""
     var prefs: SharedPreferences? = null
     var email: String = ""
-    fun getActionBar(): ActionBar? {
-        return (activity as AppCompatActivity).supportActionBar
-    }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//    fun getActionBar(): ActionBar? {
+//        return (activity as AppCompatActivity).supportActionBar
+//    }
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//
+//        prefs = ctx.getSharedPreferences(pref, 0)
+////        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
+//        kd_user = prefs?.getString(login_session, null).toString()
+//        nama_dokter = prefs?.getString(nm_dokter, null).toString()
+//        email = prefs?.getString(email_device, "").toString()
+//
+//        return inflater.inflate(R.layout.layout_pasien, container, false)
+//    }
+//
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        getActionBar()?.setTitle("Pasien Rawat Inap")
+//        refresh()
+//        swiperefreshe.onRefresh {
+//            refresh()
+//            swiperefreshe.isRefreshing = false
+//        }
+//    }
 
-        prefs = ctx.getSharedPreferences(pref, 0)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        prefs = getSharedPreferences(pref, 0)
 //        Log.d("tokene", sharedPreferences.getString(my_token, null)!! + " ")
         kd_user = prefs?.getString(login_session, null).toString()
         nama_dokter = prefs?.getString(nm_dokter, null).toString()
         email = prefs?.getString(email_device, "").toString()
-
-        return inflater.inflate(R.layout.layout_pasien, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        getActionBar()?.setTitle("Pasien Rawat Inap")
+        setContentView(R.layout.layout_pasien)
         refresh()
         swiperefreshe.onRefresh {
             refresh()
@@ -76,7 +91,7 @@ class Pranap : Fragment(), PranapView {
                         PasienAdapter(data,data.size) { infor ->
 //                            activity?.openNotif(data)
 //                            toast(infor.NOMR+" test")
-                            activity?.openPdetailRanap(infor.IDXDAFTAR,infor.NOMR)
+                            openPdetailRanap(infor.IDXDAFTAR,infor.NOMR)
                         }
             }
         }
@@ -119,35 +134,11 @@ class Pranap : Fragment(), PranapView {
         progress_circular.visibility = View.GONE
         no_data.visibility = View.VISIBLE
     }
+
+
     override fun showDokter(data: List<ListDokter.Dokter>) {
 
-        var spindokter = ArrayList<String>();
-        var isi = ArrayList<String>();
-        for (i in data){
-            spindokter.add(i.NAMADOKTER)
-            isi.add(i.KDDOKTER)
-        }
 
-        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, spindokter )
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        positionSpinner.adapter = adapter
-
-        positionSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                // either one will work as well
-                // val item = parent.getItemAtPosition(position) as String
-                val item = adapter.getItem(position)
-                kd_user  = isi.get(positionSpinner.selectedItemPosition)
-//                toast(alerte)
-                refresh2(kd_user)
-
-            }
-
-        }
 
     }
 

@@ -48,7 +48,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="Informasi Pasien RSUD RAA Soewondo Pati"
+                android:text="@string/app_name"
                 android:textColor="@color/primary_text"
                 android:textSize="18sp"
                 />
