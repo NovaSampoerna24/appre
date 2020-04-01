@@ -33,8 +33,6 @@ import retrofit2.Retrofit;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiClient;
 import id.go.patikab.rsud.remun.remunerasi.data.api.ApiInterface;
 
-
-
 public class SplashActivity extends AppCompatActivity {
 
     private ProgressBar intro_progress;
